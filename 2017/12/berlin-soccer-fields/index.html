@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="Here in Berlin, there are 450 soccer fields (some call it football or f&uacute;tbol)  across the city. How do I know? Well, OpenStreetMap has them all. I downloaded their spatial data1, added temporal information from recorded satellite images, recognised the pitch surfaces and analyzed their recent changes.">
+
+
+<meta property="og:description" content="Here in Berlin, there are 450 soccer fields (some call it football or f&uacute;tbol)  across the city. How do I know? Well, OpenStreetMap has them all. I downloaded their spatial data1, added temporal information from recorded satellite images, recognised the pitch surfaces and analyzed their recent changes.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields">
+<meta name="twitter:title" content="The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields">
+<meta property="og:url" content="https://philippgaertner.github.io/2017/12/berlin-soccer-fields/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2017/12/berlin-soccer-fields/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="Here in Berlin, there are 450 soccer fields (some call it football or f&uacute;tbol)  across the city. How do I know? Well, OpenStreetMap has them all. I downloaded their spatial data1, added temporal information from recorded satellite images, recognised the pitch surfaces and analyzed their recent changes.">
+<meta name="twitter:description" content="Here in Berlin, there are 450 soccer fields (some call it football or f&uacute;tbol)  across the city. How do I know? Well, OpenStreetMap has them all. I downloaded their spatial data1, added temporal information from recorded satellite images, recognised the pitch surfaces and analyzed their recent changes.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2017-12-15T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2017-12-15T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Soccer Fields">
+    
+      <meta property="article:section" content="Berlin">
+    
+  
+  
+    
+      <meta property="article:tag" content="Soccer Field">
+    
+      <meta property="article:tag" content="Soccer Pitch">
+    
+      <meta property="article:tag" content="Natural Grass">
+    
+      <meta property="article:tag" content="Artificial Turf">
+    
+      <meta property="article:tag" content="Google Earth">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="http://res.cloudinary.com/dj9pbb7v1/image/upload/v1513364579/Collage_ArtificialTurf_noshcq.jpg">
+  <meta property="twitter:image" content="http://res.cloudinary.com/dj9pbb7v1/image/upload/v1513364579/Collage_ArtificialTurf_noshcq.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2017/12/berlin-soccer-fields/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2017-12-15T00:00:00Z">
+        
+  December 15, 2017
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/soccer-fields">Soccer Fields</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/berlin">Berlin</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Here in Berlin, there are <strong>450</strong> soccer fields (some call it football or f&uacute;tbol)  across the city. How do I know? Well, OpenStreetMap has them all. I downloaded their spatial data<sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>, added temporal information from recorded satellite images, recognised the pitch surfaces and analyzed their recent changes.</p>
+
+<p><br></p>
+
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/v1513364589/Collage_Header_jrwzjj.jpg"  />
+</div>
+<div class="main-content-wrap">
+
+<p><br></p>
+
+<p>The motivation for the blog post is associated with the answer to the rather insignificant question. <em>&ldquo;Was there any change in Berlin&rsquo;s soccer infrastructure when the 2006 FIFA World Cup was hosted in Germany and the final was scheduled in Berlin?&rdquo;</em></p>
+
+<h1 id="soccer-field-types">Soccer Field Types</h1>
+
+<p>Generally speaking, soccer pitches can be distinguished according to their characteristics and appearance. In this blog post, I focused on <strong>three</strong> different surface types:
+<br>
+<br>
+<embed src="https://philippgaertner.github.io/img/2017-11-07-berlin-soccer-fields/soccer-pitch-network.svg" type="image/svg+xml"/></p>
+
+<h4 id="surface-natural-grass">Surface: Natural Grass</h4>
+
+<p>
+
+
+<div class="figure right nocaption fig-33" >
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128191/2017-11-berlin-soccer-fields/Collage_NaturalGrass.jpg" >
+  
+  
+</div>
+
+There is the traditional <strong>natural grass</strong> pitch which is used in the German professional soccer leagues, from the 1st Bundesliga down to the Regionalliga. The rather new <strong>hybrid grass</strong> system is officially recognised as natural grass.</p>
+
+<p>Hybrid grass is <a href="https://en.wikipedia.org/wiki/Hybrid_grass">natural grass reinforced by artificial fibres</a>. With this system one tries to combine the optimal playing characteristics of natural grass with the robustness and resilience of synthetic grass.
+<br>
+<br></p>
+
+<h4 id="surface-artificial-turf">Surface: Artificial Turf</h4>
+
+<p><strong>Artificial turf</strong> is a kind of plastic carpet that is similar in texture and appearance to natural grass. Most <a href="https://en.wikipedia.org/wiki/Artificial_turf">artificial turf</a> is produced using the so-called tufting process. The yarns used are made of polypropylene, polyethylene or polyamide. The fibres are coated with latex and usually additionally stabilized.</p>
+
+<p>
+
+
+<div class="figure right nocaption fig-33" >
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128191/2017-11-berlin-soccer-fields/Collage_ArtificialTurf.jpg" >
+  
+  
+</div>
+Today, artificial turf pitches are usually filled with <strong>sand</strong> and/or <strong>rubber granulate</strong>.
+Despite the mostly similar appearance, there is a multitude of different artificial turf qualities, which have a different fibre structure (straight, crimped), fibre density and pile height.</p>
+
+<p>Over the last few decades, a great deal has happened in the development and production of artificial turf systems. Currently we are already in the 4th generation, and the end of development is far from being foreseeable. <a href="http://fixgreen.de/kunstrasen-geschichte.html">A short history of artificial turf is provided by fixgreen</a>.</p>
+
+<ul>
+<li><strong>1st generation - (hard soils, very high risk of injury)</strong> For the first time in the 1960s, this is a dense, unfilled synthetic yarn turf. As a result, the artificial turf of the first generation was known for its high risk of injury due to its hard ground.</li>
+<li><strong>2nd generation - (first sand filling, also suitable for sliding tackle)</strong> In this generation the artificial turf is sand-filled for the first time. This ensures a better sliding quality than in 1st generation pitches. However, damping in this generation is still very poor.</li>
+<li><strong>3rd generation - (rubber filling, with good damping properties for the first time)</strong> The third generation works with synthetic grass fibres and sand and rubber granulate filling, this generation is certified for the first time by UEFA and <a href="https://football-technology.fifa.com/en/standards/football-turf/">FIFA</a>. The elastic cushioning makes the floor very resilient and gives a good playing feeling.</li>
+<li><strong>4th generation - (playing characteristics close to natural grass)</strong> The latest generation of artificial turf systems, processed with synthetic grass fibres of different sizes and thicknesses, thus replicating natural grass. The risk of injury is even lower for this generation than in the previous version.</li>
+</ul>
+
+<p>The advantages of artificial turf compared to the natural grass pitch are obvious: all-year-round, weather-independent playability, the playing characteristics are homogeneous over the entire field and of course the low-cost maintenance.
+<br>
+<br></p>
+
+<h4 id="surface-hard-pitch">Surface: Hard Pitch</h4>
+
+<p>
+
+
+<div class="figure right nocaption fig-33" >
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128191/2017-11-berlin-soccer-fields/Collage_HartPitch.jpg" >
+  
+  
+</div>
+
+In German this kind of pitch (<em>Hartplatz</em>) is also called <strong>ash pitch</strong> (<a href="https://de.wikipedia.org/wiki/Aschenplatz"><em>Ascheplatz</em></a>) or sometimes also <strong>slag pitch</strong> (<em>Schlackeplatz</em>). The advantages over natural grass are a <a href="https://de.wikipedia.org/wiki/Aschenplatz">lower purchase price, lower maintenance requirements (and thus lower maintenance costs), higher load-bearing capacity and playability even in bad weather conditions</a>.
+However, hard pitches are feared by all soccer players because of the risk of injury.</p>
+
+<h1 id="soccer-field-development-in-berlin">Soccer Field Development In Berlin</h1>
+
+<p>In Berlin, we have the situation that there are more soccer fields now than ever. In the last 17 years were 18 new soccer fields built. In most cases, unused areas were converted for this process. However, 11 out of the 18 new fields have been created in the years before the World Cup 2006 in Germany. Until 2006 have 28 soccer fields been <strong>converted</strong> from hard pitch into a artificial turf pitch, while 14 soccer fields were converted from natural grass pitch into artificial turf pitch.
+<br>
+<br>
+<blockquote class="pullquote right">
+	<p>Since 2002, the majority of soccer fields in Berlin are artificial turf pitches.</p>
+</blockquote>The analysis revealed another interesting fact. Since 2002, exist more artificial turf pitches throughout the city than any other surface type. Meaning, artificial turf distributor companies are the clear winners and beneficiaries of this market trend.
+<br>
+<br>
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure nocaption fig-80" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128310/2017-11-berlin-soccer-fields/soccer-pitches-ts-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128310/2017-11-berlin-soccer-fields/soccer-pitches-ts-1.png" >
+  
+    </a>
+  
+  
+</div>
+</p>
+
+<h1 id="current-situation-in-berlin-2016">Current Situation In Berlin (2016)</h1>
+
+<p>Due to the different population numbers, the density of buildings and the long division of the city, the situation of football pitch availability among Berlin districts<sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup> looks very different today.</p>
+
+<ul>
+<li>Most soccer fields are in the district of Charlottenburg-Wilmersdorf (64).</li>
+<li>Friedrichshain-Kreuzberg, Marzahn-Hellersdorf, Mitte and Tempelhof-Sch&ouml;neberg have no hard pitches anymore.</li>
+<li>Treptow-K&ouml;penick is the only district with more natural grass (26) than with artificial turf (17) pitches.</li>
+<li>In Friedrichshain-Kreuzberg, 90 % of the soccer fields have artificial turf while only 10 % remain with natural grass.</li>
+</ul>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure center nocaption" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128310/2017-11-berlin-soccer-fields/soccer-pitches-bezirke-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618128310/2017-11-berlin-soccer-fields/soccer-pitches-bezirke-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<p><br></p>
+
+<h1 id="installation-of-artificial-turf-pitches">Installation Of Artificial Turf Pitches</h1>
+
+<p>While validating the classification results I came across pictures in <a href="https://www.google.com/earth/">Google Earth</a> which were taken at the moment of artificial turf installation, in the following section a small selection is shown.</p>
+
+<h4 id="sportverein-stern-britz-1889-e-v-neuk-ouml-lln-2014">Sportverein Stern-Britz 1889 e.V. - Neuk&ouml;lln - 2014</h4>
+
+<!--osm_id 48687669 neuer Belag wir 2014 verlegt-->
+
+<iframe frameborder="0" class="juxtapose" width="100%" height="435" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=c8636a6e-e1bc-11e7-b263-0edaf8f81e27"></iframe>
+#### Volkspark Mariendorf - Tempelhof-Sch&ouml;neberg - 2014
+<!--osm_id 158580729 neuer Belag in 2014-->
+<iframe frameborder="0" class="juxtapose" width="100%" height="435" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=74d5ba68-e1c2-11e7-b263-0edaf8f81e27"></iframe>
+<!--osm_id 49327893 streifen vom Kunstrasen sind sichtbar-->
+<!--osm_id 28278455 tolles Beispiel von Grass zu Kusntrasen in 2012-->
+<!--osm_id 8002491 gro?e Probleme # 2006 Bauarbeiten-->
+#### SG Rotation Prenzlauer Berg e.V. - Pankow - 2016
+<!--osm_id 118573976 grass zu kunstrasen in 2016-->
+<iframe frameborder="0" class="juxtapose" width="100%" height="435" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=f339e436-e1c4-11e7-b263-0edaf8f81e27"></iframe>
+<!--vfB Britz 1916 e.V. - Neuk&ouml;lln - 2016-->
+<!--osm_id 350664108 in 2017 blauer kunstrasen-->
+
+#### Sportanlage Westend - Charlottenburg-Wilmersdorf - 2006
+<!--Beispiel f?r fokus 8002490 change 2006 hartplatz zu Kunstrasen-->
+<iframe frameborder="0" class="juxtapose" width="100%" height="435" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=286c3a4c-e1c9-11e7-b263-0edaf8f81e27"></iframe>
+
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>You can <strong>cite</strong> this blogpost using: <em>Gärtner, Philipp (2017/12/15) “The FIFA World Cup in 2006 had an impact on the development of Berlin&rsquo;s soccer fields”, <a href="https://philippgaertner.github.io/2017/12/berlin-soccer-fields/">https://philippgaertner.github.io/2017/12/berlin-soccer-fields/</a></em></p>
+
+<hr />
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+<h1 id="data-source">Data Source</h1>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">Soccer pitch polygons: The spatial data for the soccer pitches come from the <a href="https://daten.berlin.de/datensaetze/openstreetmap-daten-f%C3%BCr-berlin">BerlinOpenData - OpenStreetMap data for Berlin</a> page (last update: 12.12.2016; license: <a href="http://opendefinition.org/licenses/odc-odbl/">Open Data Commons Open Database License - ODbL</a>).
+ <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+<li id="fn:2"><a href="https://github.com/m-hoerz/berlin-shapes">Berliner Bezirke</a>
+ <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
+</ol>
+</div>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/soccer-field/">Soccer Field</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/soccer-pitch/">Soccer Pitch</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/natural-grass/">Natural Grass</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/artificial-turf/">Artificial Turf</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth/">Google Earth</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/04/bfast-preparation/" data-tooltip="How to arrange a raster image stack for the use with BFAST in R">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/" data-tooltip="Intra-annual vegetation density changes of two public parks in Berlin, Germany">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/04/bfast-preparation/" data-tooltip="How to arrange a raster image stack for the use with BFAST in R">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/" data-tooltip="Intra-annual vegetation density changes of two public parks in Berlin, Germany">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2017\/12\/berlin-soccer-fields\/';
+          
+            this.page.identifier = '\/2017\/12\/berlin-soccer-fields\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

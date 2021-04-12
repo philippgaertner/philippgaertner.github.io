@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="Imagine we have the perfect time series. Daily values with 100% accuracy. And imagine we know the driving forces for the course of the time series. How beautiful would that be. Well, welcome to the world of finance &amp; soccer.">
+
+
+<meta property="og:description" content="Imagine we have the perfect time series. Daily values with 100% accuracy. And imagine we know the driving forces for the course of the time series. How beautiful would that be. Well, welcome to the world of finance &amp; soccer.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data">
+<meta name="twitter:title" content="Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data">
+<meta property="og:url" content="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="Imagine we have the perfect time series. Daily values with 100% accuracy. And imagine we know the driving forces for the course of the time series. How beautiful would that be. Well, welcome to the world of finance &amp; soccer.">
+<meta name="twitter:description" content="Imagine we have the perfect time series. Daily values with 100% accuracy. And imagine we know the driving forces for the course of the time series. How beautiful would that be. Well, welcome to the world of finance &amp; soccer.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2018-05-28T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2018-05-28T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="BVB">
+    
+  
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617827539/thumbnail_bvb_all_soccer_results.png">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617827539/thumbnail_bvb_all_soccer_results.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-05-28T00:00:00Z">
+        
+  May 28, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/bvb">BVB</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Imagine we have the perfect time series. Daily values with 100% accuracy. And imagine we know the driving forces for the course of the time series. How beautiful would that be. Well, welcome to the world of finance &amp; soccer.</p>
+
+<h1 id="the-objective">The Objective</h1>
+
+<p>In this blog post I have a closer look at the stock prices of the sports club <strong>Borussia Dortmund GmbH &amp; Co. KGaA</strong>. I use the <code>BFAST</code> R package for detecting and characterizing abrupt changes within the trend component of the time series while searching for the optimal h-parameter. Furthermore, I point to possible reasons behind the abrupt changing prices by means of soccer game results (of the Ballspielverein Borussia 09 e.V. Dortmund, commonly known as <strong>Borussia Dortmund</strong>, <strong>BVB</strong>, or simply Dortmund), player transfers or outcome of FIFA Soccer World Cups.</p>
+
+<h2 id="1-historical-stock-prices">1. Historical Stock Prices</h2>
+
+<p>The stock of Borussia Dortmund GmbH &amp; Co. KGaA was floated on the stock market in October 2000 and is listed in the General Standard of Deutsche B&ouml;rse AG (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>). I am using the daily stock closing prices from March 2001 until May 2018 (source: <a href="https://finance.yahoo.com/quote/BVB.MU/history?period1=973047500&amp;period2=1525402800&amp;interval=1d&amp;filter=history&amp;frequency=1d">https://finance.yahoo.com - historical data - frequency:daily - BVB</a>). Trading days are on working days from Monday until Friday. Currency is in Euro.</p>
+
+<p><br></p>
+
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data_files/plot.bvb.stocks-1.png"  />
+</div>
+<div class="main-content-wrap">
+
+<h2 id="2-borussia-dortmund-game-results">2. Borussia Dortmund Game Results</h2>
+
+<p>I scraped all Borussia Dortmund soccer match details from <a href="www.weltfussball.de">weltfussball.de</a> starting with the 2000 / 2001 season until 2017 / 2018. The provided data contain the following information (tiny subset):
+<br>
+<br></p>
+
+<table class="table table-striped table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Round </th>
+   <th style="text-align:left;"> Date </th>
+   <th style="text-align:left;"> Time </th>
+   <th style="text-align:left;"> Location </th>
+   <th style="text-align:left;"> Competition </th>
+   <th style="text-align:left;"> Opponent </th>
+   <th style="text-align:left;"> Result </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Gruppe H </td>
+   <td style="text-align:left;"> 26.09.2017 </td>
+   <td style="text-align:left;"> 20:45 </td>
+   <td style="text-align:left;"> H </td>
+   <td style="text-align:left;"> Champions League 2017/2018 </td>
+   <td style="text-align:left;"> Real Madrid </td>
+   <td style="text-align:left;"> 1:3 (0:1) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Gruppe H </td>
+   <td style="text-align:left;"> 17.10.2017 </td>
+   <td style="text-align:left;"> 20:45 </td>
+   <td style="text-align:left;"> A </td>
+   <td style="text-align:left;"> Champions League 2017/2018 </td>
+   <td style="text-align:left;"> APOEL Nikosia </td>
+   <td style="text-align:left;"> 1:1 (0:0) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 32. Spieltag </td>
+   <td style="text-align:left;"> 29.04.2018 </td>
+   <td style="text-align:left;"> 18:00 </td>
+   <td style="text-align:left;"> A </td>
+   <td style="text-align:left;"> Bundesliga 2017/2018 </td>
+   <td style="text-align:left;"> Werder Bremen </td>
+   <td style="text-align:left;"> 1:1 (1:1) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 33. Spieltag </td>
+   <td style="text-align:left;"> 05.05.2018 </td>
+   <td style="text-align:left;"> 15:30 </td>
+   <td style="text-align:left;"> H </td>
+   <td style="text-align:left;"> Bundesliga 2017/2018 </td>
+   <td style="text-align:left;"> 1. FSV Mainz 05 </td>
+   <td style="text-align:left;"> 1:2 (1:2) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> 1. Runde </td>
+   <td style="text-align:left;"> 12.08.2017 </td>
+   <td style="text-align:left;"> 15:30 </td>
+   <td style="text-align:left;"> A </td>
+   <td style="text-align:left;"> DFB-Pokal 2017/2018 </td>
+   <td style="text-align:left;"> 1. FC Rielasingen-Arlen </td>
+   <td style="text-align:left;"> 4:0 (2:0) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Achtelfinale </td>
+   <td style="text-align:left;"> 20.12.2017 </td>
+   <td style="text-align:left;"> 20:45 </td>
+   <td style="text-align:left;"> A </td>
+   <td style="text-align:left;"> DFB-Pokal 2017/2018 </td>
+   <td style="text-align:left;"> Bayern München </td>
+   <td style="text-align:left;"> 1:2 (0:2) </td>
+  </tr>
+</tbody>
+</table>
+
+<p>I filtered all game results for the most important competitions where Borussia Dortmund participated, which are the</p>
+
+<ul>
+<li><strong>Bundeliga</strong> (National League),</li>
+<li><strong>DFB-Pokal</strong> (National Cup)</li>
+<li><strong>Champions League</strong> &amp;</li>
+<li><strong>Europa League</strong>.</li>
+</ul>
+
+<p>Furthermore, results from the Ligapokal, Supercup, qualification games for the <blockquote class="pullquote right">
+	<p>
+When mouse is over point elements, tooltips will display additional infos in every graph.
+</p>
+</blockquote>Champions League and any friendly matches were excluded. I coloured all games according to the results (<span class="highlight-text red">
+Defeat</span>, <span class="highlight-text yellow">Draw</span> and <span class="highlight-text green">Win</span>) and marked if the game was played at Home (the home from BVB is the Signal Iduna Park with a capacity of 80.720 spectators).</p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/bvb_all_soccer_results.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h2 id="3-historical-stock-prices-with-bvb-game-results">3. Historical Stock Prices with BVB Game Results</h2>
+
+<p>Each dataset by itself doesn&rsquo;t bring much of information, but if we combine the stock prices with games results we can see some patterns emerge. In this plot I also added the coach history.</p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/bvb_soccer_and_stocks.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2001-2002-2002-2003">Season 2001 - 2002 &amp; 2002 - 2003</h3>
+
+<p><em>In 2002, Borussia Dortmund won their third Bundesliga title. Dortmund had a remarkable run at the end of the season to overtake Bayer Leverkusen, securing the title on the final day. Manager Matthias Sammer became the first person in Borussia Dortmund history to win the Bundesliga as both a player and manager. In the same season, Borussia lost the final of the 2001-02 UEFA Cup to Dutch side Feyenoord.  (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2001_2003.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2003-2004-2004-2005">Season 2003 - 2004 &amp; 2004 - 2005</h3>
+
+<p><em>Dortmund&rsquo;s fortunes then steadily declined for a number of years. Poor financial management led to a heavy debt load and the sale of their Westfalenstadion grounds. The situation was compounded by failure to advance in the 2003-04 UEFA Champions League, when the team was eliminated on penalties in the qualifying rounds by Club Brugge. In 2003, Bayern Munich loaned 2 million Euro to Dortmund for several months to pay their payroll. Borussia was again driven to the brink of bankruptcy in 2005, the original 11 Euro value of its shares having plummeted by over 80% on the Frankfurter Wertpapierb&ouml;rse (Frankfurt Stock Exchange). The response to the crisis included a 20% pay cut for all players. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2003_2005.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2005-2006-2006-2007">Season 2005 - 2006 &amp; 2006 - 2007</h3>
+
+<p><em>In 2006, in order to reduce debt, the Westfalenstadion was renamed &ldquo;Signal Iduna Park&rdquo; after a local insurance company. The naming rights agreement ran until 2016. The stadium is currently the largest football stadium in Germany with a capacity of 80,720 spectators, and hosted several matches in the 2006 World Cup, including a semi-final. Borussia Dortmund enjoys the highest average attendance of any football club in Europe, at 80,478 per match (2010-11).</em></p>
+
+<p><em>Dortmund suffered a miserable start to the 2005-06 season, but rallied to finish seventh. The club failed to gain a place in the UEFA Cup via the Fair Play draw. The club&rsquo;s management recently indicated that the club again showed a profit; this was largely related to the sale of David Odonkor to Real Betis and Tom&aacute;s Rosick&yacute; to Arsenal.</em></p>
+
+<p><em>In the 2006-07 season, Dortmund unexpectedly faced serious relegation trouble for the first time in years. Dortmund went through three coaches and appointed Thomas Doll on 13 March 2007 after dropping to just one point above the relegation zone. Christoph Metzelder also left Borussia Dortmund on a free transfer. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2005_2007.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2007-2008-2008-2009">Season 2007 - 2008 &amp; 2008 - 2009</h3>
+
+<p><em>In the 2007-08 season, Dortmund lost to many smaller Bundesliga clubs. Despite finishing 13th in the Bundesliga table, Dortmund reached the DFB-Pokal Final against Bayern Munich, where they lost 2-1 in extra time. The final appearance qualified Dortmund for the UEFA Cup because Bayern already qualified for the Champions League. Thomas Doll resigned on 19 May 2008 and was replaced by J&uuml;rgen Klopp. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2007_2009.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2009-2010-2010-2011">Season 2009 - 2010 &amp; 2010 - 2011</h3>
+
+<p><em>In the 2009-10 season, Klopp&rsquo;s Dortmund improved on the season before to finish fifth in the Bundesliga to qualify for the UEFA Europa League. The team missed an opportunity to qualify for the Champions League by failing to beat eighth-place VfL Wolfsburg and 14th-place SC Freiburg in the final two matches of the campaign.</em></p>
+
+<p><em>Entering the 2010-11 season, Dortmund fielded a young and vibrant roster. On 4 December 2010, Borussia became Herbstmeister (&ldquo;Autumn Champion&rdquo;), an unofficial accolade going to the league leader at the winter break. They did this three matches before the break, sharing the record for having achieved this earliest with Eintracht Frankfurt (1993-94) and 1. FC Kaiserslautern (1997-98). On 30 April 2011, the club beat 1. FC N&uuml;rnberg 2-0 at home, while second-place Bayer Leverkusen lost, leaving Dortmund eight points clear with two games to play. This championship equaled the seven national titles held by rivals Schalke 04, and guaranteed a spot in the 2011-12 Champions League group stages. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2009_2011.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2011-2012-2012-2013">Season 2011 - 2012 &amp; 2012 - 2013</h3>
+
+<p><em>One year later, Dortmund made a successful defense of its Bundesliga title with a win over Borussia M&ouml;nchengladbach, again on the 32nd match day. By the 34th and final match day, Dortmund set a new record with the most points-81-ever gained by a club in one Bundesliga season. This was surpassed the following season by Bayern Munich&rsquo;s 91 points. The club&rsquo;s eighth championship places it third in total national titles, and players will now wear two stars over their uniform crest in recognition of the team&rsquo;s five Bundesliga titles. Notable names from the winning roster include Lucas Barrios, Mario G&ouml;tze, Neven Subotic, Mats Hummels, Robert Lewandowski, Shinji Kagawa, Lukasz Piszczek, Jakub Blaszczykowski, Kevin Gro&szlig;kreutz, Ivan Perisic and Ilkay G&uuml;ndogan.</em></p>
+
+<p><em>The club capped its successful 2011-12 season by winning the double for the first time by beating Bayern 5-2 in the final of the DFB-Pokal. Borussia Dortmund are one of four German clubs to win the Bundesliga and DFB-Pokal double, along with Bayern Munich, 1. FC K&ouml;ln and Werder Bremen. The club was voted Team of the Year 2011 at the annual Sportler des Jahres (German Sports Personality of the Year) awards.</em></p>
+
+<p><em>Borussia Dortmund ended the 2012-13 season in second place in the Bundesliga. Dortmund played in their second UEFA Champions League Final against Bayern Munich in the first ever all-German club final at Wembley Stadium on 25 May 2013, which they lost 2-1. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2011_2013.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2013-2014-2014-2015">Season 2013 - 2014 &amp; 2014 - 2015</h3>
+
+<p><em>The 2013-14 season started with a five-game winning streak for Dortmund, their best start to a season. Despite such a promising start, however, their season was hampered by injuries to several key players, seeing them stoop as low as fourth place in the table, and with a depleted squad could go only as far as the quarter-finals of the Champions League, losing 3-2 on aggregate to Real Madrid.</em></p>
+
+<p><em>Nevertheless, Dortmund managed to end their season on a high note by finishing second in the Bundesliga and reaching the 2014 DFB-Pokal Final, losing 0-2 to Bayern in extra time.</em></p>
+
+<p><em>They then began their 2014-15 season by defeating Bayern in the 2014 DFL-Supercup 2-0. However, this victory would not be enough to inspire the squad to a solid performance at the start of the ensuing season, with Dortmund recording various results such as a 0-1 loss to Hamburger SV and two 2-2 draws against VfB Stuttgart and Bundesliga newcomers Paderborn 07.</em></p>
+
+<p><em>During the winter, Dortmund fell to the bottom of the table on multiple occasions, but managed to escape the relegation zone after four consecutive wins in February. On 15 April 2015, J&uuml;rgen Klopp announced that after seven years, he would be leaving Dortmund. Four days later, Dortmund announced that Thomas Tuchel would replace Klopp at the end of the season. Klopp&rsquo;s final season, however, ended on high note, rising and finishing seventh after facing relegation, gaining a DFB-Pokal final with VfL Wolfsburg and qualifying for the 2015-16 Europa League. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2013_2015.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="anchor-2017">Season 2015 - 2016 &amp; 2016 - 2017</h3>
+
+<p><em>In the 2015-16 season, Dortmund started off on a high, winning 4-0 against Borussia M&ouml;nchengladbach on the opening day, followed by five-straight wins which took them to the top of the Bundesliga. After the eighth matchday, they were surpassed by Bayern Munich following an unlucky draw with 1899 Hoffenheim. Dortmund kept their performances up, winning 24 out of 34 league games and becoming the best Bundesliga runner-up team of all time. In the Europa League, they advanced to the quarter-finals, getting knocked out by a J&uuml;rgen Klopp-led Liverpool in a dramatic comeback at Anfield, where defender Dejan Lovren scored a late goal to make it 4-3 to the Reds and 5-4 on aggregate.</em></p>
+
+<p><em>In the 2015-16 DFB-Pokal, for the third-straight year Dortmund made it to the competition final, but lost to Bayern Munich on penalties.</em></p>
+
+<p><blockquote class="pullquote right">
+	<p>
+On 11 April 2017, three explosions occurred near the team's bus on its way to a Champions League match against AS Monaco at the Signal Iduna Park.
+</p>
+</blockquote><em>On 11 April 2017, three explosions occurred near the team&rsquo;s bus on its way to a Champions League match against AS Monaco at the Signal Iduna Park. Defender Marc Bartra was injured, and taken to hospital. Dortmund went on to lose the game 2-3 to AS Monaco. Dortmund&rsquo;s manager, Thomas Tuchel, blamed the loss as a result of an ignorant decision by UEFA. UEFA went on to say that the team made no objection to playing, and that the decision was made in compliance with the club and local law enforcement. In the second leg, Dortmund went on to lose 1-3, leaving the aggregate score at 3-6, and seeing them eliminated from that year&rsquo;s UEFA Champions League. (<a href="https://en.wikipedia.org/wiki/Borussia_Dortmund">Wikipedia</a>)</em></p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2015_2017.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h3 id="season-2017-2018">Season 2017 - 2018</h3>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-05-bvb-bfast-the-data/season_2017_2018.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>  
+  
+
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>This blog post showed you the data I am going to use for detecting and characterizing abrupt changes in a time series. Part II, is going to cover the <code>BFAST</code> function and the search for its optimal h-parameter.</p>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/" data-tooltip="Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/04/bfast-preparation/" data-tooltip="How to arrange a raster image stack for the use with BFAST in R">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/" data-tooltip="Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/04/bfast-preparation/" data-tooltip="How to arrange a raster image stack for the use with BFAST in R">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2018\/05\/bfast-bvb-the-data\/';
+          
+            this.page.identifier = '\/2018\/05\/bfast-bvb-the-data\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

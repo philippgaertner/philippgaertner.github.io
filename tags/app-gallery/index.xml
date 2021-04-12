@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>app-gallery on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/app-gallery/</link>
+    <description>Recent content in app-gallery on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 Mar 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/app-gallery/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Google Earth Engine App Image Gallery</title>
+      <link>https://philippgaertner.github.io/2020/03/ee-apps/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/03/ee-apps/</guid>
+      <description>A image gallery (ordered alphabetically, by users name) of almost all publicly available Google Earth Engine Apps.</description>
+    </item>
+    
+  </channel>
+</rss>

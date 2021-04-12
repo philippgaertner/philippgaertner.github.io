@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and reticulate - the R interface to Python.">
+
+
+<meta property="og:description" content="A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and reticulate - the R interface to Python.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Use Google Earth Engine in RStudio with reticulate">
+<meta name="twitter:title" content="Use Google Earth Engine in RStudio with reticulate">
+<meta property="og:url" content="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and reticulate - the R interface to Python.">
+<meta name="twitter:description" content="A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and reticulate - the R interface to Python.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-12-17T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2019-12-17T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="NDVI">
+    
+      <meta property="article:section" content="Python">
+    
+      <meta property="article:section" content="R">
+    
+  
+  
+    
+      <meta property="article:tag" content="Google-Earth-Engine">
+    
+      <meta property="article:tag" content="RStudio">
+    
+      <meta property="article:tag" content="reticulate">
+    
+      <meta property="article:tag" content="rstats">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617876817/earth-engine-rstudio-reticulate/GEE_RStudio_header_s.png">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617876817/earth-engine-rstudio-reticulate/GEE_RStudio_header_s.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Use Google Earth Engine in RStudio with reticulate</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Use Google Earth Engine in RStudio with reticulate
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-12-17T00:00:00Z">
+        
+  December 17, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/ndvi">NDVI</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/python">Python</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/r">R</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and <code>reticulate</code> - the R interface to Python.</p>
+
+<p></div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876817/earth-engine-rstudio-reticulate/GEE_RStudio_header.png"  />
+</div>
+<div class="main-content-wrap">
+To use Google Earth Engine in RStudio we need several ingredients. First of all we need Python to use the Earth Engine Python API in order to send our requests to the Earth Engine servers. Then we need <code>reticulate</code>.</p>
+
+<p><code>reticulate</code> allows us to combine Python and R code in RStudio. So, when values are returned from Python to R they are converted back to R types.</p>
+
+<h1 id="setup">Setup</h1>
+
+<p>Where can you get the Earth Engine Python API? Well, there are many installation options, here I use the <a href="https://conda.io/en/latest/">conda</a> option. The workflow is from Tyler Erickson&rsquo;s <a href="https://docs.google.com/presentation/d/e/2PACX-1vTFAWIEBg3aVhY5dImnTzTDmbgnu9A4pEOW6OUdpoCLvxD1ot3UI0qbcD90oXsR0CJdWQz-kAUE_2tb/pub?start=false&amp;loop=false&amp;delayms=3000&amp;slide=id.g36d4e169fe_300_295">Earth Engine Python API</a> - <a href="https://sites.google.com/earthoutreach.org/geoforgood19/agenda/breakout-sessions">breakout session</a> from the <a href="https://sites.google.com/earthoutreach.org/geoforgood19/home">Geo4Good</a> summit 2019.</p>
+
+<h3 id="terminal">Terminal</h3>
+
+<p>Open your Terminal and write (check the conda <a href="https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf">cheat sheet</a> for Windows &amp; Mac differences):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">### Terminal</span>
+
+conda create --name gee-demo      <span style="color:#75715e"># Create a conda environment</span>
+
+conda activate gee-demo           <span style="color:#75715e"># Activate the environment</span>
+
+conda install -c conda-forge earthengine-api <span style="color:#75715e"># Install the Earth Engine Python API</span>
+
+earthengine authenticate          <span style="color:#75715e"># Authenticate your access with the command line tool</span>
+
+conda install pandas
+conda install numpy</code></pre></div>
+<h3 id="in-rstudio">In RStudio</h3>
+
+<p>In RStudio, install the <code>reticulate</code> package and apply the <code>use_condaenv()</code> function, which  enables you to specify which version of Python in the <code>conda</code> environment you want to use.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R </span>
+
+install<span style="color:#f92672">.</span>packages(reticulate)   
+library(reticulate)
+
+use_condaenv(<span style="color:#e6db74">&#34;gee-demo&#34;</span>, conda <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,required <span style="color:#f92672">=</span> TRUE)</code></pre></div>
+<p>Import the Earth Engine API (ee) and run the <code>ee$Initialize</code> function to trigger the authentication.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+ee <span style="color:#f92672">=</span> import(<span style="color:#e6db74">&#34;ee&#34;</span>)          <span style="color:#75715e"># Import the Earth Engine library</span>
+
+ee<span style="color:#960050;background-color:#1e0010">$</span>Initialize()            <span style="color:#75715e"># Trigger the authentication</span>
+
+np <span style="color:#f92672">=</span> import(<span style="color:#e6db74">&#34;numpy&#34;</span>)       <span style="color:#75715e"># Import Numpy </span>
+pd <span style="color:#f92672">=</span> import(<span style="color:#e6db74">&#34;pandas&#34;</span>)      <span style="color:#75715e"># Import Pandas</span></code></pre></div>
+<h1 id="get-sentinel-2-data-from-earth-engine">Get Sentinel-2 data from Earth Engine</h1>
+
+<p>Let&rsquo;s assume we are interested in a high resolution, cloud free summer scene from a urban green area in Berlin, Germany. Here is the workflow to get the data into R.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+geometry <span style="color:#f92672">=</span> ee<span style="color:#960050;background-color:#1e0010">$</span>Geometry<span style="color:#960050;background-color:#1e0010">$</span>Point(<span style="color:#ae81ff">13.481643640792527</span>,<span style="color:#ae81ff">52.48959983479137</span>);
+
+S2 <span style="color:#f92672">=</span> ee<span style="color:#960050;background-color:#1e0010">$</span>ImageCollection(<span style="color:#e6db74">&#34;COPERNICUS/S2_SR&#34;</span>)
+
+<span style="color:#75715e"># select images between May and August of 2019</span>
+S2 <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>filterDate(ee<span style="color:#960050;background-color:#1e0010">$</span>Date(<span style="color:#e6db74">&#39;2019-05-01&#39;</span>), ee<span style="color:#960050;background-color:#1e0010">$</span>Date(<span style="color:#e6db74">&#39;2019-08-01&#39;</span>))<span style="color:#960050;background-color:#1e0010">$</span>filterBounds(geometry)</code></pre></div>
+<p>Check the number of images in the Image Collection</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+nbrImages <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>size()<span style="color:#960050;background-color:#1e0010">$</span>getInfo()
+nbrImages
+
+<span style="color:#75715e"># 71</span></code></pre></div>
+<p>Order all images according to their cloudiness and select the first (least clouds) image. Create a green vegetation layer (NDVI) and convert the <code>ee.Image</code> to a <code>numpy</code> array.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+S2 <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>sort(<span style="color:#e6db74">&#34;CLOUD_COVERAGE_ASSESSMENT&#34;</span>)<span style="color:#960050;background-color:#1e0010">$</span>first() <span style="color:#75715e"># select the least cloudy image</span>
+S2 <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>select(list(<span style="color:#e6db74">&#34;B2&#34;</span>, <span style="color:#e6db74">&#34;B3&#34;</span>, <span style="color:#e6db74">&#34;B4&#34;</span>, <span style="color:#e6db74">&#34;B8&#34;</span>))
+
+ndvi <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>normalizedDifference(c(<span style="color:#e6db74">&#39;B8&#39;</span>, <span style="color:#e6db74">&#39;B4&#39;</span>))     <span style="color:#75715e"># get the NDVI as new layer</span>
+ndvi <span style="color:#f92672">=</span> ndvi<span style="color:#960050;background-color:#1e0010">$</span>multiply(<span style="color:#ae81ff">1000</span>)<span style="color:#960050;background-color:#1e0010">$</span>clip(geometry<span style="color:#960050;background-color:#1e0010">$</span>buffer(<span style="color:#ae81ff">500</span>))<span style="color:#960050;background-color:#1e0010">$</span>rename(<span style="color:#e6db74">&#34;ndvi&#34;</span>) <span style="color:#75715e"># clip to the park area  </span>
+
+latlng <span style="color:#f92672">=</span> ee<span style="color:#960050;background-color:#1e0010">$</span>Image<span style="color:#960050;background-color:#1e0010">$</span>pixelLonLat()<span style="color:#960050;background-color:#1e0010">$</span>addBands(S2)<span style="color:#960050;background-color:#1e0010">$</span>addBands(ndvi)   <span style="color:#75715e"># get selected bands and ndvi  </span>
+latlng <span style="color:#f92672">=</span> latlng<span style="color:#960050;background-color:#1e0010">$</span>reduceRegion(reducer   <span style="color:#f92672">=</span> ee<span style="color:#960050;background-color:#1e0010">$</span>Reducer<span style="color:#960050;background-color:#1e0010">$</span>toList(), 
+                             geometry  <span style="color:#f92672">=</span> geometry<span style="color:#960050;background-color:#1e0010">$</span>buffer(<span style="color:#ae81ff">500</span>), 
+                             maxPixels <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e8</span>, 
+                             scale     <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>)
+
+lats <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;latitude&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo()))    <span style="color:#75715e"># convert lat lon values to numpy array</span>
+lngs <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;longitude&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo()))
+
+
+ndvi_values <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;ndvi&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo())) <span style="color:#75715e"># convert band values to numpy array</span>
+B2_values   <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;B2&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo()))
+B3_values   <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;B3&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo()))
+B4_values   <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;B4&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo()))
+B8_values   <span style="color:#f92672">=</span> np<span style="color:#960050;background-color:#1e0010">$</span>array((ee<span style="color:#960050;background-color:#1e0010">$</span>Array(latlng<span style="color:#960050;background-color:#1e0010">$</span>get(<span style="color:#e6db74">&#34;B8&#34;</span>))<span style="color:#960050;background-color:#1e0010">$</span>getInfo()))</code></pre></div>
+<h1 id="convert-numpy-array-to-raster">Convert numpy array to raster</h1>
+
+<p>Convert the <code>numpy</code> array (Python) to a <code>data.frame</code> &reg; and <code>raster</code> &reg; data types.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+df <span style="color:#f92672">&lt;-</span> data<span style="color:#f92672">.</span>frame(x <span style="color:#f92672">=</span> lngs, y <span style="color:#f92672">=</span> lats, ndvi <span style="color:#f92672">=</span> ndvi_values, B2 <span style="color:#f92672">=</span> B2_values, 
+                 B3 <span style="color:#f92672">=</span> B3_values, B4 <span style="color:#f92672">=</span> B4_values, B8 <span style="color:#f92672">=</span> B8_values)
+
+library(raster)
+XYZ <span style="color:#f92672">&lt;-</span> rasterFromXYZ(df)</code></pre></div>
+<h1 id="plot-false-true-colour">Plot False &amp; True Colour</h1>
+
+<p>Once we have the raster stack, we can start to prepare a false colour or true colour plot based on exported layers.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+plotRGB(XYZ, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>, interpolate <span style="color:#f92672">=</span> TRUE)
+plotRGB(XYZ, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">2</span>, interpolate <span style="color:#f92672">=</span> TRUE, stretch <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lin&#34;</span>)</code></pre></div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876817/earth-engine-rstudio-reticulate/FalseColour.png" title="False color - Based on bands 8,4,3" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876817/earth-engine-rstudio-reticulate/FalseColour.png"  alt="False color - Based on bands 8,4,3">
+  
+    </a>
+  
+   
+    <span class="caption">False color - Based on bands 8,4,3</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876818/earth-engine-rstudio-reticulate/TrueColour.png" title="True color - Based on bands 4,3,2" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876818/earth-engine-rstudio-reticulate/TrueColour.png"  alt="True color - Based on bands 4,3,2">
+  
+    </a>
+  
+   
+    <span class="caption">True color - Based on bands 4,3,2</span>
+  
+</div>
+
+
+<h1 id="rayshader">Rayshader</h1>
+
+<p>Last but not least I wanted to try the new <code>rayshader</code> library and render a 3D NDVI map with depth of field.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+library(rayshader)
+ndvi_m <span style="color:#f92672">=</span> raster_to_matrix(XYZ<span style="color:#960050;background-color:#1e0010">$</span>ndvi)
+
+ndvi_m <span style="color:#f92672">%&gt;%</span>
+  sphere_shade(texture <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;desert&#34;</span>) <span style="color:#f92672">%&gt;%</span>
+  add_water(detect_water(ndvi_m), color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lightblue&#34;</span>) <span style="color:#f92672">%&gt;%</span>
+  add_shadow(ray_shade(ndvi_m, zscale <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>), <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">%&gt;%</span>
+  add_shadow(ambient_shade(ndvi_m), <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">%&gt;%</span>
+  plot_3d(ndvi_m, zscale <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>, fov <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>, theta <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">225</span>, phi <span style="color:#f92672">=</span> <span style="color:#ae81ff">25</span>, windowsize <span style="color:#f92672">=</span> c(<span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">800</span>), zoom <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.3</span>)
+
+render_depth(focus <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.6</span>, focallength <span style="color:#f92672">=</span> <span style="color:#ae81ff">200</span>, clear <span style="color:#f92672">=</span> TRUE)
+render_snapshot(clear <span style="color:#f92672">=</span> TRUE)</code></pre></div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876817/earth-engine-rstudio-reticulate/rayshader_3D_NDVI.png" title="3D NDVI map with depth of field - made with rayshader" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617876817/earth-engine-rstudio-reticulate/rayshader_3D_NDVI.png"  alt="3D NDVI map with depth of field - made with rayshader">
+  
+    </a>
+  
+   
+    <span class="caption">3D NDVI map with depth of field - made with rayshader</span>
+  
+</div>
+
+
+<h1 id="session-info">Session Info</h1>
+
+<p>Here is my version information about R, the OS (Mac) and attached or loaded packages for comparison.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+sessionInfo()
+
+<span style="color:#75715e">## R version 3.4.3 (2017-11-30)</span>
+<span style="color:#75715e">## Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
+<span style="color:#75715e">## Running under: macOS High Sierra 10.13.6</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## Matrix products: default</span>
+<span style="color:#75715e">## BLAS: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRblas.0.dylib</span>
+<span style="color:#75715e">## LAPACK: /Library/Frameworks/R.framework/Versions/3.4/Resources/lib/libRlapack.dylib</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## locale:</span>
+<span style="color:#75715e">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## attached base packages:</span>
+<span style="color:#75715e">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## loaded via a namespace (and not attached):</span>
+<span style="color:#75715e">##  [1] compiler_3.4.3  magrittr_1.5    tools_3.4.3     htmltools_0.3.6</span>
+<span style="color:#75715e">##  [5] yaml_2.2.0      Rcpp_1.0.1      stringi_1.3.1   rmarkdown_1.12 </span>
+<span style="color:#75715e">##  [9] knitr_1.22      stringr_1.4.0   xfun_0.8        digest_0.6.18  </span>
+<span style="color:#75715e">## [13] evaluate_0.13</span></code></pre></div>
+<h2 id="bottom-line">Bottom Line</h2>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">Google-Earth-Engine</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rstudio/">RStudio</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/reticulate/">reticulate</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rstats/">rstats</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/" data-tooltip="Look a little closer - the story of a satellite image and fire fighting missions in Australia">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/05/gee-management-tips/" data-tooltip="Collection of Google Earth Engine management tips">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/" data-tooltip="Look a little closer - the story of a satellite image and fire fighting missions in Australia">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/05/gee-management-tips/" data-tooltip="Collection of Google Earth Engine management tips">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2019\/12\/earth-engine-rstudio-reticulate\/';
+          
+            this.page.identifier = '\/2019\/12\/earth-engine-rstudio-reticulate\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

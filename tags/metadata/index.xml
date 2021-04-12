@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Metadata on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/metadata/</link>
+    <description>Recent content in Metadata on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 06 Jul 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/metadata/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>When Landsat-8 (almost) meets Sentinel-2</title>
+      <link>https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</link>
+      <pubDate>Fri, 06 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</guid>
+      <description>How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.</description>
+    </item>
+    
+    <item>
+      <title>Landsat image inventory in Google Earth Engine</title>
+      <link>https://philippgaertner.github.io/2017/08/landsat-image-inventory-in-google-earth-engine/</link>
+      <pubDate>Tue, 08 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/08/landsat-image-inventory-in-google-earth-engine/</guid>
+      <description>Welcome, to my first step by step tutorial to investigate Landsat image availability and metadata properties for every country within the Earth Engine.</description>
+    </item>
+    
+  </channel>
+</rss>

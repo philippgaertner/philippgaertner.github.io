@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>BVB on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/bvb/</link>
+    <description>Recent content in BVB on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 07 Jun 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/bvb/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST</title>
+      <link>https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/</link>
+      <pubDate>Thu, 07 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/</guid>
+      <description>In this blog post I use stock prices of the Borussia Dortmund (BVB) sports club to detect and characterize abrupt changes within the trend component of the time series. The main objective is, to search and find the optimal segmentation parameter which characterizes the timing and magnitude of abrupt changes best.</description>
+    </item>
+    
+    <item>
+      <title>Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data</title>
+      <link>https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/</link>
+      <pubDate>Mon, 28 May 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/</guid>
+      <description>&lt;p&gt;Imagine we have the perfect time series. Daily values with 100% accuracy. And imagine we know the driving forces for the course of the time series. How beautiful would that be. Well, welcome to the world of finance &amp;amp; soccer.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Landsat Archive on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/landsat-archive/</link>
+    <description>Recent content in Landsat Archive on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 26 Jun 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/landsat-archive/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This Landsat project would cost...</title>
+      <link>https://philippgaertner.github.io/2018/06/landsat-cost-estimator/</link>
+      <pubDate>Tue, 26 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/06/landsat-cost-estimator/</guid>
+      <description>LANDSAT COST ESTIMATOR - A tool to estimate the cost of analyzed Landsat imagery if it wasn&amp;rsquo;t freely available.</description>
+    </item>
+    
+  </channel>
+</rss>

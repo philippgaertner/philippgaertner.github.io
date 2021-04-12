@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Google Analytics on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/google-analytics/</link>
+    <description>Recent content in Google Analytics on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 19 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/google-analytics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Blog Summary - 2020</title>
+      <link>https://philippgaertner.github.io/2020/12/blog-summary-2020/</link>
+      <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/12/blog-summary-2020/</guid>
+      <description>Read a short summary about my blog in 2020 (including Google Analytics summary).</description>
+    </item>
+    
+  </channel>
+</rss>

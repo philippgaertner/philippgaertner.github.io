@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Twitter on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/twitter/</link>
+    <description>Recent content in Twitter on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 22 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/twitter/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Collection of Google Earth Engine management tips</title>
+      <link>https://philippgaertner.github.io/2019/05/gee-management-tips/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/05/gee-management-tips/</guid>
+      <description>&lt;p&gt;Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Analysing Google Earth Engine User Summit 2018 tweets</title>
+      <link>https://philippgaertner.github.io/2018/06/twitter-eeus2018/</link>
+      <pubDate>Thu, 14 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/06/twitter-eeus2018/</guid>
+      <description>Today ended the three-day Google Earth Engine User Summit 2018. On social media channels such as Twitter and YouTube, could non-participants indirectly follow the progress and news around the Earth Engine technology.</description>
+    </item>
+    
+  </channel>
+</rss>

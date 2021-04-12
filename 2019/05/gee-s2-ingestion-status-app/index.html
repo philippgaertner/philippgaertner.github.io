@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App.">
+
+
+<meta property="og:description" content="I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Code behind the Sentinel-2 Ingestion Status App">
+<meta name="twitter:title" content="Code behind the Sentinel-2 Ingestion Status App">
+<meta property="og:url" content="https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App.">
+<meta name="twitter:description" content="I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-05-14T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2019-05-14T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Earth Engine App">
+    
+  
+  
+    
+      <meta property="article:tag" content="google-earth-engine">
+    
+      <meta property="article:tag" content="sentinel-2">
+    
+      <meta property="article:tag" content="surface-reflectance">
+    
+      <meta property="article:tag" content="earth-engine-app">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1618157363/Es-zeVWW8AY9PhF.jpg">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1618157363/Es-zeVWW8AY9PhF.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Code behind the Sentinel-2 Ingestion Status App</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Code behind the Sentinel-2 Ingestion Status App
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-05-14T00:00:00Z">
+        
+  May 14, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/earth-engine-app">Earth Engine App</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App (<a href="https://gaertnerp.users.earthengine.app/view/sentinel2-ingestion-status" target="_blank">Link to Sentinel-2 Ingestion Status App</a>).<br />
+<br>
+<iframe frameborder="2" width="100%" height="550px" src="https://gaertnerp.users.earthengine.app/view/sentinel2-ingestion-status"></iframe></p>
+
+<h1 id="complete-script">Complete Script</h1>
+
+<p>This link opens a <a href="https://code.earthengine.google.com/?scriptPath=users%2Fgaertnerp%2FBlog%3A2019-05-sentinel2-ingestion-status-app" target="_blank">copy of the script</a> in the Javascript Code Editor, or simply copy &amp; paste the code from below.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Javascript
+</span><span style="color:#75715e"></span>
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">addTypeToA</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {  
+  
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ToA</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Image</span>(<span style="color:#ae81ff">1</span>).<span style="color:#a6e22e">rename</span>([<span style="color:#e6db74">&#39;TOA&#39;</span>]);
+  
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">addBands</span>(<span style="color:#a6e22e">ToA</span>);
+  
+};
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">addTypeSR</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {  
+  
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">SR</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Image</span>(<span style="color:#ae81ff">2</span>).<span style="color:#a6e22e">rename</span>([<span style="color:#e6db74">&#39;SR&#39;</span>]);
+  
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">addBands</span>(<span style="color:#a6e22e">SR</span>);
+  
+};
+
+<span style="color:#75715e">// =&gt; Get Sentinel-2 Surface Reflectance Data
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">SR</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#34;COPERNICUS/S2_SR&#34;</span>); 
+
+<span style="color:#75715e">// =&gt; Get Sentinel-2 Surface Reflectance Data
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ToA</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#34;COPERNICUS/S2&#34;</span>);    
+    
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setCenter</span>(<span style="color:#ae81ff">11.23</span>,<span style="color:#ae81ff">49.68</span>,<span style="color:#ae81ff">4</span>);
+
+<span style="color:#75715e">// Create a panel to hold our widgets.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">panel</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Panel</span>();
+<span style="color:#a6e22e">panel</span>.<span style="color:#a6e22e">style</span>().<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;width&#39;</span>, <span style="color:#e6db74">&#39;450px&#39;</span>);
+
+
+<span style="color:#75715e">// Create an intro panel with labels.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">intro</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Panel</span>([
+  <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Label</span>({
+    <span style="color:#a6e22e">value</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Sentinel-2 Ingestion Status&#39;</span>,
+    <span style="color:#a6e22e">style</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">fontSize</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;26px&#39;</span>, <span style="color:#a6e22e">fontWeight</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;bold&#39;</span>}
+  }),
+  <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Label</span>(<span style="color:#e6db74">&#39;Click in the map to obtain information on the ingested Sentinel-2 data.&#39;</span>,{<span style="color:#a6e22e">fontSize</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;15px&#39;</span>})
+]);
+
+<span style="color:#a6e22e">panel</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">intro</span>);
+
+<span style="color:#75715e">// Create panels to hold lon/lat values.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lon</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Label</span>();
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lat</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Label</span>();
+
+<span style="color:#a6e22e">panel</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Panel</span>([<span style="color:#a6e22e">lon</span>, <span style="color:#a6e22e">lat</span>], <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Panel</span>.<span style="color:#a6e22e">Layout</span>.<span style="color:#a6e22e">flow</span>(<span style="color:#e6db74">&#39;horizontal&#39;</span>)));
+
+<span style="color:#75715e">// Register a callback on the default map to be invoked when the map is clicked.
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">onClick</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">coords</span>) {
+
+  <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">layers</span>().<span style="color:#a6e22e">remove</span>(<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">layers</span>().<span style="color:#a6e22e">get</span>(<span style="color:#ae81ff">0</span>));
+  
+  <span style="color:#75715e">// Update the lon/lat panel with values from the click event.
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">lon</span>.<span style="color:#a6e22e">setValue</span>(<span style="color:#e6db74">&#39;lon: &#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">coords</span>.<span style="color:#a6e22e">lon</span>.<span style="color:#a6e22e">toFixed</span>(<span style="color:#ae81ff">2</span>)),
+  <span style="color:#a6e22e">lat</span>.<span style="color:#a6e22e">setValue</span>(<span style="color:#e6db74">&#39;lat: &#39;</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">coords</span>.<span style="color:#a6e22e">lat</span>.<span style="color:#a6e22e">toFixed</span>(<span style="color:#ae81ff">2</span>));
+
+  <span style="color:#75715e">// Add a red dot for the point clicked on.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">geometry</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Geometry</span>.<span style="color:#a6e22e">Point</span>(<span style="color:#a6e22e">coords</span>.<span style="color:#a6e22e">lon</span>, <span style="color:#a6e22e">coords</span>.<span style="color:#a6e22e">lat</span>);
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">dot</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">Layer</span>(<span style="color:#a6e22e">geometry</span>, {<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;red&#39;</span>});
+  
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">TILE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">Layer</span>(<span style="color:#a6e22e">SR</span>.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">geometry</span>).<span style="color:#a6e22e">geometry</span>(), {<span style="color:#a6e22e">colour</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;black&#39;</span>}, <span style="color:#e6db74">&#39;MGRS-TILE&#39;</span>, <span style="color:#66d9ef">true</span>, <span style="color:#ae81ff">0.6</span>);
+  
+  <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">layers</span>().<span style="color:#a6e22e">set</span>(<span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">TILE</span>);
+  <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">layers</span>().<span style="color:#a6e22e">set</span>(<span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">dot</span>);
+  
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">SR_Type</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">SR</span>.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">geometry</span>)
+  .<span style="color:#a6e22e">filterDate</span>(<span style="color:#e6db74">&#39;2015-06-01&#39;</span>, <span style="color:#e6db74">&#39;2019-12-31&#39;</span>).<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">addTypeSR</span>).<span style="color:#a6e22e">select</span>(<span style="color:#e6db74">&#39;SR&#39;</span>);
+
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ToA_Type</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ToA</span>.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">geometry</span>)
+  .<span style="color:#a6e22e">filterDate</span>(<span style="color:#e6db74">&#39;2015-06-01&#39;</span>, <span style="color:#e6db74">&#39;2019-12-31&#39;</span>).<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">addTypeToA</span>).<span style="color:#a6e22e">select</span>(<span style="color:#e6db74">&#39;TOA&#39;</span>);
+
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">SR_Type</span>.<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">ToA_Type</span>);
+
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">chart</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Chart</span>.<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">series</span>(<span style="color:#a6e22e">S2</span>, <span style="color:#a6e22e">geometry</span>, <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Reducer</span>.<span style="color:#a6e22e">mean</span>(), <span style="color:#ae81ff">10</span>)
+  .<span style="color:#a6e22e">setChartType</span>(<span style="color:#e6db74">&#39;ScatterChart&#39;</span>)
+  .<span style="color:#a6e22e">setSeriesNames</span>([<span style="color:#e6db74">&#34;Level-2A (SR)&#34;</span>, <span style="color:#e6db74">&#34;Level-1C (ToA)&#34;</span>])
+  .<span style="color:#a6e22e">setOptions</span>({
+      <span style="color:#a6e22e">legend</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">position</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;top&#39;</span>, <span style="color:#a6e22e">alignment</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;start&#39;</span> },
+      <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Sentinel-2 Ingestion Status&#39;</span>,
+      <span style="color:#a6e22e">hAxis</span><span style="color:#f92672">:</span> {
+        <span style="color:#a6e22e">gridlines</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;transparent&#39;</span>},
+        <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Date&#39;</span>
+      },
+      <span style="color:#a6e22e">vAxis</span><span style="color:#f92672">:</span> {
+        <span style="color:#a6e22e">viewWindow</span><span style="color:#f92672">:</span> {
+        <span style="color:#a6e22e">min</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0.5</span>,
+        <span style="color:#a6e22e">max</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2.5</span>
+      },
+        <span style="color:#a6e22e">textPosition</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;none&#39;</span>,
+        <span style="color:#75715e">// gridlines: { color: &#39;transparent&#39;},
+</span><span style="color:#75715e"></span>        <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;&#39;</span>
+      },
+      <span style="color:#a6e22e">series</span><span style="color:#f92672">:</span> {
+            <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">pointSize</span><span style="color:#f92672">:</span><span style="color:#ae81ff">2</span>,<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;red&#39;</span>}, <span style="color:#75715e">// urban
+</span><span style="color:#75715e"></span>            <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">pointSize</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>,<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;green&#39;</span>} <span style="color:#75715e">// forest
+</span><span style="color:#75715e"></span>  
+   }
+  });
+
+  <span style="color:#a6e22e">panel</span>.<span style="color:#a6e22e">widgets</span>().<span style="color:#a6e22e">set</span>(<span style="color:#ae81ff">2</span>, <span style="color:#a6e22e">chart</span>);
+
+});
+
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setControlVisibility</span>(<span style="color:#66d9ef">false</span>, <span style="color:#66d9ef">true</span>, <span style="color:#66d9ef">true</span>, <span style="color:#66d9ef">false</span>, <span style="color:#66d9ef">false</span>, <span style="color:#66d9ef">true</span>);
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#39;SATELLITE&#39;</span>);
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">style</span>().<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;cursor&#39;</span>, <span style="color:#e6db74">&#39;crosshair&#39;</span>);
+
+<span style="color:#75715e">// Add the panel to the ui.root.
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">root</span>.<span style="color:#a6e22e">insert</span>(<span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">panel</span>);
+</code></pre></div>
+<h2 id="bottom-line">Bottom Line</h2>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">google-earth-engine</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/sentinel-2/">sentinel-2</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/surface-reflectance/">surface-reflectance</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/earth-engine-app/">earth-engine-app</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/05/gee-management-tips/" data-tooltip="Collection of Google Earth Engine management tips">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/" data-tooltip="Checking Earth Engine&#39;s Sentinel-2 Surface Reflectance ingestion status">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/05/gee-management-tips/" data-tooltip="Collection of Google Earth Engine management tips">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/" data-tooltip="Checking Earth Engine&#39;s Sentinel-2 Surface Reflectance ingestion status">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2019\/05\/gee-s2-ingestion-status-app\/';
+          
+            this.page.identifier = '\/2019\/05\/gee-s2-ingestion-status-app\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

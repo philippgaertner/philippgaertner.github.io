@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="Google Earth Engine provides with the &lsquo;Profiler&rsquo; cloud-computing performance information concerning the resources consumed during script computation.">
+
+
+<meta property="og:description" content="Google Earth Engine provides with the &lsquo;Profiler&rsquo; cloud-computing performance information concerning the resources consumed during script computation.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Diagnose Earth Engine performance with the profiler">
+<meta name="twitter:title" content="Diagnose Earth Engine performance with the profiler">
+<meta property="og:url" content="https://philippgaertner.github.io/2017/10/profiler/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2017/10/profiler/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="Google Earth Engine provides with the &lsquo;Profiler&rsquo; cloud-computing performance information concerning the resources consumed during script computation.">
+<meta name="twitter:description" content="Google Earth Engine provides with the &lsquo;Profiler&rsquo; cloud-computing performance information concerning the resources consumed during script computation.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2017-10-16T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2017-10-16T00:00:00">
+  
+  
+  
+  
+    
+      <meta property="article:tag" content="Profiler">
+    
+      <meta property="article:tag" content="Peak Memory">
+    
+      <meta property="article:tag" content="Google-Earth-Engine">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617806106/peakmemory_gauge_plot.png">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617806106/peakmemory_gauge_plot.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Diagnose Earth Engine performance with the profiler</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2017/10/profiler/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Diagnose Earth Engine performance with the profiler
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2017-10-16T00:00:00Z">
+        
+  October 16, 2017
+
+      </time>
+    
+    
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>Google Earth Engine provides in the web-based JavaScript code editor a <a href="https://developers.google.com/earth-engine/playground#profiler">performance profiler</a> which displays information about the resources consumed during script computation.</p>
+
+<p>This blog post discusses provided profiler performance numbers resulting from computations invoked by the <a href="https://philippgaertner.github.io/scripts/Sentinel2-capital-greenness.js"><strong>Sentinel2-capital-greenness.js</strong></a> script, the basis for the <a href="https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/">43 European capital greenness evaluation</a>.</p>
+
+<h4 id="performance">Performance</h4>
+
+<p>The execution of the whole script took about 85 seconds, or 1.42 minutes. In that time were 473 profiles viewed, 215 from API calls and 258 from the display of tiles currently visible in the map. In this particular exercise was the map zoomed in on Berlin, Germany.</p>
+
+<p>The profiler recorded 57 operations and provided an <a href="#anchor">output table</a> with execution numbers <blockquote class="pullquote left">
+	<p>In total were 57 operations profiled.</p>
+</blockquote>where each row corresponds to an algorithm, computation, asset load or overhead operation.</p>
+
+<p>For example, out of the 57 operations belong seven to the category <em>Loading assets</em>, in which the COPERNICUS/Sentinel-2 data are instantiated. Eleven times were methods called that are attached to <em>ee.Image</em> objects, five time for <em>ee.ImageCollection</em> objects. The category <em>Other</em> (n = 14), is an accumulation of elements that have appeared only once in their form and cannot be assigned to any other category.</p>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618130861/2017-10-profiler/waffle_chart.png" title="Aggregation summary of algorithm, computation, asset load and overhead operations." data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618130861/2017-10-profiler/waffle_chart.png"  alt="Aggregation summary of algorithm, computation, asset load and overhead operations.">
+  
+    </a>
+  
+   
+    <span class="caption">Aggregation summary of algorithm, computation, asset load and overhead operations.</span>
+  
+</div>
+
+
+<h4 id="peak-memory-cpu-times">Peak memory &amp; CPU times</h4>
+
+<p>The numbers of the profiler indicate that the highest peak memory (50 megabytes) was needed to load the assets of the COPERNICUS/Sentinel-2 data, which took less than 10 seconds.
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618130853/2017-10-profiler/peakmemory_gauge_plot.png" title="Maximum memory (50MB) was used loading assets of COPERNICUS/S2 data." data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618130853/2017-10-profiler/peakmemory_gauge_plot.png"  alt="Maximum memory (50MB) was used loading assets of COPERNICUS/S2 data.">
+  
+    </a>
+  
+   
+    <span class="caption">Maximum memory (50MB) was used loading assets of COPERNICUS/S2 data.</span>
+  
+</div>
+</p>
+
+<p>The second-highest peak memory (4.7 megabytes) was used on plumbing. The plumbing operation was 57.334 times invoked, thats about 48% of the total counts of operations (119.221 total counts). See the <a href="#anchor">profiler operation table</a> for details.
+<blockquote>
+  <p>Definition: What does Plumbing mean? - Plumbing is a term used to describe the technology and connections between systems in a cloud computing model. It includes the systems, storage, network and the interconnection components that form the cloud environment. The quality of plumbing decides the efficiency of the applications and services delivered. - www.techopedia.com </p>
+  <footer>
+    <strong></strong>
+    
+      
+        <cite></cite>
+      
+    
+  </footer>
+</blockquote></p>
+
+<h4 id="anchor">Profiler operations table</h4>
+
+<table>
+<thead>
+<tr>
+<th align="left">ID</th>
+<th align="center">Compute</th>
+<th align="center">Peak.Mem</th>
+<th align="center">Count</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="left">1</td>
+<td align="center">9.775</td>
+<td align="center">50M</td>
+<td align="center">1553</td>
+<td align="left">Loading assets: COPERNICUS/S2</td>
+</tr>
+
+<tr>
+<td align="left">2</td>
+<td align="center">7.333</td>
+<td align="center">1.2M</td>
+<td align="center">258</td>
+<td align="left">Encoding pixels to image</td>
+</tr>
+
+<tr>
+<td align="left">3</td>
+<td align="center">5.143</td>
+<td align="center">4.7M</td>
+<td align="center">57334</td>
+<td align="left">(plumbing)</td>
+</tr>
+
+<tr>
+<td align="left">4</td>
+<td align="center">1.086</td>
+<td align="center">148k</td>
+<td align="center">12</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagecollectionreduce">Algorithm ImageCollection.reduce with reducer Reducer.median</a></td>
+</tr>
+
+<tr>
+<td align="left">5</td>
+<td align="center">0.431</td>
+<td align="center">45k</td>
+<td align="center">3554</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimageselect">Algorithm Image.select</a></td>
+</tr>
+
+<tr>
+<td align="left">6</td>
+<td align="center">0.337</td>
+<td align="center">17k</td>
+<td align="center">1763</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagevisualize">Algorithm Image.visualize</a></td>
+</tr>
+
+<tr>
+<td align="left">7</td>
+<td align="center">0.334</td>
+<td align="center">7.0k</td>
+<td align="center">903</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimageclip">Algorithm Image.clip</a></td>
+</tr>
+
+<tr>
+<td align="left">8</td>
+<td align="center">0.334</td>
+<td align="center">229k</td>
+<td align="center">233</td>
+<td align="left">Algorithm (user-defined function)</td>
+</tr>
+
+<tr>
+<td align="left">9</td>
+<td align="center">0.211</td>
+<td align="center">34k</td>
+<td align="center">1777</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagefloat">Algorithm Image.float</a></td>
+</tr>
+
+<tr>
+<td align="left">10</td>
+<td align="center">0.202</td>
+<td align="center">1.0M</td>
+<td align="center">5</td>
+<td align="left">Reprojection precalculation between EPSG:32632 and SR-ORG:6627</td>
+</tr>
+
+<tr>
+<td align="left">11</td>
+<td align="center">0.202</td>
+<td align="center">33k</td>
+<td align="center">1777</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimageaddbands">Algorithm Image.addBands</a></td>
+</tr>
+
+<tr>
+<td align="left">12</td>
+<td align="center">0.198</td>
+<td align="center">23k</td>
+<td align="center">1777</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagerename">Algorithm Image.rename</a></td>
+</tr>
+
+<tr>
+<td align="left">13</td>
+<td align="center">0.196</td>
+<td align="center">19k</td>
+<td align="center">1777</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagenormalizeddifference">Algorithm Image.normalizedDifference</a></td>
+</tr>
+
+<tr>
+<td align="left">14</td>
+<td align="center">0.193</td>
+<td align="center">1.0M</td>
+<td align="center">5</td>
+<td align="left">Reprojection precalculation between EPSG:32633 and SR-ORG:6627</td>
+</tr>
+
+<tr>
+<td align="left">15</td>
+<td align="center">0.074</td>
+<td align="center">576k</td>
+<td align="center">60</td>
+<td align="left">Loading assets: COPERNICUS/S2/20160827T101022_20160827T153533_T32UQD</td>
+</tr>
+
+<tr>
+<td align="left">16</td>
+<td align="center">0.073</td>
+<td align="center">1.1M</td>
+<td align="center">60</td>
+<td align="left">Loading assets: COPERNICUS/S2/20150704T101337_20160809T015434_T32UQD</td>
+</tr>
+
+<tr>
+<td align="left">17</td>
+<td align="center">0.072</td>
+<td align="center">958k</td>
+<td align="center">62</td>
+<td align="left">Loading assets: COPERNICUS/S2/20160827T101022_20160827T153533_T33UUU</td>
+</tr>
+
+<tr>
+<td align="left">18</td>
+<td align="center">0.071</td>
+<td align="center">878k</td>
+<td align="center">62</td>
+<td align="left">Loading assets: COPERNICUS/S2/20170830T102019_20170830T102531_T33UUU</td>
+</tr>
+
+<tr>
+<td align="left">19</td>
+<td align="center">0.068</td>
+<td align="center">1.0M</td>
+<td align="center">62</td>
+<td align="left">Loading assets: COPERNICUS/S2/20150704T101337_20160809T015434_T33UUU</td>
+</tr>
+
+<tr>
+<td align="left">20</td>
+<td align="center">0.060</td>
+<td align="center">6.1k</td>
+<td align="center">178</td>
+<td align="left">Listing collection</td>
+</tr>
+
+<tr>
+<td align="left">21</td>
+<td align="center">0.051</td>
+<td align="center">473k</td>
+<td align="center">921</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagecollectionreduce">Algorithm ImageCollection.reduce</a></td>
+</tr>
+
+<tr>
+<td align="left">22</td>
+<td align="center">0.022</td>
+<td align="center">4.2k</td>
+<td align="center">387</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eegeometrybuffer">Algorithm Geometry.buffer</a></td>
+</tr>
+
+<tr>
+<td align="left">23</td>
+<td align="center">0.008</td>
+<td align="center">1.4k</td>
+<td align="center">12</td>
+<td align="left">Reprojecting geometry to SR-ORG:6627</td>
+</tr>
+
+<tr>
+<td align="left">24</td>
+<td align="center">0.007</td>
+<td align="center">128</td>
+<td align="center">60</td>
+<td align="left">Reprojecting pixels from EPSG:32633 to SR-ORG:6627</td>
+</tr>
+
+<tr>
+<td align="left">25</td>
+<td align="center">0.006</td>
+<td align="center">4.0k</td>
+<td align="center">516</td>
+<td align="left">Algorithm Element.geometry</td>
+</tr>
+
+<tr>
+<td align="left">26</td>
+<td align="center">0.006</td>
+<td align="center">12k</td>
+<td align="center">344</td>
+<td align="left">Algorithm Collection.geometry</td>
+</tr>
+
+<tr>
+<td align="left">27</td>
+<td align="center">0.005</td>
+<td align="center">616</td>
+<td align="center">43</td>
+<td align="left">Algorithm Collection.reduceColumns with reducer Reducer.toList</td>
+</tr>
+
+<tr>
+<td align="left">28</td>
+<td align="center">0.005</td>
+<td align="center">72k</td>
+<td align="center">24</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimageclip">Algorithm Image.clip computing pixels</a></td>
+</tr>
+
+<tr>
+<td align="left">29</td>
+<td align="center">0.004</td>
+<td align="center">128</td>
+<td align="center">40</td>
+<td align="left">Reprojecting pixels from EPSG:32632 to SR-ORG:6627</td>
+</tr>
+
+<tr>
+<td align="left">30</td>
+<td align="center">0.003</td>
+<td align="center">464</td>
+<td align="center">828</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagevisualize">Algorithm Image.visualize computing pixels</a></td>
+</tr>
+
+<tr>
+<td align="left">31</td>
+<td align="center">0.002</td>
+<td align="center">1.0k</td>
+<td align="center">50</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagenormalizeddifference">Algorithm Image.normalizedDifference computing pixels</a></td>
+</tr>
+
+<tr>
+<td align="left">32</td>
+<td align="center">-</td>
+<td align="center">321k</td>
+<td align="center">153</td>
+<td align="left">no description available</td>
+</tr>
+
+<tr>
+<td align="left">33</td>
+<td align="center">-</td>
+<td align="center">321k</td>
+<td align="center">12</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagecollectionreduce">Algorithm ImageCollection.reduce computing pixels</a></td>
+</tr>
+
+<tr>
+<td align="left">34</td>
+<td align="center">-</td>
+<td align="center">86k</td>
+<td align="center">393</td>
+<td align="left">Algorithm List.(construct from elements)</td>
+</tr>
+
+<tr>
+<td align="left">35</td>
+<td align="center">-</td>
+<td align="center">67k</td>
+<td align="center">387</td>
+<td align="left">Algorithm Collection</td>
+</tr>
+
+<tr>
+<td align="left">36</td>
+<td align="center">-</td>
+<td align="center">21k</td>
+<td align="center">3150</td>
+<td align="left">Algorithm Collection.map</td>
+</tr>
+
+<tr>
+<td align="left">37</td>
+<td align="center">-</td>
+<td align="center">11k</td>
+<td align="center">921</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeimagecollectionload">Algorithm ImageCollection.load</a></td>
+</tr>
+
+<tr>
+<td align="left">38</td>
+<td align="center">-</td>
+<td align="center">10k</td>
+<td align="center">17415</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eefeature">Algorithm Feature</a></td>
+</tr>
+
+<tr>
+<td align="left">39</td>
+<td align="center">-</td>
+<td align="center">7.4k</td>
+<td align="center">129</td>
+<td align="left">Algorithm AggregateFeatureCollection.array</td>
+</tr>
+
+<tr>
+<td align="left">40</td>
+<td align="center">-</td>
+<td align="center">6.3k</td>
+<td align="center">792</td>
+<td align="left">Loading assets: COPERNICUS</td>
+</tr>
+
+<tr>
+<td align="left">41</td>
+<td align="center">-</td>
+<td align="center">5.6k</td>
+<td align="center">86</td>
+<td align="left">Algorithm Collection.reduceColumns</td>
+</tr>
+
+<tr>
+<td align="left">42</td>
+<td align="center">-</td>
+<td align="center">5.4k</td>
+<td align="center">792</td>
+<td align="left">Algorithm TypedImageCollection.Constructor</td>
+</tr>
+
+<tr>
+<td align="left">43</td>
+<td align="center">-</td>
+<td align="center">5.3k</td>
+<td align="center">3150</td>
+<td align="left">Algorithm Collection.filter</td>
+</tr>
+
+<tr>
+<td align="left">44</td>
+<td align="center">-</td>
+<td align="center">4.7k</td>
+<td align="center">2763</td>
+<td align="left">Algorithm Collection.limit</td>
+</tr>
+
+<tr>
+<td align="left">45</td>
+<td align="center">-</td>
+<td align="center">4.5k</td>
+<td align="center">1842</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eefilterintersects">Algorithm Filter.intersects</a></td>
+</tr>
+
+<tr>
+<td align="left">46</td>
+<td align="center">-</td>
+<td align="center">4.4k</td>
+<td align="center">792</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eepixeltype">Algorithm PixelType</a></td>
+</tr>
+
+<tr>
+<td align="left">47</td>
+<td align="center">-</td>
+<td align="center">4.3k</td>
+<td align="center">387</td>
+<td align="left">Algorithm Element.copyProperties</td>
+</tr>
+
+<tr>
+<td align="left">48</td>
+<td align="center">-</td>
+<td align="center">4.3k</td>
+<td align="center">792</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eefiltercalendarrange">Algorithm Filter.calendarRange</a></td>
+</tr>
+
+<tr>
+<td align="left">49</td>
+<td align="center">-</td>
+<td align="center">4.2k</td>
+<td align="center">387</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eefiltereq">Algorithm Filter.eq</a></td>
+</tr>
+
+<tr>
+<td align="left">50</td>
+<td align="center">-</td>
+<td align="center">4.1k</td>
+<td align="center">129</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eefilterdayofyear">Algorithm Filter.dayOfYear</a></td>
+</tr>
+
+<tr>
+<td align="left">51</td>
+<td align="center">-</td>
+<td align="center">4.1k</td>
+<td align="center">792</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eeerrormargin">Algorithm ErrorMargin</a></td>
+</tr>
+
+<tr>
+<td align="left">52</td>
+<td align="center">-</td>
+<td align="center">4.0k</td>
+<td align="center">258</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eestring">Algorithm String</a></td>
+</tr>
+
+<tr>
+<td align="left">53</td>
+<td align="center">-</td>
+<td align="center">3.5k</td>
+<td align="center">215</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eelistget">Algorithm List.get</a></td>
+</tr>
+
+<tr>
+<td align="left">54</td>
+<td align="center">-</td>
+<td align="center">2.3k</td>
+<td align="center">5590</td>
+<td align="left">Algorithm Dictionary.(construct from elements)</td>
+</tr>
+
+<tr>
+<td align="left">55</td>
+<td align="center">-</td>
+<td align="center">1.1k</td>
+<td align="center">307</td>
+<td align="left"><a href="https://developers.google.com/earth-engine/api_docs#eereducermedian">Algorithm Reducer.median</a></td>
+</tr>
+
+<tr>
+<td align="left">56</td>
+<td align="center">-</td>
+<td align="center">256</td>
+<td align="center">1050</td>
+<td align="left">Expression evaluation</td>
+</tr>
+
+<tr>
+<td align="left">57</td>
+<td align="center">-</td>
+<td align="center">64</td>
+<td align="center">100</td>
+<td align="left">Algorithm Image.load computing pixels</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/profiler/">Profiler</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/peak-memory/">Peak Memory</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">Google-Earth-Engine</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/" data-tooltip="Intra-annual vegetation density changes of two public parks in Berlin, Germany">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/" data-tooltip="European capital greenness evaluation">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/" data-tooltip="Intra-annual vegetation density changes of two public parks in Berlin, Germany">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/" data-tooltip="European capital greenness evaluation">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2017\/10\/profiler\/';
+          
+            this.page.identifier = '\/2017\/10\/profiler\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

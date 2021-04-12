@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Visualization on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/data-visualization/</link>
+    <description>Recent content in Data Visualization on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 07 Oct 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/data-visualization/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>European capital greenness evaluation</title>
+      <link>https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/</link>
+      <pubDate>Sat, 07 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/</guid>
+      <description>The analysis of satellite images from Sentinel-2 shows how green Europe&amp;rsquo;s capitals really are. The greenness was evaluated with the Normalized Difference Vegetation Index and allows comparison among the 43 analyzed capitals.</description>
+    </item>
+    
+  </channel>
+</rss>

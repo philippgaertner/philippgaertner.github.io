@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>surface-reflectance on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/surface-reflectance/</link>
+    <description>Recent content in surface-reflectance on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 14 May 2019 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/surface-reflectance/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Code behind the Sentinel-2 Ingestion Status App</title>
+      <link>https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/</link>
+      <pubDate>Tue, 14 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/</guid>
+      <description>I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App.</description>
+    </item>
+    
+    <item>
+      <title>Checking Earth Engine&#39;s Sentinel-2 Surface Reflectance ingestion status</title>
+      <link>https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/</link>
+      <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/</guid>
+      <description>Since the 27&lt;sup&gt;th&lt;/sup&gt; of March 2019 has the Earth Engine data catalogue one more dataset. Sentinel-2 Surface Reflectance (Level-2A) data are finally available. This blog post teaches you in one minute, how to get the current Sentinel-2 ingestion status for your country.</description>
+    </item>
+    
+  </channel>
+</rss>

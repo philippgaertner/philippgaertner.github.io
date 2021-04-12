@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Earth Engine User Summit on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/earth-engine-user-summit/</link>
+    <description>Recent content in Earth Engine User Summit on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 14 Jun 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/earth-engine-user-summit/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Analysing Google Earth Engine User Summit 2018 tweets</title>
+      <link>https://philippgaertner.github.io/2018/06/twitter-eeus2018/</link>
+      <pubDate>Thu, 14 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/06/twitter-eeus2018/</guid>
+      <description>Today ended the three-day Google Earth Engine User Summit 2018. On social media channels such as Twitter and YouTube, could non-participants indirectly follow the progress and news around the Earth Engine technology.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fire Fighting on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/fire-fighting/</link>
+    <description>Recent content in Fire Fighting on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 07 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/fire-fighting/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Look a little closer - the story of a satellite image and fire fighting missions in Australia</title>
+      <link>https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/</link>
+      <pubDate>Tue, 07 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/</guid>
+      <description>Every painting has its story. The same is true for satellite images. This blogpost is about a Sentinel-2 satellite image of the Australian bush fire and how a second data source helped to visualize fire-fighting missions.</description>
+    </item>
+    
+  </channel>
+</rss>

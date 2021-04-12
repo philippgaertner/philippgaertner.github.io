@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Monitoring on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/monitoring/</link>
+    <description>Recent content in Monitoring on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 19 Dec 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/monitoring/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Europe&#39;s air pollution is lower during weekends</title>
+      <link>https://philippgaertner.github.io/2018/12/no2/</link>
+      <pubDate>Wed, 19 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/12/no2/</guid>
+      <description>&lt;p&gt;&lt;em&gt;TL;DR&lt;/em&gt; Europe&amp;rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO&lt;sub&gt;2&lt;/sub&gt;) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO&lt;sub&gt;2&lt;/sub&gt; values compared to other &amp;ldquo;normal&amp;rdquo; Saturdays.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>When Landsat-8 (almost) meets Sentinel-2</title>
+      <link>https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</link>
+      <pubDate>Fri, 06 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</guid>
+      <description>How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.</description>
+    </item>
+    
+  </channel>
+</rss>

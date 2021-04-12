@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="In this blog post I use stock prices of the Borussia Dortmund (BVB) sports club to detect and characterize abrupt changes within the trend component of the time series. The main objective is, to search and find the optimal segmentation parameter which characterizes the timing and magnitude of abrupt changes best.">
+
+
+<meta property="og:description" content="In this blog post I use stock prices of the Borussia Dortmund (BVB) sports club to detect and characterize abrupt changes within the trend component of the time series. The main objective is, to search and find the optimal segmentation parameter which characterizes the timing and magnitude of abrupt changes best.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST">
+<meta name="twitter:title" content="Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST">
+<meta property="og:url" content="https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="In this blog post I use stock prices of the Borussia Dortmund (BVB) sports club to detect and characterize abrupt changes within the trend component of the time series. The main objective is, to search and find the optimal segmentation parameter which characterizes the timing and magnitude of abrupt changes best.">
+<meta name="twitter:description" content="In this blog post I use stock prices of the Borussia Dortmund (BVB) sports club to detect and characterize abrupt changes within the trend component of the time series. The main objective is, to search and find the optimal segmentation parameter which characterizes the timing and magnitude of abrupt changes best.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2018-06-07T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2018-06-07T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="BVB">
+    
+      <meta property="article:section" content="BFAST">
+    
+  
+  
+    
+      <meta property="article:tag" content="Regular Time Series">
+    
+      <meta property="article:tag" content="Breakpoint Detection">
+    
+      <meta property="article:tag" content="Breakpoint Magnitude">
+    
+      <meta property="article:tag" content="Minimum Segment Size">
+    
+      <meta property="article:tag" content="rstats">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617827662/thumbnailImage_bfast.png">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617827662/thumbnailImage_bfast.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2018/06/bfast-bvb-the-optimal-h-parameter/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Break Detection on Borussia Dortmund (BVB) stock prices - Part II The optimal h-parameter of BFAST
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-06-07T00:00:00Z">
+        
+  June 7, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/bvb">BVB</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/bfast">BFAST</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>In this blog post I use stock prices of the <strong>Borussia Dortmund GmbH &amp; Co. KGaA</strong> sports club to detect and characterize abrupt changes within the trend component of the time series. The main objective is, to search and find the optimal segmentation parameter which characterizes the timing and magnitude of abrupt changes best.</p>
+
+<p>Furthermore, I point to possible reasons behind the abrupt changing prices by means of soccer game results of the Ballspielverein Borussia 09 e.V. Dortmund, commonly known as <strong>Borussia Dortmund</strong> or <strong>BVB</strong>, player transfers or outcome of FIFA Soccer World Cups.</p>
+
+<p>The blog post is quite long, so I decided to divide it thematically (You are reading <strong>Part II</strong>).</p>
+
+<h1 id="bfast-and-the-search-for-the-optimal-h-parameter">BFAST and the search for the optimal h-parameter</h1>
+
+<p>Well, we know almost every <a href="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/">BVB game result</a> and the most important transfers of the last 18 years and focus now on the search for abrupt changes in the time series of stock prices. For this I use the <code>BFAST</code> R package with the function of the same name <code>bfast()</code>.</p>
+
+<h4 id="usage">Usage</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R </span>
+
+library(bfast)
+bfast(Yt, h <span style="color:#f92672">=</span> <span style="color:#960050;background-color:#1e0010">??</span>, season <span style="color:#f92672">=</span> c(<span style="color:#e6db74">&#34;dummy&#34;</span>, <span style="color:#e6db74">&#34;harmonic&#34;</span>, <span style="color:#e6db74">&#34;none&#34;</span>), 
+      max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> NULL, breaks <span style="color:#f92672">=</span> NULL, hpc <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;none&#34;</span>, 
+      level <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.05</span>, type<span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;OLS-MOSUM&#34;</span>)</code></pre></div>
+<h4 id="short-description">Short Description</h4>
+
+<p>BFAST performs a iterative break detection in seasonal and trend component of a time series. Seasonal breaks is a function that combines the iterative decomposition of time series into trend, seasonal and remainder components with significant break detection in the decomposed components of the time series (source: R Documentation).</p>
+
+<h4 id="arguments">Arguments</h4>
+
+<p>I am applying the above function and change two arguments.</p>
+
+<div class="alert info ">
+  <p><code>h</code> -  Minimal segment size between potentially detected breaks in the trend model given as fraction relative to the sample size. (i.e. 0.5)</p>
+</div>
+
+<div class="alert info ">
+  <p><code>season</code> -  The seasonal model used to fit the seasonal component and detect seasonal breaks (i.e. significant phenological change). There are three options: <code>dummy</code>, <code>harmonic</code>, or <code>none</code>. If there is no seasonal cycle, <code>none</code> can be selected to avoid fitting a seasonal model.</p>
+</div>
+
+<!--While searching for the breakpoints, the only argument I am changing when I call `bfast()`, is the `h` parameter. -->
+
+<h2 id="the-workflow">The Workflow</h2>
+
+<p>I will go through the workflow step by step.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+library(zoo)
+library(xts)
+library(lubridate)
+library(dplyr)
+library(tibble)
+library(bfast)
+library(patchwork)
+library(ggplot2)
+library(ggiraph)
+library(kableExtra)</code></pre></div>
+<h3 id="create-daily-time-series">Create Daily Time Series</h3>
+
+<p>Take the daily BVB stock price <code>data.frame</code> and turn it into a daily time series <code>ts</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+load(<span style="color:#e6db74">&#34;finance_all_data.Rda&#34;</span>)
+
+finance_all_data <span style="color:#f92672">&lt;-</span> finance_all_data <span style="color:#f92672">%&gt;%</span>
+   dplyr::select(date, PX_LAST, weekdays) <span style="color:#f92672">%&gt;%</span> <span style="color:#75715e"># select important columns</span>
+   mutate(year <span style="color:#f92672">=</span> lubridate::year(date))       <span style="color:#75715e"># add column: year</span>
+
+ts<span style="color:#f92672">.</span>bvb <span style="color:#f92672">&lt;-</span> ts(data <span style="color:#f92672">=</span> finance_all_data<span style="color:#960050;background-color:#1e0010">$</span>PX_LAST,
+     start <span style="color:#f92672">=</span> c(min(finance_all_data<span style="color:#960050;background-color:#1e0010">$</span>year), <span style="color:#ae81ff">60</span>),  <span style="color:#75715e"># year 2001, day 60</span>
+     end   <span style="color:#f92672">=</span> c(max(finance_all_data<span style="color:#960050;background-color:#1e0010">$</span>year), <span style="color:#ae81ff">138</span>), <span style="color:#75715e"># year 2018, day 138</span>
+     frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">365</span>)
+    
+<span style="color:#75715e"># Replace NA by interpolation from the weekends and public holidays </span>
+ts<span style="color:#f92672">.</span>bvb <span style="color:#f92672">&lt;-</span> zoo::na<span style="color:#f92672">.</span>approx(ts<span style="color:#f92672">.</span>bvb) 
+    
+tibble::glimpse(ts<span style="color:#f92672">.</span>bvb)
+<span style="color:#75715e">##  Time-Series [1:6284] from 2001 to 2018: 8.16 8.2 8.2 8.2 8.2 ...</span></code></pre></div>
+<h3 id="convert-daily-to-weekly">Convert Daily To Weekly</h3>
+
+<p>Take the daily BVB stock price time series and turn it into a weekly time series (BFAST on daily data takes up a lot of processing time, therefore I gonna work here with weekly data).</p>
+
+<p>At this point I can use the <code>aggregate.daily.to.weekly</code> function from my last blog post. The result is a time series with the length of 896 weeks.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> function(ts<span style="color:#f92672">.</span>daily) {
+     
+     library(xts)
+     library(lubridate)
+     dates      <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(date_decimal(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time(ts<span style="color:#f92672">.</span>daily))))
+     
+     xts<span style="color:#f92672">.</span>daily  <span style="color:#f92672">&lt;-</span> xts(ts<span style="color:#f92672">.</span>daily, order<span style="color:#f92672">.</span>by <span style="color:#f92672">=</span> dates)
+     
+     xts<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> round(xts::apply<span style="color:#f92672">.</span>weekly(xts<span style="color:#f92672">.</span>daily, mean),<span style="color:#ae81ff">2</span>)  <span style="color:#75715e"># xts</span>
+     
+     ts<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> ts(data <span style="color:#f92672">=</span> xts<span style="color:#f92672">.</span>weekly, 
+                     <span style="color:#75715e"># define the start and end (Year, Week)  </span>
+                     start <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(start(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%Y&#34;</span>)),
+                               <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(start(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%W&#34;</span>))), 
+                     end   <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(end(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%Y&#34;</span>)), 
+                               <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(end(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%W&#34;</span>))), 
+                     frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">52</span>)
+     
+     <span style="color:#66d9ef">return</span>(ts<span style="color:#f92672">.</span>weekly)
+ 
+ }
+
+ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>weekly(ts<span style="color:#f92672">.</span>bvb)
+length(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w)  <span style="color:#75715e"># 896 weeks</span>
+<span style="color:#75715e">## [1] 896</span>
+
+plot(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w, main <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Borussia Dortmund weekly aggregated stock prices&#34;</span>, 
+ylab <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Stock Price (Euro)&#34;</span>)</code></pre></div>
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/apply-function-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/apply-function-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<h3 id="question-which-is-the-most-ideal-h-parameter">Question: Which is the most ideal h-parameter?</h3>
+
+<p>We have now a valid weekly time series and would be ready to fire up the <code>bfast()</code> function. At this point we have to decide which h-parameter is the most ideal for our dataset. Lets start by figuring out which is, for our dataset, the biggest and which is the smallest h-parameter possible and how many options are actually there.</p>
+
+<h4 id="the-biggest-smallest-h-parameter">The biggest / smallest h-parameter</h4>
+
+<p>The biggest possible h-parameter is <strong>0.5</strong> and the minimal segment size between the <strong>one</strong> potentially detected break is <strong>448 weeks</strong> (i.e. 448 weeks / 896 weeks = 0.5). We potentially get 2 trend segments and 1 breakpoint.</p>
+
+<p>The smallest possible h-parameter is <strong>0.001116071</strong> and the minimal segment size between the <strong>895</strong> potentially detected breaks is <strong>1 week</strong> (i.e. 1 week / 896 weeks = 0.001116071).<blockquote class="pullquote right">
+	<p>
+The most ideal h-parameter is somewhere between 0.5 and 0.001116071. 
+</p>
+</blockquote></p>
+
+<p>In total there are 448 different h-parameter value options for our BVB weekly time.series. From <sup>448</sup>&frasl;<sub>896</sub> = 0.5 until until <sup>1</sup>&frasl;<sub>896</sub> = 0.001116071.</p>
+
+<h4 id="call-bfast-with-wrong-arguments">Call <code>bfast()</code> with wrong arguments</h4>
+
+<p>What happens when we call <code>bfast()</code> with incorrect arguments? Two examples.</p>
+
+<p>Here, I use a wrong h-parameter (too big). We know the maximum is 0.5, anyway I try 0.9 and get the following error:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">bfast(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.9</span>, season <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;none&#34;</span>, max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+<span style="color:#75715e">## [1] &#34;No seasonal model will be fitted!&#34;</span>
+
+<span style="color:#75715e">## Error in breakpoints.formula(Vt ~ ti, h = h, breaks = breaks, hpc = hpc): </span>
+<span style="color:#75715e">## minimum segment size must be smaller than half the number of observations</span></code></pre></div>
+<p>What about a different seasonal model?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">bfast(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>, season <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;dummy&#34;</span>, max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+<span style="color:#75715e">## Error in stl(Yt, &#34;periodic&#34;): only univariate series are allowed</span>
+
+bfast(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>, season <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;harmonic&#34;</span>, max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+<span style="color:#75715e">## Error in stl(Yt, &#34;periodic&#34;): only univariate series are allowed</span></code></pre></div>
+<h2 id="loop-over">Loop over</h2>
+
+<h4 id="apply-bfast-with-different-h-parameters">Apply <code>bfast()</code> with different h-parameters</h4>
+
+<p>I run <code>bfast()</code> 45 times, each time with a changing <code>h</code> value. I am starting with <sup>448</sup>&frasl;<sub>896</sub> = <strong>0.5</strong> (448 weeks are the minimal number of observations allowed in each segment, 896 weeks is the total length of the time series).</p>
+
+<p>The second <code>h</code> value I use is <sup>440</sup>&frasl;<sub>896</sub> = <strong>0.4910714</strong>. From here I decrease the minimal number by 10 weeks, .i.e <sup>430</sup>&frasl;<sub>896</sub> = <strong>0.4799107</strong> until I reach 10 weeks (<sup>10</sup>&frasl;<sub>896</sub> = <strong>0.01116071</strong>).</p>
+
+<p>The result is a <code>list</code> of the class &ldquo;bfast&rdquo;. I extract from the list</p>
+
+<p>a) the time of the abrupt changes (breakpoints),<br />
+b) the break magnitude and<br />
+c) the processing time.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df <span style="color:#f92672">&lt;-</span> data<span style="color:#f92672">.</span>frame()
+
+x <span style="color:#f92672">&lt;-</span> seq(<span style="color:#ae81ff">440</span>, <span style="color:#ae81ff">10</span>, by <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>)
+y <span style="color:#f92672">&lt;-</span> x<span style="color:#f92672">/</span>length(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w)  <span style="color:#75715e"># 896 weeks</span>
+y <span style="color:#f92672">&lt;-</span> append(y, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0</span>)  <span style="color:#75715e"># add 448 / 896 = 0.5</span>
+
+<span style="color:#66d9ef">for</span> (i <span style="color:#f92672">in</span> y) {
+     
+     start_time <span style="color:#f92672">&lt;-</span> Sys<span style="color:#f92672">.</span>time()
+     fit <span style="color:#f92672">&lt;-</span> bfast::bfast(ts<span style="color:#f92672">.</span>bvb<span style="color:#f92672">.</span>w, h <span style="color:#f92672">=</span> i, season <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;none&#34;</span>, max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+     end_time <span style="color:#f92672">&lt;-</span> Sys<span style="color:#f92672">.</span>time()
+     
+     brk_pts <span style="color:#f92672">&lt;-</span> fit<span style="color:#960050;background-color:#1e0010">$</span>output[[<span style="color:#ae81ff">1</span>]]<span style="color:#960050;background-color:#1e0010">$</span>ci<span style="color:#f92672">.</span>Vt<span style="color:#960050;background-color:#1e0010">$</span>confint  <span style="color:#75715e"># time of breakpoint</span>
+     
+     brk_pts<span style="color:#f92672">.</span>df <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>frame(brk_pts)
+     
+     <span style="color:#75715e"># magnitude of the biggest change detected in the trend component</span>
+     brk_pts<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>max_mag <span style="color:#f92672">&lt;-</span> fit<span style="color:#960050;background-color:#1e0010">$</span>Magnitude
+     
+     brk_pts<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>mag <span style="color:#f92672">&lt;-</span> NA  <span style="color:#75715e"># here goes the magnitude of each breakpoint</span>
+     
+     <span style="color:#75715e"># the fitted trend component</span>
+     Tt <span style="color:#f92672">&lt;-</span> fit<span style="color:#960050;background-color:#1e0010">$</span>output[[<span style="color:#ae81ff">1</span>]]<span style="color:#960050;background-color:#1e0010">$</span>Tt
+     
+     <span style="color:#66d9ef">for</span> (xx <span style="color:#f92672">in</span> <span style="color:#ae81ff">1</span>:nrow(brk_pts<span style="color:#f92672">.</span>df)) {
+         
+         break_week <span style="color:#f92672">&lt;-</span> brk_pts[xx, <span style="color:#ae81ff">2</span>]
+         <span style="color:#75715e"># read the magnitude from the fitted trend component</span>
+         brk_pts<span style="color:#f92672">.</span>df[xx, <span style="color:#ae81ff">5</span>] <span style="color:#f92672">&lt;-</span> Tt[[(break_week <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)]] <span style="color:#f92672">-</span> Tt[[break_week]]
+     }
+     
+     brk_pts<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>h <span style="color:#f92672">&lt;-</span> i
+     brk_pts<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>speed <span style="color:#f92672">&lt;-</span> end_time <span style="color:#f92672">-</span> start_time  <span style="color:#75715e"># get the processing time</span>
+     
+     df <span style="color:#f92672">&lt;-</span> rbind(df, brk_pts<span style="color:#f92672">.</span>df)
+     
+ }</code></pre></div>
+<p>Plots with sample results for bfast with h = 0.5, 0.402, 0.301, 0.201, 0.1, 0.056 and 0.011 are shown below.</p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.5-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.5-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.402-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.402-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-75" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618134700/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.011-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618134700/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.011-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.201-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.201-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.100-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.100-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.056-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.056-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+  <div style="clear:both;"></div>
+</p>
+
+<p><br></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+tibble::glimpse(df)
+<span style="color:#75715e">## Observations: 203</span>
+<span style="color:#75715e">## Variables: 7</span>
+<span style="color:#75715e">## $ `2.5 %`     &lt;dbl447, 439, 429, 419, 409, 406, 406, 406, 406, 406, ...</span>
+<span style="color:#75715e">## $ breakpoints &lt;dbl448, 440, 430, 420, 410, 407, 407, 407, 407, 407, ...</span>
+<span style="color:#75715e">## $ `97.5 %`    &lt;dbl449, 441, 431, 421, 411, 408, 408, 408, 408, 408, ...</span>
+<span style="color:#75715e">## $ max_mag     &lt;dbl0.661649797, 0.532089150, 0.353913696, 0.192414896...</span>
+<span style="color:#75715e">## $ mag         &lt;dbl0.661649797, 0.532089150, 0.353913696, 0.192414896...</span>
+<span style="color:#75715e">## $ h           &lt;dbl0.5000000, 0.4910714, 0.4799107, 0.4687500, 0.4575...</span>
+<span style="color:#75715e">## $ speed       &lt;time10.80762 secs, 10.77663 secs, 10.61063 secs, 10.7...</span></code></pre></div>
+<p>We get the following results from the for-loop.</p>
+
+<ul>
+<li><strong>2.5 %</strong> - confidence interval of abrupt change (week)</li>
+<li><strong>breakpoints</strong> - abrupt change (week)</li>
+<li><strong>97.5 %</strong> - confidence interval of abrupt change (week)</li>
+<li><strong>max_mag</strong> - largest jump in the trend component (Euro)</li>
+<li><strong>mag</strong> - jump in the trend component (Euro)</li>
+<li><strong>h</strong> - used h parameter (fraction relative to the sample size)</li>
+<li><strong>speed</strong> - processing time (seconds)
+<br />
+<br /></li>
+</ul>
+
+<h4 id="add-extra-information-for-plots">Add extra information for plots</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">df <span style="color:#f92672">&lt;-</span> df <span style="color:#f92672">%&gt;%</span>
+     dplyr::group_by(h) <span style="color:#f92672">%&gt;%</span>
+     mutate(n          <span style="color:#f92672">=</span> n()) <span style="color:#f92672">%&gt;%</span>                 <span style="color:#75715e"># number of observations per h - group</span>
+     mutate(id         <span style="color:#f92672">=</span> row_number()) <span style="color:#f92672">%&gt;%</span>        <span style="color:#75715e"># add row number per h - group</span>
+     mutate(mag        <span style="color:#f92672">=</span> round(mag,<span style="color:#ae81ff">5</span>)) <span style="color:#f92672">%&gt;%</span>        <span style="color:#75715e"># round number of magnitude</span>
+     mutate(absolute_mag <span style="color:#f92672">=</span> abs(mag)) <span style="color:#f92672">%&gt;%</span>          <span style="color:#75715e"># get absolute values for the magnitude</span>
+     mutate(max_mag    <span style="color:#f92672">=</span> round(max_mag, <span style="color:#ae81ff">5</span>)) <span style="color:#f92672">%&gt;%</span>   <span style="color:#75715e"># round number of maximum manitude</span>
+     mutate(speed      <span style="color:#f92672">=</span> round(speed, <span style="color:#ae81ff">4</span>)) <span style="color:#f92672">%&gt;%</span>     <span style="color:#75715e"># round number of processing time </span>
+     mutate(mag_mean   <span style="color:#f92672">=</span> mean(absolute_mag)) <span style="color:#f92672">%&gt;%</span>  <span style="color:#75715e"># add mean of all breakpoints magnitude per h-group</span>
+     mutate(mag_median <span style="color:#f92672">=</span> median(absolute_mag))    <span style="color:#75715e"># add median of all breakpoints magnitude per h-group</span>
+    
+<span style="color:#75715e"># check at which breakpoint the biggest magnitude change occured</span>
+sel <span style="color:#f92672">&lt;-</span> df[, <span style="color:#ae81ff">4</span>] <span style="color:#f92672">==</span> df[, <span style="color:#ae81ff">5</span>] <span style="color:#75715e"># max_mag vs. mag</span>
+df<span style="color:#960050;background-color:#1e0010">$</span>is_max_mag <span style="color:#f92672">&lt;-</span> sel      <span style="color:#75715e"># TRUE / FALSE</span>
+    
+glimpse(df)
+
+<span style="color:#75715e">## Observations: 203</span>
+<span style="color:#75715e">## Variables: 13</span>
+<span style="color:#75715e">## $ `2.5 %`      &lt;dbl447, 439, 429, 419, 409, 406, 406, 406, 406, 406,...</span>
+<span style="color:#75715e">## $ breakpoints  &lt;dbl448, 440, 430, 420, 410, 407, 407, 407, 407, 407,...</span>
+<span style="color:#75715e">## $ `97.5 %`     &lt;dbl449, 441, 431, 421, 411, 408, 408, 408, 408, 408,...</span>
+<span style="color:#75715e">## $ max_mag      &lt;dbl0.66165, 0.53209, 0.35391, 0.19241, 0.04382, 0.00...</span>
+<span style="color:#75715e">## $ mag          &lt;dbl0.66165, 0.53209, 0.35391, 0.19241, 0.04382, 0.00...</span>
+<span style="color:#75715e">## $ h            &lt;dbl0.5000000, 0.4910714, 0.4799107, 0.4687500, 0.457...</span>
+<span style="color:#75715e">## $ speed        &lt;time10.8076 secs, 10.7766 secs, 10.6106 secs, 10.774...</span>
+<span style="color:#75715e">## $ n            &lt;int1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2...</span>
+<span style="color:#75715e">## $ id           &lt;int1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...</span>
+<span style="color:#75715e">## $ absolute_mag &lt;dbl0.66165, 0.53209, 0.35391, 0.19241, 0.04382, 0.00...</span>
+<span style="color:#75715e">## $ mag_mean     &lt;dbl0.661650, 0.532090, 0.353910, 0.192410, 0.043820,...</span>
+<span style="color:#75715e">## $ mag_median   &lt;dbl0.661650, 0.532090, 0.353910, 0.192410, 0.043820,...</span>
+<span style="color:#75715e">## $ is_max_mag   &lt;lglTRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, T...</span></code></pre></div>
+<h4 id="the-results">The Results</h4>
+
+<p>The following plot shows all breakpoints, their occurence in time and the corresponding h - parameters. The highlighted points (<span class="highlight-text red">red</span>) mark the h - parameters from the previous detailed plots.</p>
+
+<p>The plot resembles a pyramid, a few breakpoints at high h-values and many breakpoints at low h-values. h-value 0.01116071 (<sup>10</sup>&frasl;<sub>896</sub>) has 31 breakpoints. Interestingly, it takes 23 weeks before the first breakpoint appears. The last breakpoint was registered in week 876, exactly 20 weeks before the end of the time series.</p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast01.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<p>The following plot shows the same points, but the magnitude of the change detected is now highlighted in spectral colours. Black-edged points indicate the point in time when the magnitude of the biggest change was detected in the trend component.</p>
+
+<iframe width="120%" height="600" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast02.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h4 id="find-all-segments-with-the-minimum-size">Find all segments with the minimum size</h4>
+
+<p>The bfast plots way above shows trend components in blue. These trend components have different lengths, according to their connected breakpoints. They also have a theoretical minimal length. Here is a example of what I mean.</p>
+
+<ul>
+<li><p>bfast with a <code>h</code>-parameter of 0.5 can theoretically create two segments with the length of 448 weeks (896 weeks * 0.5 = 448 weeks or 896 weeks / 2 segments = 448 weeks per segment) .</p></li>
+
+<li><p>bfast with a <code>h</code>-parameter of 0.3013393 (<sup>270</sup>&frasl;<sub>896</sub>) can theoretically create segments with a minimum segment size of 270 weeks (0.3013393 * 896 = 270 weeks). Meaning, there can be max. 2 breakpoints &amp; 3 trend components (segments). The segment can always be longer, but not shorter. Applied to the bvb time series the h-parameter of 0.3013393 got 2 breakpoints and three trend segments with the length of 270 weeks (mininum) + 270 weeks (minimum) + 356 weeks = 896 weeks.</p></li>
+</ul>
+
+<p>The idea is now to find all segments which have the theoretical minimum segment size.</p>
+
+<p>To do so I created for each <code>h</code>-value all theoretically possible minimum segment sizes and compared them against the real segment size.</p>
+
+<p>The result is shown in the following plot, where I also added the <strong>1:1 line of the minimal segment size</strong>. Which means, the first segment of the trend component cannot be left (shorter) from this line.</p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast03.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+<pre><code>## Observations: 10,558
+## Variables: 6
+## $ h           &lt;dbl0.01116071, 0.01116071, 0.01116071, 0.01116071, 0....
+## $ breakpoints &lt;dbl23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23...
+## $ n           &lt;int31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31, 31...
+## $ id          &lt;int1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ values      &lt;dbl10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120,...
+## $ direction   &lt;chr&#34;forward&#34;, &#34;forward&#34;, &#34;forward&#34;, &#34;forward&#34;, &#34;forwa...</code></pre>
+<h4 id="selection-criteria">Selection Criteria</h4>
+
+<p>Sorry for the lengthy exercise and the many details of the BFAST results. While writing the blog post I considered finally, three criteria for the selection of the optimal h-parameter.</p>
+
+<p>The optimal h parameter, for the BVB dataset, should</p>
+
+<ol>
+<li>recognise more than 2 breakpoints</li>
+<li>not contain any segment with a minimum segment size,<br /></li>
+<li>have a high median absolute magnitude (absolute).</li>
+</ol>
+
+<p>The following three plots show the sequential <code>h</code>-value filtering on the basis of the above mentioned criteria.</p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast04.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast05.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast06.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+    
+
+<table class="table table-striped" style="width: auto !important; float: right; margin-left: 10px;">
+<caption>h-parameter: 0.0892857</caption>
+ <thead>
+  <tr>
+   <th style="text-align:right;"> 2.5 % </th>
+   <th style="text-align:right;"> breakpoints </th>
+   <th style="text-align:right;"> 97.5 % </th>
+   <th style="text-align:right;"> mag </th>
+   <th style="text-align:left;"> date </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:right;"> 114 </td>
+   <td style="text-align:right;"> 115 </td>
+   <td style="text-align:right;"> 116 </td>
+   <td style="text-align:right;"> 1.22994 </td>
+   <td style="text-align:left;"> 2003-05-08 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 244 </td>
+   <td style="text-align:right;"> 248 </td>
+   <td style="text-align:right;"> 265 </td>
+   <td style="text-align:right;"> 0.43795 </td>
+   <td style="text-align:left;"> 2005-11-24 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 378 </td>
+   <td style="text-align:right;"> 397 </td>
+   <td style="text-align:right;"> 399 </td>
+   <td style="text-align:right;"> -0.43969 </td>
+   <td style="text-align:left;"> 2008-10-02 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 505 </td>
+   <td style="text-align:right;"> 506 </td>
+   <td style="text-align:right;"> 507 </td>
+   <td style="text-align:right;"> 1.61659 </td>
+   <td style="text-align:left;"> 2010-11-04 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 589 </td>
+   <td style="text-align:right;"> 590 </td>
+   <td style="text-align:right;"> 591 </td>
+   <td style="text-align:right;"> 0.14791 </td>
+   <td style="text-align:left;"> 2012-06-14 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 717 </td>
+   <td style="text-align:right;"> 718 </td>
+   <td style="text-align:right;"> 723 </td>
+   <td style="text-align:right;"> -0.88305 </td>
+   <td style="text-align:left;"> 2014-11-27 </td>
+  </tr>
+  <tr>
+   <td style="text-align:right;"> 813 </td>
+   <td style="text-align:right;"> 814 </td>
+   <td style="text-align:right;"> 816 </td>
+   <td style="text-align:right;"> 1.42852 </td>
+   <td style="text-align:left;"> 2016-09-29 </td>
+  </tr>
+</tbody>
+</table>
+
+<p>The last three remaining <code>h</code>-parameters have between 6 and 7 breakpoints. The first four breakpoints are almost 100% identical at both the time (including both intervals) and the magnitude of the change.</p>
+
+<p>The fifth breakpoint is spread over the weeks 590, 606 and 616. While the sixth breakpoint is at week 718, 733 and 734.</p>
+
+<p>Of the remaining three <code>h</code>-parameters, parameter 0.0892857 is the only one with 7 breakpoints. The seventh breakpoint is in week 814.</p>
+
+<p>If we, in our youthful recklessness, regard 0.08928571 as the  optimal <code>h</code>-parameter value, then we get the following bfast result.</p>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618134700/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.011-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618134700/2018-06-bfast-bvb-the-optimal-h-parameter/plot_bfast_0.011-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<h4 id="breakpoint-1-week-115-2003-05-08">Breakpoint 1 - week 115 (2003-05-08)</h4>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2001_2003_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2001_2003_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<p>A sustained negative trend is interrupted by a short-term positive upswing. The time series shows no special events at the time of the breakpoint.</p>
+
+<p><br></p>
+
+<h4 id="breakpoint-2-week-248-2005-11-24">Breakpoint 2 - week 248 (2005-11-24)</h4>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2005_2007_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2005_2007_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<p>A sustained negative trend is interrupted by a short-term positive upswing. The time series shows no special events at the time of the breakpoint.</p>
+
+<p><br></p>
+
+<h4 id="breakpoint-3-week-397-2008-10-02">Breakpoint 3 - week 397 (2008-10-02)</h4>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2007_2009_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2007_2009_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<p>The breakpoint hits exactly the day on which BVB lost 3-4 to Udinese Calcio and dropped out of the Europa League in first round.</p>
+
+<p>In general, Thomas Doll resigned 4.5 month earlier (on 19 May 2008) and was replaced by Jürgen Klopp. With this change ended also the long-lasting negative trend. In the following 2.5 years the trend of the stock value is slightly positive.</p>
+
+<p><br></p>
+
+<h4 id="breakpoint-4-week-506-2010-11-04">Breakpoint 4 - week 506 (2010-11-04)</h4>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2009_2011_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2009_2011_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+This is the breaking point with the largest magnitude of 1.61659 Euro. In this season Dortmund fielded a young and vibrant roster. Exactly a month after the detected breakpoint (4 December 2010), Borussia became Herbstmeister (“Autumn Champion”), an unofficial titel going to the league leader at the winter break. They did this three matches before the winter break.</p>
+
+<p><br></p>
+
+<h4 id="breakpoint-5-week-590-2012-06-14">Breakpoint 5 - week 590 (2012-06-14)</h4>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2011_2013_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2011_2013_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+The breakpoint with the lowest magnitude (0.14791 Euro) is between a short negative trend (approx. 1.5 years) and a longer significant upward trend (approx. 2.5 years).</p>
+
+<p>The trigger for the breakpoint could be the win of the double for the first time by beating Bayern 5-2 in the final of the DFB-Pokal, just a month earlier (2012-05-12).</p>
+
+<p><br></p>
+
+<h4 id="breakpoint-6-week-718-2014-11-27">Breakpoint 6 - week 718 (2014-11-27)</h4>
+
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2013_2015_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2013_2015_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<p>The profit of the World Cup title in Brazil also boosted the BVB share which  reached a new high for the year. However, the breakpoint comes a day after a 2-0 defeat to Arsenal London in the Champion League.</p>
+
+<p><br></p>
+
+<h4 id="breakpoint-7-week-814-2016-09-29">Breakpoint 7 - week 814 (2016-09-29)</h4>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2015_2017_arrow.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618133621/2018-06-bfast-bvb-the-optimal-h-parameter/p_timeline_2015_2017_arrow.png" >
+  
+    </a>
+  
+  
+</div>
+
+The sale of Hummels, Guendogan and Mkhitaryan in the summer of 2016 gives the BVB share an enormous boost. At the same time the team has coped well with the loss of key players started off on a high, winning 4-0 against Borussia Mönchengladbach on the opening day, followed by five-straight wins which took them to the top of the Bundesliga.</p>
+
+<h1 id="benchmarking">Benchmarking</h1>
+
+<p>With every execution of <code>bfast()</code> I recorded the the processing time. As you might expect, the time increases with decreasing h-parameter. The fastest run took about 10 seconds and the slowest about 10 times more.
+When running almost tens of thousands of different time series, i.e. pixels in an image stack, the waiting time can be considerable.
+There are small tricks how you can shorten a few percent of the process times here and there, maybe more about that in another blog entry.</p>
+
+<iframe width="100%" height="500" name="iframe" src="https://philippgaertner.github.io/img/2018-06-bfast-bvb-the-optimal-h-parameter/bfast07.html" frameborder="0" scrolling="no" onload="resizeIframe(this)"></iframe>
+
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>This blog post showed you how to find the optimal h-parameter to use for detecting and characterizing abrupt changes in the bvb stock price time series .</p>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/regular-time-series/">Regular Time Series</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/breakpoint-detection/">Breakpoint Detection</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/breakpoint-magnitude/">Breakpoint Magnitude</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/minimum-segment-size/">Minimum Segment Size</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rstats/">rstats</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/06/twitter-eeus2018/" data-tooltip="Analysing Google Earth Engine User Summit 2018 tweets">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/" data-tooltip="Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/06/twitter-eeus2018/" data-tooltip="Analysing Google Earth Engine User Summit 2018 tweets">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/" data-tooltip="Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2018\/06\/bfast-bvb-the-optimal-h-parameter\/';
+          
+            this.page.identifier = '\/2018\/06\/bfast-bvb-the-optimal-h-parameter\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

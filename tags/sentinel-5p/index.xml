@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sentinel-5P on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/sentinel-5p/</link>
+    <description>Recent content in Sentinel-5P on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/sentinel-5p/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Europe&#39;s Air Quality Winner</title>
+      <link>https://philippgaertner.github.io/2020/06/europe-air-quality-winner/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/06/europe-air-quality-winner/</guid>
+      <description>&lt;p&gt;A Google Earth Engine App (prototype) to compare European countries NO2 Median changes during the Corona lockdown with the previous year.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Europe&#39;s air pollution is lower during weekends</title>
+      <link>https://philippgaertner.github.io/2018/12/no2/</link>
+      <pubDate>Wed, 19 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/12/no2/</guid>
+      <description>&lt;p&gt;&lt;em&gt;TL;DR&lt;/em&gt; Europe&amp;rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO&lt;sub&gt;2&lt;/sub&gt;) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO&lt;sub&gt;2&lt;/sub&gt; values compared to other &amp;ldquo;normal&amp;rdquo; Saturdays.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

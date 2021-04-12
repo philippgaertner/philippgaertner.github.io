@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="This blogpost is about RStudio and the reticulate package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.">
+
+
+<meta property="og:description" content="This blogpost is about RStudio and the reticulate package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Use Google&#39;s Earth Engine Python API in RStudio">
+<meta name="twitter:title" content="Use Google&#39;s Earth Engine Python API in RStudio">
+<meta property="og:url" content="https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="This blogpost is about RStudio and the reticulate package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.">
+<meta name="twitter:description" content="This blogpost is about RStudio and the reticulate package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-10-16T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-10-16T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Python">
+    
+      <meta property="article:section" content="R">
+    
+      <meta property="article:section" content="NDVI">
+    
+      <meta property="article:section" content="Tutorial">
+    
+  
+  
+    
+      <meta property="article:tag" content="Google-Earth-Engine">
+    
+      <meta property="article:tag" content="RStudio">
+    
+      <meta property="article:tag" content="Python">
+    
+      <meta property="article:tag" content="reticulate">
+    
+      <meta property="article:tag" content="rstats">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1602682649/coord_polar.png">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1602682649/coord_polar.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Use Google&#39;s Earth Engine Python API in RStudio</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Use Google&#39;s Earth Engine Python API in RStudio
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-10-16T00:00:00Z">
+        
+  October 16, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/python">Python</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/r">R</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/ndvi">NDVI</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/tutorial">Tutorial</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>This blogpost is about RStudio and the <code>reticulate</code> package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.</p>
+
+<p>Tutorial: Deriving simple tree phenology data from Sentinel2 with Earth Engine and plotting the data in R.</p>
+
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602856612/2020-10-14-python-api/plt.png" alt="Sentinel-2 derived NDVI values of a beech forest plotted over four years with annual min/max values highlighted." /><span class="caption">Sentinel-2 derived NDVI values of a beech forest plotted over four years with annual min/max values highlighted.</span>
+</div>
+<div class="main-content-wrap">
+
+<h1 id="life-between-span-style-color-34b6f7-use-span-googleearthengine-and-span-style-color-34b6f7-in-span-r-span-style-color-34b6f7-studio-span"><del>Life between</del> <span style="color:#34B6F7">Use</span> GoogleEarthEngine <del>and</del> <span style="color:#34B6F7">in</span> R<span style="color:#34B6F7">Studio</span></h1>
+
+<p><!--html_preserve--><blockquote class="twitter-tweet"><p lang="en" dir="ltr">Life between <a href="https://twitter.com/hashtag/GoogleEarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#GoogleEarthEngine</a> and <a href="https://twitter.com/hashtag/R?src=hash&amp;ref_src=twsrc%5Etfw">#R</a> <a href="https://t.co/ZbI33X21i3">pic.twitter.com/ZbI33X21i3</a></p>&mdash; Hammad Gilani (@gilanius) <a href="https://twitter.com/gilanius/status/1316339939001368581?ref_src=twsrc%5Etfw">October 14, 2020</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<!--/html_preserve--></p>
+
+<p>With <code>reticulate</code> we can use:</p>
+
+<ul>
+<li>the <a href="https://developers.google.com/earth-engine/guides/python_install">Google Earth Engine Python API</a> to extract values of satellite data <strong>(in Python chunks)</strong>,</li>
+<li><code>dplyr</code> &amp; <code>ggplot</code> packages to manipulate the extracted data and to create e.g. a phenology chart (<strong>in R chunks</strong>).</li>
+</ul>
+
+<h3 id="my-setup">My Setup</h3>
+
+<ul>
+<li>Mac - macOS High Sierra 10.13.6</li>
+<li>R - version 3.6.3</li>
+<li>RStudio - version 1.3.1093</li>
+<li>Conda - version 4.7.12</li>
+</ul>
+
+<h3 id="create-new-conda-environment-with-earthengine-api">Create new conda environment with earthengine-api</h3>
+
+<p>The RStudio <strong>Terminal</strong> provides access to the system shell from within the RStudio IDE. Open your <strong>Terminal</strong> tab and write:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">### Terminal</span>
+
+<span style="color:#75715e"># Create a conda environment</span>
+conda create --name gee-demo 
+
+<span style="color:#75715e"># Activate the environment</span>
+conda activate gee-demo      
+
+<span style="color:#75715e"># Install the Earth Engine Python API</span>
+conda install -c conda-forge earthengine-api 
+
+<span style="color:#75715e"># Authenticate your access with the command line tool</span>
+earthengine authenticate     
+
+conda install pandas
+conda install numpy</code></pre></div>
+<h3 id="create-new-r-markdown-file">Create new R Markdown file</h3>
+
+<p>In RStudio, create a new R Markdown file (File =&gt; New File =&gt; R Markdown &hellip;) and install the <code>reticulate</code> package and apply the <code>use_condaenv()</code> function to point to the created <strong>&lsquo;gee-demo&rsquo;</strong> conda environment.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+<span style="color:#66d9ef">if</span>(<span style="color:#960050;background-color:#1e0010">!</span>require(<span style="color:#e6db74">&#34;reticulate&#34;</span>)) install<span style="color:#f92672">.</span>packages(<span style="color:#e6db74">&#34;reticulate&#34;</span>)
+library(reticulate)
+
+use_condaenv(<span style="color:#e6db74">&#34;gee-demo&#34;</span>, conda <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,required <span style="color:#f92672">=</span> TRUE)</code></pre></div>
+<p>The Earth Engine Python API is available as a Python package that can be installed locally. The Python API package is called <code>ee</code>. It must be imported and initialized for each new Python session and script.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+<span style="color:#f92672">import</span> ee       
+ee<span style="color:#f92672">.</span>Initialize() <span style="color:#75715e"># Initialize the API</span>
+<span style="color:#66d9ef">print</span>(ee<span style="color:#f92672">.</span>__version__)
+
+
+<span style="color:#75715e">## 0.1.238</span></code></pre></div>
+<p>At this point we have set up our working environment and can get started. The ultimate goal is to use this working environment and to visualize the phenology of a beech forest without leaving RStudio.</p>
+
+<h4 id="generate-ndvi-data-for-a-german-beech-forest">Generate NDVI data for a german beech forest</h4>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-50 right" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602840983/2020-10-14-python-api/Screen_Shot_2020-10-16_at_11.01.17.png" title="opentrees.org at  38.713521/-9.171883" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602840983/2020-10-14-python-api/Screen_Shot_2020-10-16_at_11.01.17.png"  alt="opentrees.org at  38.713521/-9.171883">
+  
+    </a>
+  
+   
+    <span class="caption">opentrees.org at  38.713521/-9.171883</span>
+  
+</div>
+With the help of the <a href="http://opentrees.org">opentrees.org</a> project I found a beech forest near Potsdam in East Germany. <a href="http://opentrees.org">Opentrees.org</a> is the world&rsquo;s largest database of municipal street and park trees, produced by harvesting open data from dozens of different sources.<br />
+<br>
+<br></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+geometry <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Geometry<span style="color:#f92672">.</span>Polygon( <span style="color:#75715e"># beech forest area</span>
+        [[[<span style="color:#ae81ff">13.109782839513642</span>, <span style="color:#ae81ff">52.42163736335469</span>],
+          [<span style="color:#ae81ff">13.109782839513642</span>, <span style="color:#ae81ff">52.420752422262055</span>],
+          [<span style="color:#ae81ff">13.111671114660126</span>, <span style="color:#ae81ff">52.420752422262055</span>],
+          [<span style="color:#ae81ff">13.111671114660126</span>, <span style="color:#ae81ff">52.42163736335469</span>]]]);</code></pre></div>
+<h4 id="create-a-function-to-mask-clouds-using-the-sentinel-2-qa-band">Create a function to mask clouds using the Sentinel-2 QA band</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">maskclouds</span>(image):
+    qa <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>select(<span style="color:#e6db74">&#34;QA60&#34;</span>)
+    cloudBitMask  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">10</span>
+    cirrusBitMask <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">11</span>
+    mask  <span style="color:#f92672">=</span> qa<span style="color:#f92672">.</span>bitwiseAnd(cloudBitMask)<span style="color:#f92672">.</span>eq(<span style="color:#ae81ff">0</span>) \
+              <span style="color:#f92672">.</span>And(qa<span style="color:#f92672">.</span>bitwiseAnd(cirrusBitMask)<span style="color:#f92672">.</span>eq(<span style="color:#ae81ff">0</span>))
+    <span style="color:#66d9ef">return</span> image<span style="color:#f92672">.</span>updateMask(mask)<span style="color:#f92672">.</span>divide(<span style="color:#ae81ff">10000</span>) \
+                 <span style="color:#f92672">.</span>set(<span style="color:#e6db74">&#39;date&#39;</span>, image<span style="color:#f92672">.</span>date()<span style="color:#f92672">.</span>format()) <span style="color:#75715e"># adding recording date</span></code></pre></div>
+<h4 id="create-a-function-to-add-normalized-difference-vegetation-index-ndvi-band">Create a function to add Normalized Difference Vegetation Index (NDVI) band</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ndvi</span>(image):
+    ndvi <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>normalizedDifference([<span style="color:#e6db74">&#34;B8&#34;</span>,<span style="color:#e6db74">&#34;B4&#34;</span>])<span style="color:#f92672">.</span>rename(<span style="color:#e6db74">&#34;ndvi&#34;</span>)
+    <span style="color:#66d9ef">return</span> image<span style="color:#f92672">.</span>addBands([ndvi])</code></pre></div>
+<h4 id="create-two-imagecollections-with-sentinel2-level-2a-and-cloud-probability-data">Create two <code>ImageCollections</code> with Sentinel2 Level-2A and cloud probability data</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+start_date <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Date(<span style="color:#e6db74">&#39;2017-04-01&#39;</span>)
+end_date   <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Date(<span style="color:#e6db74">&#39;2020-12-31&#39;</span>)
+
+s2Sr <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>ImageCollection(<span style="color:#e6db74">&#34;COPERNICUS/S2_SR&#34;</span>) \
+         <span style="color:#f92672">.</span>filterBounds(geometry) \
+         <span style="color:#f92672">.</span>filterDate(start_date, end_date) \
+         <span style="color:#f92672">.</span>filter(ee<span style="color:#f92672">.</span>Filter<span style="color:#f92672">.</span>eq(<span style="color:#e6db74">&#39;MGRS_TILE&#39;</span>, <span style="color:#e6db74">&#39;33UUU&#39;</span>)) \
+         <span style="color:#f92672">.</span>map(maskclouds) \
+         <span style="color:#f92672">.</span>map(ndvi)
+
+s2c <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>ImageCollection(<span style="color:#e6db74">&#39;COPERNICUS/S2_CLOUD_PROBABILITY&#39;</span>) \
+        <span style="color:#f92672">.</span>filterBounds(geometry) \
+        <span style="color:#f92672">.</span>filterDate(start_date, end_date);</code></pre></div>
+<h4 id="create-a-function-to-join-two-collections-on-their-system-index-property">Create a function to <code>Join</code> two collections on their &lsquo;system:index&rsquo; property.</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+<span style="color:#75715e"># The propertyName parameter is the name of the property</span>
+<span style="color:#75715e"># that references the joined image.</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">indexJoin</span>(collectionA, collectionB, propertyName):
+  joined <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>ImageCollection(ee<span style="color:#f92672">.</span>Join<span style="color:#f92672">.</span>saveFirst(propertyName)<span style="color:#f92672">.</span>apply(
+    primary <span style="color:#f92672">=</span> collectionA,
+    secondary <span style="color:#f92672">=</span> collectionB,
+    condition <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Filter<span style="color:#f92672">.</span>equals(
+      leftField <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;system:index&#39;</span>,
+      rightField <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;system:index&#39;</span>
+    )
+  ))
+  <span style="color:#75715e"># Merge the bands of the joined image.</span>
+  <span style="color:#66d9ef">return</span> joined<span style="color:#f92672">.</span>map(<span style="color:#66d9ef">lambda</span> image: image<span style="color:#f92672">.</span>addBands(ee<span style="color:#f92672">.</span>Image(image<span style="color:#f92672">.</span>get(propertyName))<span style="color:#f92672">.</span>rename(<span style="color:#e6db74">&#34;cld&#34;</span>)))</code></pre></div>
+<h4 id="create-a-function-to-get-a-median-value-and-b-the-recording-date-for-each-image">Create a function to get a) median value and b) the recording date for each image</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculateMedian</span>(image):
+  
+  median <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>reduceRegion(reducer  <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Reducer<span style="color:#f92672">.</span>median(),
+                            geometry <span style="color:#f92672">=</span> geometry,
+                            scale <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>,
+                            maxPixels <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e9</span>)
+
+  <span style="color:#75715e"># set the recording date and median values as a property of the image</span>
+  <span style="color:#66d9ef">return</span> image<span style="color:#f92672">.</span>set(<span style="color:#e6db74">&#39;date&#39;</span>, image<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;date&#39;</span>))<span style="color:#f92672">.</span>set(<span style="color:#e6db74">&#39;median&#39;</span>, median)</code></pre></div>
+<h4 id="apply-the-join-function-and-median-values">Apply the <code>Join</code> function and median values</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+withCloudProbability <span style="color:#f92672">=</span> indexJoin(s2Sr, s2c, <span style="color:#e6db74">&#39;cloud_probability&#39;</span>);
+
+<span style="color:#75715e"># select only the &#39;ndvi&#39; and &#39;cloud probability&#39; values. </span>
+withMedian <span style="color:#f92672">=</span> withCloudProbability<span style="color:#f92672">.</span>select([<span style="color:#e6db74">&#34;ndvi&#34;</span>,<span style="color:#e6db74">&#34;cld&#34;</span>])<span style="color:#f92672">.</span>map(calculateMedian)
+
+<span style="color:#75715e"># reduce the images properties to a list of lists</span>
+values <span style="color:#f92672">=</span> withMedian<span style="color:#f92672">.</span>reduceColumns(ee<span style="color:#f92672">.</span>Reducer<span style="color:#f92672">.</span>toList(<span style="color:#ae81ff">2</span>), [<span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#e6db74">&#39;median&#39;</span>])<span style="color:#f92672">.</span>values()<span style="color:#f92672">.</span>get(<span style="color:#ae81ff">0</span>)
+
+<span style="color:#75715e"># Type casts the result into a List</span>
+eeList <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>List(values)
+
+<span style="color:#75715e"># convert  list of lists to a dictionaty</span>
+medians <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Dictionary(eeList<span style="color:#f92672">.</span>flatten())</code></pre></div>
+<h4 id="call-getinfo-on-earth-engine-objects-to-get-the-object-from-the-server-to-the-client">Call <code>getInfo()</code> on Earth Engine objects to get the object from the server to the client</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+median_values <span style="color:#f92672">=</span> medians<span style="color:#f92672">.</span>getInfo(); <span style="color:#75715e"># ee.Dictionary =&gt; Python dictionary</span>
+type(median_values)
+
+<span style="color:#75715e">## &lt;class &#39;dict&#39;&gt;</span></code></pre></div>
+<h4 id="python-dictionary-to-pandas-dataframe">Python dictionary to pandas DataFrame</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+<span style="color:#f92672">import</span> pandas
+pd_df <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>DataFrame<span style="color:#f92672">.</span>from_dict(median_values, orient<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;index&#39;</span>)</code></pre></div>
+<hr />
+
+<h2 id="span-style-color-red-stop-span-lets-see-what-we-have-got-span-style-color-red-stop-span"><span style="color:red">STOP</span> - lets see what we have got - <span style="color:red">STOP</span></h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+
+pd_df
+
+<span style="color:#75715e">##                        cld      ndvi</span>
+<span style="color:#75715e">## 2017-04-24T10:11:20   84.0       NaN</span>
+<span style="color:#75715e">## 2017-04-27T10:20:25    9.0  0.426655</span>
+<span style="color:#75715e">## 2017-05-04T10:13:49  100.0       NaN</span>
+<span style="color:#75715e">## 2017-05-14T10:11:25   16.0  0.712856</span>
+<span style="color:#75715e">## 2017-05-17T10:23:52    1.0  0.862517</span>
+<span style="color:#75715e">## ...                    ...       ...</span>
+<span style="color:#75715e">## 2020-09-30T10:16:16    6.0  0.852820</span>
+<span style="color:#75715e">## 2020-10-03T10:26:13   67.0       NaN</span>
+<span style="color:#75715e">## 2020-10-08T10:26:16   98.0       NaN</span>
+<span style="color:#75715e">## 2020-10-10T10:16:16   99.0       NaN</span>
+<span style="color:#75715e">## 2020-10-13T10:26:14  100.0       NaN</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## [457 rows x 2 columns]</span></code></pre></div>
+<p>In total we have NDVI and cloud probability data (from cloud free [0 %] to cloudy [100 %]) of 457 Sentinel-2 images in our DataFrame. Some rows have NaN values in the NDVI column. NaN values occur if clouds were recognized in the QA60 band and masked out.</p>
+
+<h4 id="calling-python-from-r">Calling Python from R</h4>
+
+<p>The <strong>pd_df</strong> <code>panda</code> DataFrame, created within the Python chunk above, is available to R using the <code>py</code> object from the <code>reticulate</code> package.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+df <span style="color:#f92672">&lt;-</span> py<span style="color:#960050;background-color:#1e0010">$</span>pd_df <span style="color:#75715e"># convert pandas DataFrame to R DataFrame</span>
+head(df)
+
+<span style="color:#75715e">##                     cld      ndvi</span>
+<span style="color:#75715e">## 2017-04-24T10:11:20  84       NaN</span>
+<span style="color:#75715e">## 2017-04-27T10:20:25   9 0.4266549</span>
+<span style="color:#75715e">## 2017-05-04T10:13:49 100       NaN</span>
+<span style="color:#75715e">## 2017-05-14T10:11:25  16 0.7128555</span>
+<span style="color:#75715e">## 2017-05-17T10:23:52   1 0.8625174</span>
+<span style="color:#75715e">## 2017-05-24T10:13:53 100       NaN</span></code></pre></div>
+<h4 id="prepare-data-for-plotting">Prepare data for plotting</h4>
+
+<p>For the work with R we use the following packages:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+list<span style="color:#f92672">.</span>of<span style="color:#f92672">.</span>packages <span style="color:#f92672">&lt;-</span> c(<span style="color:#e6db74">&#34;stringr&#34;</span>, <span style="color:#e6db74">&#34;dplyr&#34;</span>, <span style="color:#e6db74">&#34;tidyr&#34;</span>, <span style="color:#e6db74">&#34;ggplot2&#34;</span>, <span style="color:#e6db74">&#34;patchwork&#34;</span>)
+new<span style="color:#f92672">.</span>packages <span style="color:#f92672">&lt;-</span> list<span style="color:#f92672">.</span>of<span style="color:#f92672">.</span>packages[<span style="color:#960050;background-color:#1e0010">!</span>(list<span style="color:#f92672">.</span>of<span style="color:#f92672">.</span>packages <span style="color:#f92672">%</span><span style="color:#f92672">in</span><span style="color:#f92672">%</span> installed<span style="color:#f92672">.</span>packages()[, <span style="color:#e6db74">&#34;Package&#34;</span>])]
+<span style="color:#66d9ef">if</span> (length(new<span style="color:#f92672">.</span>packages)) install<span style="color:#f92672">.</span>packages(new<span style="color:#f92672">.</span>packages)
+
+library(stringr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)</code></pre></div>
+<p>In the next code chunk we manipulate the data to make our life easier with the plotting. We extract the recording date from the <code>rownames</code> and additionally create <strong>year</strong> and <strong>doy</strong> (day of the year) values. We also delete all lines with <code>NaN</code> NDVI values and exclude images with cloud probability values greater than 40.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+xx <span style="color:#f92672">&lt;-</span> df <span style="color:#f92672">%&gt;%</span>
+  mutate(row_names <span style="color:#f92672">=</span> rownames(df)) <span style="color:#f92672">%&gt;%</span>
+  mutate(datetime <span style="color:#f92672">=</span> stringr::str_split(row_names, <span style="color:#e6db74">&#34;T&#34;</span>, simplify <span style="color:#f92672">=</span> TRUE)[,<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">%&gt;%</span>
+  select(<span style="color:#f92672">-</span>row_names) <span style="color:#f92672">%&gt;%</span>
+  drop_na(ndvi) <span style="color:#f92672">%&gt;%</span>
+  mutate(date <span style="color:#f92672">=</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(datetime, format<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;%Y-%m-</span><span style="color:#e6db74">%d</span><span style="color:#e6db74">&#34;</span>)) <span style="color:#f92672">%&gt;%</span>
+  filter(cld <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">40</span>) <span style="color:#f92672">%&gt;%</span>
+  mutate(yday <span style="color:#f92672">=</span> lubridate::yday(date)) <span style="color:#f92672">%&gt;%</span>
+  mutate(year <span style="color:#f92672">=</span> lubridate::year(date)) <span style="color:#f92672">%&gt;%</span>
+  mutate(id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>:n())
+  
+str(xx)
+
+<span style="color:#75715e">## &#39;data.frame&#39;:	164 obs. of  7 variables:</span>
+<span style="color:#75715e">##  $ cld     : num  9 16 1 2 21 22 11 7 16 4 ...</span>
+<span style="color:#75715e">##  $ ndvi    : num  0.427 0.713 0.863 0.921 0.814 ...</span>
+<span style="color:#75715e">##  $ datetime: chr  &#34;2017-04-27&#34; &#34;2017-05-14&#34; &#34;2017-05-17&#34; &#34;2017-06-06&#34; ...</span>
+<span style="color:#75715e">##  $ date    : Date, format: &#34;2017-04-27&#34; &#34;2017-05-14&#34; ...</span>
+<span style="color:#75715e">##  $ yday    : num  117 134 137 157 167 174 177 184 187 227 ...</span>
+<span style="color:#75715e">##  $ year    : num  2017 2017 2017 2017 2017 ...</span>
+<span style="color:#75715e">##  $ id      : int  1 2 3 4 5 6 7 8 9 10 ...</span>
+
+
+
+dim(xx)
+
+<span style="color:#75715e">## [1] 164   7</span></code></pre></div>
+<p>After filtering all <strong>NaN</strong> values and exclude cloud probabilities higher than <strong>40 %</strong> we have 164 rows (median NDVI values) left to work with.</p>
+
+<h4 id="plotting-the-data">Plotting the data</h4>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+max <span style="color:#f92672">&lt;-</span> xx <span style="color:#f92672">%&gt;%</span>
+  group_by(year) <span style="color:#f92672">%&gt;%</span>
+  filter(ndvi <span style="color:#f92672">==</span> max(ndvi)) 
+
+min <span style="color:#f92672">&lt;-</span> xx <span style="color:#f92672">%&gt;%</span>
+  group_by(year) <span style="color:#f92672">%&gt;%</span>
+  filter(ndvi <span style="color:#f92672">==</span> min(ndvi)) 
+
+plot_title <span style="color:#f92672">&lt;-</span> expression(paste(<span style="color:#e6db74">&#34;Phenology of a beech forest &#34;</span>, italic(<span style="color:#e6db74">&#34;(Fagus Sylvatica)&#34;</span>), <span style="color:#e6db74">&#34; near Potsdam - Germany&#34;</span>))
+
+plt1 <span style="color:#f92672">&lt;-</span> ggplot(data <span style="color:#f92672">=</span> xx, aes(x <span style="color:#f92672">=</span> date, y <span style="color:#f92672">=</span> ndvi, fill <span style="color:#f92672">=</span> id)) <span style="color:#f92672">+</span> 
+  geom_smooth(colour <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;black&#34;</span>, size<span style="color:#f92672">=</span>  <span style="color:#ae81ff">0.25</span>,se <span style="color:#f92672">=</span> FALSE, span <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.15</span>)<span style="color:#f92672">+</span>
+  geom_point(colour <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;white&#34;</span>,pch<span style="color:#f92672">=</span><span style="color:#ae81ff">21</span>) <span style="color:#f92672">+</span> 
+  geom_point(data <span style="color:#f92672">=</span> max, aes(x <span style="color:#f92672">=</span> date, y <span style="color:#f92672">=</span> ndvi),fill <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;red&#34;</span>, pch <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span>) <span style="color:#f92672">+</span>
+  geom_point(data <span style="color:#f92672">=</span> min, aes(x <span style="color:#f92672">=</span> date, y <span style="color:#f92672">=</span> ndvi),fill <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;orange&#34;</span>, pch <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span>) <span style="color:#f92672">+</span>
+  ggtitle(plot_title) <span style="color:#f92672">+</span>
+  xlab(<span style="color:#e6db74">&#34;&#34;</span>) <span style="color:#f92672">+</span> ylab(<span style="color:#e6db74">&#34;Normalized Vegetation Index (NDVI)&#34;</span>) <span style="color:#f92672">+</span>
+  scale_fill_viridis_c() <span style="color:#f92672">+</span> theme_minimal() <span style="color:#f92672">+</span> theme(legend<span style="color:#f92672">.</span>position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;none&#34;</span>) 
+
+plt1</code></pre></div>
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602865129/2020-10-14-python-api/unnamed-chunk-20-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602865129/2020-10-14-python-api/unnamed-chunk-20-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+plt2 <span style="color:#f92672">&lt;-</span> ggplot(xx, aes(x<span style="color:#f92672">=</span>yday, y<span style="color:#f92672">=</span>ndvi, fill <span style="color:#f92672">=</span> id))<span style="color:#f92672">+</span>  
+  coord_polar(theta<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x&#34;</span>, start<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,direction<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span>  
+  geom_point(colour <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;white&#34;</span>, pch <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span>) <span style="color:#f92672">+</span>  
+  geom_point(data <span style="color:#f92672">=</span> max, aes(x <span style="color:#f92672">=</span> yday, y <span style="color:#f92672">=</span> ndvi),fill <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;red&#34;</span>, pch <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span>) <span style="color:#f92672">+</span>
+  geom_point(data <span style="color:#f92672">=</span> min, aes(x <span style="color:#f92672">=</span> yday, y <span style="color:#f92672">=</span> ndvi),fill <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;orange&#34;</span>, pch <span style="color:#f92672">=</span> <span style="color:#ae81ff">21</span>) <span style="color:#f92672">+</span>
+  scale_y_continuous(limits <span style="color:#f92672">=</span> c(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">+</span>
+  xlab(<span style="color:#e6db74">&#34;&#34;</span>) <span style="color:#f92672">+</span> ylab(<span style="color:#e6db74">&#34;&#34;</span>) <span style="color:#f92672">+</span>
+  labs(caption <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Data - Sentinel2 | Processed - EarthEngine Python API&#34;</span>) <span style="color:#f92672">+</span>
+  scale_x_continuous(breaks <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span><span style="color:#f92672">*</span><span style="color:#ae81ff">0</span>:<span style="color:#ae81ff">11</span>, minor_breaks <span style="color:#f92672">=</span> NULL, labels <span style="color:#f92672">=</span> month<span style="color:#f92672">.</span>abb) <span style="color:#f92672">+</span>
+  scale_fill_viridis_c() <span style="color:#f92672">+</span> theme_minimal() <span style="color:#f92672">+</span> theme(legend<span style="color:#f92672">.</span>position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;none&#34;</span>) 
+ 
+plt2 </code></pre></div>
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602865129/2020-10-14-python-api/unnamed-chunk-21-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602865129/2020-10-14-python-api/unnamed-chunk-21-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+plt1 <span style="color:#f92672">+</span> plt2 <span style="color:#f92672">+</span> plot_layout(widths <span style="color:#f92672">=</span> c(<span style="color:#ae81ff">2.5</span>, <span style="color:#ae81ff">1</span>), heights <span style="color:#f92672">=</span> unit(c(<span style="color:#ae81ff">5</span>), c(<span style="color:#e6db74">&#39;cm&#39;</span>, <span style="color:#e6db74">&#39;null&#39;</span>)))</code></pre></div>
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602865129/2020-10-14-python-api/unnamed-chunk-22-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602865129/2020-10-14-python-api/unnamed-chunk-22-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+
+<h2 id="other-examples">Other examples</h2>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602867675/2020-10-14-python-api/Lisbon.png" title="38.713521/-9.171883" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602867675/2020-10-14-python-api/Lisbon.png"  alt="38.713521/-9.171883">
+  
+    </a>
+  
+   
+    <span class="caption">38.713521/-9.171883</span>
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-75" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602867354/2020-10-14-python-api/plt_Lisbon.png" title="Mediterranean cypress (Cupressus sempervirens) in Lisbon, Portugal" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602867354/2020-10-14-python-api/plt_Lisbon.png"  alt="Mediterranean cypress (Cupressus sempervirens) in Lisbon, Portugal">
+  
+    </a>
+  
+   
+    <span class="caption">Mediterranean cypress (Cupressus sempervirens) in Lisbon, Portugal</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602868545/2020-10-14-python-api/Bordeaux.png" title="44.84549/-0.573493" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602868545/2020-10-14-python-api/Bordeaux.png"  alt="44.84549/-0.573493">
+  
+    </a>
+  
+   
+    <span class="caption">44.84549/-0.573493</span>
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-75" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602869003/2020-10-14-python-api/plt_Bordeaux.png" title="Spanish plane (Platanus x hispanica) in Bordeaux, France" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1602869003/2020-10-14-python-api/plt_Bordeaux.png"  alt="Spanish plane (Platanus x hispanica) in Bordeaux, France">
+  
+    </a>
+  
+   
+    <span class="caption">Spanish plane (Platanus x hispanica) in Bordeaux, France</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h2 id="session-info">Session Info</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+sessionInfo()
+
+<span style="color:#75715e">## R version 3.6.3 (2020-02-29)</span>
+<span style="color:#75715e">## Platform: x86_64-apple-darwin15.6.0 (64-bit)</span>
+<span style="color:#75715e">## Running under: macOS High Sierra 10.13.6</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## Matrix products: default</span>
+<span style="color:#75715e">## BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span>
+<span style="color:#75715e">## LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## locale:</span>
+<span style="color:#75715e">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## attached base packages:</span>
+<span style="color:#75715e">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## other attached packages:</span>
+<span style="color:#75715e">## [1] patchwork_1.0.0 ggplot2_3.3.2   tidyr_1.1.0     dplyr_1.0.0    </span>
+<span style="color:#75715e">## [5] stringr_1.4.0   reticulate_1.16</span>
+<span style="color:#75715e">## </span>
+<span style="color:#75715e">## loaded via a namespace (and not attached):</span>
+<span style="color:#75715e">##  [1] Rcpp_1.0.5        pillar_1.4.6      compiler_3.6.3    tools_3.6.3      </span>
+<span style="color:#75715e">##  [5] digest_0.6.25     nlme_3.1-144      jsonlite_1.7.1    lubridate_1.7.9  </span>
+<span style="color:#75715e">##  [9] evaluate_0.14     lifecycle_0.2.0   tibble_3.0.4      gtable_0.3.0     </span>
+<span style="color:#75715e">## [13] lattice_0.20-38   viridisLite_0.3.0 mgcv_1.8-31       pkgconfig_2.0.3  </span>
+<span style="color:#75715e">## [17] rlang_0.4.8       Matrix_1.2-18     yaml_2.2.1        xfun_0.18        </span>
+<span style="color:#75715e">## [21] withr_2.3.0       knitr_1.30        generics_0.0.2    vctrs_0.3.4      </span>
+<span style="color:#75715e">## [25] grid_3.6.3        tidyselect_1.1.0  glue_1.4.2        R6_2.4.1         </span>
+<span style="color:#75715e">## [29] rmarkdown_2.3     farver_2.0.3      purrr_0.3.4       magrittr_1.5     </span>
+<span style="color:#75715e">## [33] splines_3.6.3     scales_1.1.1      ellipsis_0.3.1    htmltools_0.5.0  </span>
+<span style="color:#75715e">## [37] colorspace_1.4-1  labeling_0.3      stringi_1.5.3     munsell_0.5.0    </span>
+<span style="color:#75715e">## [41] crayon_1.3.4</span></code></pre></div>
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>This blogpost showed you how to use Earth Engine Python API in RStudio. If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>You can <strong>cite</strong> this blogpost using: <em>Gärtner, Philipp (2020/10/16) “Use Google&rsquo;s Earth Engine Python API in RStudio”, <a href="https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/">https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</a></em></p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">Google-Earth-Engine</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rstudio/">RStudio</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/python/">Python</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/reticulate/">reticulate</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rstats/">rstats</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/12/baking-without-coding/" data-tooltip="Baking without coding">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/08/percent-cloud-cover/" data-tooltip="How cloudy is my Sentinel-2 image collection? - The &#39;QA60&#39; band gives insights">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/12/baking-without-coding/" data-tooltip="Baking without coding">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/08/percent-cloud-cover/" data-tooltip="How cloudy is my Sentinel-2 image collection? - The &#39;QA60&#39; band gives insights">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2020\/10\/use-gee-python-api-in-rstudio\/';
+          
+            this.page.identifier = '\/2020\/10\/use-gee-python-api-in-rstudio\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ggplot2 on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/ggplot2/</link>
+    <description>Recent content in ggplot2 on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 27 Oct 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/ggplot2/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Intra-annual vegetation density changes of two public parks in Berlin, Germany</title>
+      <link>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</link>
+      <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</guid>
+      <description>The blog post shows how the vegetation of two public parks changes seasonally. Multi-temporal satellite images were used to aggregate monthly histograms of vegetation index values.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="Every painting has its story. The same is true for satellite images. This blogpost is about a Sentinel-2 satellite image of the Australian bush fire and how a second data source helped to visualize fire-fighting missions.">
+
+
+<meta property="og:description" content="Every painting has its story. The same is true for satellite images. This blogpost is about a Sentinel-2 satellite image of the Australian bush fire and how a second data source helped to visualize fire-fighting missions.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Look a little closer - the story of a satellite image and fire fighting missions in Australia">
+<meta name="twitter:title" content="Look a little closer - the story of a satellite image and fire fighting missions in Australia">
+<meta property="og:url" content="https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="Every painting has its story. The same is true for satellite images. This blogpost is about a Sentinel-2 satellite image of the Australian bush fire and how a second data source helped to visualize fire-fighting missions.">
+<meta name="twitter:description" content="Every painting has its story. The same is true for satellite images. This blogpost is about a Sentinel-2 satellite image of the Australian bush fire and how a second data source helped to visualize fire-fighting missions.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-01-07T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-01-07T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Fire Fighting">
+    
+  
+  
+    
+      <meta property="article:tag" content="Landsat-8">
+    
+      <meta property="article:tag" content="Sentinel-2">
+    
+      <meta property="article:tag" content="flightradar24">
+    
+      <meta property="article:tag" content="Rural Fire Service">
+    
+      <meta property="article:tag" content="QGIS">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617809662/xx_small.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617809662/xx_small.jpg">
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313181/xx_defbnn.jpg">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313181/xx_defbnn.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Look a little closer - the story of a satellite image and fire fighting missions in Australia</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313181/xx_defbnn.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Look a little closer - the story of a satellite image and fire fighting missions in Australia
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-01-07T00:00:00Z">
+        
+  January 7, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/fire-fighting">Fire Fighting</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">Sentinel-2A from the 31.12.2019 00:06:06 UTC with NSW Rural Fire Service Plane Routes - BMBR 137 &amp; BMBR 138</span>
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>Every painting has its story. The same is true for satellite images. This blogpost is about a Sentinel-2 satellite image of the Australian bush fire and how a second data source helped to visualize fire-fighting missions.</p>
+
+<h2 id="background">Background</h2>
+
+<p>Australia had at the end of 2019 a unusually high level of bushfire activity and many hundreds of fire pictures were shown in the (social) media. But, one image (see Fig.2) was shown again and again. It is a image from ESA&rsquo;s Sentinel-2 satellite, recorded on the last day of the decade, the 31th of December 2019 at 00:06:06 UTC (Coordinated Universal Time) equal to 11:06 AM, Sydney time.</p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313604/EO_Browser_epxwmc.png" title="Fig.2 - Credit: European Union, contains modified Copernicus Sentinel data 2020, processed with EO browser" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313604/EO_Browser_epxwmc.png"  alt="Fig.2 - Credit: European Union, contains modified Copernicus Sentinel data 2020, processed with EO browser">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.2 - Credit: European Union, contains modified Copernicus Sentinel data 2020, processed with EO browser</span>
+  
+</div>
+ The image shows the east coast of New South Wales (NSW) with more than one hundred fires of enormous dimensions, huge clouds of smoke and one can only imagine the destructive power of the flames.</p>
+
+<p>On New Year&rsquo;s Day there were still many reports of people who had to flee and leave their homes and spent the night on the beach (eg. Mallacoota). But the big controversial topic of the day was actually the firework in Sydney and the ashes from the Australian fires that reached the glaciers in New Zealand. After that the media caravan moved on and other, more relevant, topics were covered elsewhere.</p>
+
+<h2 id="look-a-little-closer-stare-a-little-longer">Look a little closer, stare a little longer</h2>
+
+<p>The Sentinel-2 image shows more than just fire and smoke. If we take a closer look we recognize the fire-fighting planes and helicopters which leave the airport or circle next to fires in order to drop their water bombs.</p>
+
+<p>To simplify the search for fire-fighting planes I used <a href="https://www.flightradar24.com/">flightradar24</a> playback. Playback (see Fig.3) allows to go back to Sentinel-2 recording time and identify the location of all planes in the image.</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313491/Screen_Shot_flightradar24_gqta3l.png" title="Fig.3 - flightradar24 - Playback - 2019-12-31 00:06:06 UTC" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313491/Screen_Shot_flightradar24_gqta3l.png"  alt="Fig.3 - flightradar24 - Playback - 2019-12-31 00:06:06 UTC">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.3 - flightradar24 - Playback - 2019-12-31 00:06:06 UTC</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>Once identified, I downloaded the individual flight routes of the involved airplanes and helicopters and projected them on a Sentinel-2 false colour image which is based on band 8,4 and 3. If you wonder why there are three airplanes with funny colours visible, please check the explanation - <a href="https://medium.com/google-earth/planespotting-465ee081c168">Planespotting, by Tyler Erickson.</a></p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313337/BMBR138_ksvxyt.jpg" title="Fig.4 - BMBR 138" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313337/BMBR138_ksvxyt.jpg"  alt="Fig.4 - BMBR 138">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.4 - BMBR 138</span>
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313337/BMBR137_q8dces.jpg" title="Fig.5 - BMBR 137" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313337/BMBR137_q8dces.jpg"  alt="Fig.5 - BMBR 137">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.5 - BMBR 137</span>
+  
+</div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-33" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313337/BMBR911_p3d3j3.jpg" title="Fig.6 - BMBR 911" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578313337/BMBR911_p3d3j3.jpg"  alt="Fig.6 - BMBR 911">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.6 - BMBR 911</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+</p>
+
+<h3 id="bmbr-911">BMBR 911</h3>
+
+<p>The background stories of some airplanes are interesting, for example the <a href="https://www.flightradar24.com/data/aircraft/n17085">DC-10 Air Tanker 911</a> (<em>BMBR 911</em>, see Fig. 6) is leased from the United States to join the fleet of the NSW Rural Fire Service. Thankfully the DC-10 will be staying with the NSW RFS for the remainder of this Bush Fire Danger Period (BFDP). By the way, the water-bombing aircraft can drop 35,000 litres of water or fire retardant in eight seconds <a href="https://www.abc.net.au/news/2019-11-14/former-fire-chief-calls-out-pm-over-refusal-of-meeting/11705330">(ABC News)</a>.</p>
+
+<p>We see the tanker (Fig. 6) at a altitude of 2.500 meter with a speed of 544 km/h going south. About 18 kilometres north-west of this place are the <a href="https://www.flightradar24.com/data/aircraft/n137cg"><em>BMBR 137</em></a> and <a href="https://www.flightradar24.com/data/aircraft/n138cg"><em>BMBR 138</em></a> in the process to suppress a fire close to Kanangra. Hopefully.</p>
+
+<h3 id="bmbr-137-bmbr-138">BMBR 137 &amp; BMBR 138</h3>
+
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://player.vimeo.com/video/382961202" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="vimeo video" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+</div>
+
+
+<p>To see the BMBR 137 (red point) and BMBR 138 (white point) airplanes position at the time of the Sentinel-2 recording, you must stop the video at 2019-12-31 00:06:06 UTC, or 00:42 sec of the video. Or you get your hand on the 3D version of the scene.
+<br></p>
+
+<h1 id="3d-model">3D Model</h1>
+
+<div class="alert info ">
+  <p>Please, click into the map and move the mouse or cursor in order to zoom or pan.</p>
+</div>
+
+<iframe frameborder="0" width="100%" height="400" src="https://philippgaertner.github.io/img/2020-01-03-satellite-airplane-fire/3D_Airplane/3D_Airplane.html"></iframe>
+
+<h2 id="was-the-mission-successful">Was the mission successful?</h2>
+
+<p>Whether the fires have spread considerably further or whether the fire-fighting mission was successful can be seen by comparing our Sentinel-2 image with a Landsat-8 image. The Landsat-8 image was recorded approximately 23:56 hours, or almost one day, after the Sentinel-2 image.</p>
+
+<p><br>
+<iframe frameborder="0" class="juxtapose" width="780" height="270" src="https://cdn.knightlab.com/libs/juxtapose/latest/embed/index.html?uid=2a4baf72-3083-11ea-b9b8-0edaf8f81e27"></iframe></p>
+
+<h2 id="helicopter-mission">Helicopter mission</h2>
+
+<p>I found two helicopters fighting a fire near the Warragamba River. These are <a href="https://www.flightradar24.com/data/aircraft/p2-chy">P2-CHY</a> and <a href="https://www.flightradar24.com/data/aircraft/n247ac">N247AC</a>. Both use the river as a water source and go there at regular time intervals.</p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-50" >
+  
+    <a class="fancybox" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578347763/51987_1577655012_j3cpie.webp" title="Fig.7 - P2-CHY - Jetphotos" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578347763/51987_1577655012_j3cpie.webp"  alt="Fig.7 - P2-CHY - Jetphotos">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.7 - P2-CHY - Jetphotos</span>
+  
+</div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-50" >
+  
+    <a class="fancybox" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578347763/68113_1576887816_ulxyfr.jpg" title="Fig.8 - N247AC - Jetphotos" data-fancybox-group="">
+  
+    <img class="fig-img" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578347763/68113_1576887816_ulxyfr.jpg"  alt="Fig.8 - N247AC - Jetphotos">
+  
+    </a>
+  
+   
+    <span class="caption">Fig.8 - N247AC - Jetphotos</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+</p>
+
+<p>Unfortunately the helicopters are not visible in the satellite image, but with the help of <a href="https://www.flightradar24.com/">flightradar24</a> you can visualize their flight path.<br />
+<br>
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578346929/S2_heli_wide_image_lf9pwr.jpg" alt="Fig.9 - Sentinel-2A from the 31.12.2019 00:06:06 UTC with flight paths of two helicopters the P2-CHY (blue points) and N247AC (yellow points)." /><span class="caption">Fig.9 - Sentinel-2A from the 31.12.2019 00:06:06 UTC with flight paths of two helicopters the P2-CHY (blue points) and N247AC (yellow points).</span>
+</div>
+<div class="main-content-wrap"></p>
+
+<p>From the ground, the operation must have looked like this.</p>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Water bombing from 20 metres...<a href="https://twitter.com/hashtag/NSWfires?src=hash&amp;ref_src=twsrc%5Etfw">#NSWfires</a> <a href="https://twitter.com/hashtag/AustraliaBurning?src=hash&amp;ref_src=twsrc%5Etfw">#AustraliaBurning</a> <a href="https://t.co/WocTM8UQ19">pic.twitter.com/WocTM8UQ19</a></p>&mdash; Dr Robbi Bishop-Taylor 🛰️🌎🌊 (@SatelliteSci) <a href="https://twitter.com/SatelliteSci/status/1212927976628555777?ref_src=twsrc%5Etfw">January 3, 2020</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="3d-model-1">3D Model</h2>
+
+<div class="alert info ">
+  <p>Please, click into the map and move the mouse or cursor in order to zoom or pan.</p>
+</div>
+
+<iframe frameborder="0" width="100%" height="400" src="https://philippgaertner.github.io/img/2020-01-03-satellite-airplane-fire/3D_Helicopter/3D_Heli.html"></iframe>
+
+<h2 id="one-day-later-the-fire-has-spread-further">One day later the fire has spread further</h2>
+
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1578349500/L8_heli_wide_image_qaioii.jpg" alt="Fig.10 - Landsat-8 from the 31.12.2019 23:50:31 UTC with flight paths of two helicopters the P2-CHY (blue points) and N247AC (yellow points)." /><span class="caption">Fig.10 - Landsat-8 from the 31.12.2019 23:50:31 UTC with flight paths of two helicopters the P2-CHY (blue points) and N247AC (yellow points).</span>
+</div>
+<div class="main-content-wrap">
+
+<h2 id="sofware-used">Sofware used</h2>
+
+<p>In this blog post, except for Fig.2, I mainly used the open source software - QGIS. The new <a href="https://github.com/gee-community/qgis-earthengine-plugin">Google Earth Engine plugin</a> helped to visualize the Sentinel-2 and Landsat-8 data. I downloaded the flight routes from <a href="https://www.flightradar24.com/">flightradar24</a>, for this I used the GOLD subscription plan. The 3D models were made with <a href="https://plugins.qgis.org/plugins/Qgis2threejs/">Qgis2threejs plugin</a>.</p>
+
+<h2 id="bottom-line">Bottom Line</h2>
+
+<p>You can <strong>cite</strong> this blogpost using: <em>Gärtner, Philipp (2020/01/07) “Look a little closer - the story of a satellite image and fire fighting missions in Australia”, <a href="https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/">https://philippgaertner.github.io/2020/01/satelliteimages-airplanes-fire/</a></em></p>
+
+<hr />
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/landsat-8/">Landsat-8</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/sentinel-2/">Sentinel-2</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/flightradar24/">flightradar24</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rural-fire-service/">Rural Fire Service</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/qgis/">QGIS</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/03/ee-apps/" data-tooltip="Google Earth Engine App Image Gallery">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/" data-tooltip="Use Google Earth Engine in RStudio with reticulate">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2020/03/ee-apps/" data-tooltip="Google Earth Engine App Image Gallery">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/" data-tooltip="Use Google Earth Engine in RStudio with reticulate">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2020\/01\/satelliteimages-airplanes-fire\/';
+          
+            this.page.identifier = '\/2020\/01\/satelliteimages-airplanes-fire\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

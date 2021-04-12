@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Google-Earth-Engine on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/google-earth-engine/</link>
+    <description>Recent content in Google-Earth-Engine on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 23 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/google-earth-engine/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Google Earth Engine Apps - Updated 23th December 2020</title>
+      <link>https://philippgaertner.github.io/2020/12/ee-apps-table-searchable/</link>
+      <pubDate>Wed, 23 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/12/ee-apps-table-searchable/</guid>
+      <description>All (1395!!) publically available Google Earth Engine Apps, ordered alphabetically by users name.</description>
+    </item>
+    
+    <item>
+      <title>Use Google&#39;s Earth Engine Python API in RStudio</title>
+      <link>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</guid>
+      <description>This blogpost is about RStudio and the &lt;code&gt;reticulate&lt;/code&gt; package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.</description>
+    </item>
+    
+    <item>
+      <title>How cloudy is my Sentinel-2 image collection? - The &#39;QA60&#39; band gives insights</title>
+      <link>https://philippgaertner.github.io/2020/08/percent-cloud-cover/</link>
+      <pubDate>Fri, 14 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/08/percent-cloud-cover/</guid>
+      <description>&lt;p&gt;In Google Earth Engine we usually load an image collection first and then filter it by a date range, a region of interest and a image property with some cloud percentage estimates.&lt;br /&gt;
+&lt;br&gt;
+If the cloud threshold value is set too low it may happen that we throw away (filter out) to many images that could have been useful for our analysis. If we select the filter too generously, too many scenes with clouds remain. Finding a good threshold is not easy, this blog post may help to find it.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Europe&#39;s Air Quality Winner</title>
+      <link>https://philippgaertner.github.io/2020/06/europe-air-quality-winner/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/06/europe-air-quality-winner/</guid>
+      <description>&lt;p&gt;A Google Earth Engine App (prototype) to compare European countries NO2 Median changes during the Corona lockdown with the previous year.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Google Earth Engine App Image Gallery</title>
+      <link>https://philippgaertner.github.io/2020/03/ee-apps/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/03/ee-apps/</guid>
+      <description>A image gallery (ordered alphabetically, by users name) of almost all publicly available Google Earth Engine Apps.</description>
+    </item>
+    
+    <item>
+      <title>Use Google Earth Engine in RStudio with reticulate</title>
+      <link>https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/</link>
+      <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/</guid>
+      <description>&lt;p&gt;A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and &lt;code&gt;reticulate&lt;/code&gt; - the R interface to Python.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Collection of Google Earth Engine management tips</title>
+      <link>https://philippgaertner.github.io/2019/05/gee-management-tips/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/05/gee-management-tips/</guid>
+      <description>&lt;p&gt;Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Code behind the Sentinel-2 Ingestion Status App</title>
+      <link>https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/</link>
+      <pubDate>Tue, 14 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/</guid>
+      <description>I wrote a little Earth Engine App where I compared the data availability of Sentinel-1C (Top of Atmosphere) and Sentinel-2A (Surface Reflectance) within the EE data catalog. This blogpost is about the code behind the App.</description>
+    </item>
+    
+    <item>
+      <title>Checking Earth Engine&#39;s Sentinel-2 Surface Reflectance ingestion status</title>
+      <link>https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/</link>
+      <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/</guid>
+      <description>Since the 27&lt;sup&gt;th&lt;/sup&gt; of March 2019 has the Earth Engine data catalogue one more dataset. Sentinel-2 Surface Reflectance (Level-2A) data are finally available. This blog post teaches you in one minute, how to get the current Sentinel-2 ingestion status for your country.</description>
+    </item>
+    
+    <item>
+      <title>Europe&#39;s air pollution is lower during weekends</title>
+      <link>https://philippgaertner.github.io/2018/12/no2/</link>
+      <pubDate>Wed, 19 Dec 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/12/no2/</guid>
+      <description>&lt;p&gt;&lt;em&gt;TL;DR&lt;/em&gt; Europe&amp;rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO&lt;sub&gt;2&lt;/sub&gt;) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO&lt;sub&gt;2&lt;/sub&gt; values compared to other &amp;ldquo;normal&amp;rdquo; Saturdays.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>When Landsat-8 (almost) meets Sentinel-2</title>
+      <link>https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</link>
+      <pubDate>Fri, 06 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</guid>
+      <description>How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.</description>
+    </item>
+    
+    <item>
+      <title>This Landsat project would cost...</title>
+      <link>https://philippgaertner.github.io/2018/06/landsat-cost-estimator/</link>
+      <pubDate>Tue, 26 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/06/landsat-cost-estimator/</guid>
+      <description>LANDSAT COST ESTIMATOR - A tool to estimate the cost of analyzed Landsat imagery if it wasn&amp;rsquo;t freely available.</description>
+    </item>
+    
+    <item>
+      <title>Analysing Google Earth Engine User Summit 2018 tweets</title>
+      <link>https://philippgaertner.github.io/2018/06/twitter-eeus2018/</link>
+      <pubDate>Thu, 14 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/06/twitter-eeus2018/</guid>
+      <description>Today ended the three-day Google Earth Engine User Summit 2018. On social media channels such as Twitter and YouTube, could non-participants indirectly follow the progress and news around the Earth Engine technology.</description>
+    </item>
+    
+    <item>
+      <title>Intra-annual vegetation density changes of two public parks in Berlin, Germany</title>
+      <link>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</link>
+      <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</guid>
+      <description>The blog post shows how the vegetation of two public parks changes seasonally. Multi-temporal satellite images were used to aggregate monthly histograms of vegetation index values.</description>
+    </item>
+    
+    <item>
+      <title>Diagnose Earth Engine performance with the profiler</title>
+      <link>https://philippgaertner.github.io/2017/10/profiler/</link>
+      <pubDate>Mon, 16 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/profiler/</guid>
+      <description>Google Earth Engine provides with the &amp;lsquo;Profiler&amp;rsquo; cloud-computing performance information concerning the resources consumed during script computation.</description>
+    </item>
+    
+    <item>
+      <title>European capital greenness evaluation</title>
+      <link>https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/</link>
+      <pubDate>Sat, 07 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/</guid>
+      <description>The analysis of satellite images from Sentinel-2 shows how green Europe&amp;rsquo;s capitals really are. The greenness was evaluated with the Normalized Difference Vegetation Index and allows comparison among the 43 analyzed capitals.</description>
+    </item>
+    
+    <item>
+      <title>Landsat image inventory in Google Earth Engine</title>
+      <link>https://philippgaertner.github.io/2017/08/landsat-image-inventory-in-google-earth-engine/</link>
+      <pubDate>Tue, 08 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/08/landsat-image-inventory-in-google-earth-engine/</guid>
+      <description>Welcome, to my first step by step tutorial to investigate Landsat image availability and metadata properties for every country within the Earth Engine.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>NDVI on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/ndvi/</link>
+    <description>Recent content in NDVI on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 16 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/ndvi/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Use Google&#39;s Earth Engine Python API in RStudio</title>
+      <link>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</guid>
+      <description>This blogpost is about RStudio and the &lt;code&gt;reticulate&lt;/code&gt; package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.</description>
+    </item>
+    
+    <item>
+      <title>Use Google Earth Engine in RStudio with reticulate</title>
+      <link>https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/</link>
+      <pubDate>Tue, 17 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/</guid>
+      <description>&lt;p&gt;A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and &lt;code&gt;reticulate&lt;/code&gt; - the R interface to Python.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Intra-annual vegetation density changes of two public parks in Berlin, Germany</title>
+      <link>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</link>
+      <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</guid>
+      <description>The blog post shows how the vegetation of two public parks changes seasonally. Multi-temporal satellite images were used to aggregate monthly histograms of vegetation index values.</description>
+    </item>
+    
+    <item>
+      <title>European capital greenness evaluation</title>
+      <link>https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/</link>
+      <pubDate>Sat, 07 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/european-capital-greenness-evaluation/</guid>
+      <description>The analysis of satellite images from Sentinel-2 shows how green Europe&amp;rsquo;s capitals really are. The greenness was evaluated with the Normalized Difference Vegetation Index and allows comparison among the 43 analyzed capitals.</description>
+    </item>
+    
+  </channel>
+</rss>

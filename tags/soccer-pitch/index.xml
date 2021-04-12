@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Soccer Pitch on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/soccer-pitch/</link>
+    <description>Recent content in Soccer Pitch on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 15 Dec 2017 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/soccer-pitch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields</title>
+      <link>https://philippgaertner.github.io/2017/12/berlin-soccer-fields/</link>
+      <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/12/berlin-soccer-fields/</guid>
+      <description>&lt;p&gt;Here in Berlin, there are &lt;strong&gt;450&lt;/strong&gt; soccer fields (some call it football or f&amp;uacute;tbol)  across the city. How do I know? Well, OpenStreetMap has them all. I downloaded their spatial data&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, added temporal information from recorded satellite images, recognised the pitch surfaces and analyzed their recent changes.&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

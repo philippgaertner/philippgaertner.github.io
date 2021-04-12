@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Bing Maps on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/bing-maps/</link>
+    <description>Recent content in Bing Maps on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 30 Nov 2018 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/bing-maps/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How accurate are the recording dates for images in Microsoft Bing Maps?</title>
+      <link>https://philippgaertner.github.io/2018/11/microsoft-bing-maps/</link>
+      <pubDate>Fri, 30 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/11/microsoft-bing-maps/</guid>
+      <description>This blogpost is about Microsoft Bing Maps. More precisely, it’s about the recording dates of the very high resolution images which are available in Bing Maps.</description>
+    </item>
+    
+  </channel>
+</rss>

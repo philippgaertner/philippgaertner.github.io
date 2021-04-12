@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/</link>
+    <description>Recent content in Categories on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 23 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DataWrapper</title>
+      <link>https://philippgaertner.github.io/categories/datawrapper/</link>
+      <pubDate>Wed, 23 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/datawrapper/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Earth Engine App List</title>
+      <link>https://philippgaertner.github.io/categories/earth-engine-app-list/</link>
+      <pubDate>Wed, 23 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/earth-engine-app-list/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Google Analytics</title>
+      <link>https://philippgaertner.github.io/categories/google-analytics/</link>
+      <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/google-analytics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>NDVI</title>
+      <link>https://philippgaertner.github.io/categories/ndvi/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/ndvi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://philippgaertner.github.io/categories/python/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://philippgaertner.github.io/categories/r/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorial</title>
+      <link>https://philippgaertner.github.io/categories/tutorial/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/tutorial/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Air Quality</title>
+      <link>https://philippgaertner.github.io/categories/air-quality/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/air-quality/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Earth Engine App</title>
+      <link>https://philippgaertner.github.io/categories/earth-engine-app/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/earth-engine-app/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>NO2</title>
+      <link>https://philippgaertner.github.io/categories/no2/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/no2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Flourish</title>
+      <link>https://philippgaertner.github.io/categories/flourish/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/flourish/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Fire Fighting</title>
+      <link>https://philippgaertner.github.io/categories/fire-fighting/</link>
+      <pubDate>Tue, 07 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/fire-fighting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Twitter</title>
+      <link>https://philippgaertner.github.io/categories/twitter/</link>
+      <pubDate>Wed, 22 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/twitter/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sentinel-2</title>
+      <link>https://philippgaertner.github.io/categories/sentinel-2/</link>
+      <pubDate>Thu, 04 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/sentinel-2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bing Maps</title>
+      <link>https://philippgaertner.github.io/categories/bing-maps/</link>
+      <pubDate>Fri, 30 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/bing-maps/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Landsat</title>
+      <link>https://philippgaertner.github.io/categories/landsat/</link>
+      <pubDate>Fri, 06 Jul 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/landsat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Earth Engine User Summit</title>
+      <link>https://philippgaertner.github.io/categories/earth-engine-user-summit/</link>
+      <pubDate>Thu, 14 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/earth-engine-user-summit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>BFAST</title>
+      <link>https://philippgaertner.github.io/categories/bfast/</link>
+      <pubDate>Thu, 07 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/bfast/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>BVB</title>
+      <link>https://philippgaertner.github.io/categories/bvb/</link>
+      <pubDate>Thu, 07 Jun 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/bvb/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Berlin</title>
+      <link>https://philippgaertner.github.io/categories/berlin/</link>
+      <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/berlin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Soccer Fields</title>
+      <link>https://philippgaertner.github.io/categories/soccer-fields/</link>
+      <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/soccer-fields/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Data Visualization</title>
+      <link>https://philippgaertner.github.io/categories/data-visualization/</link>
+      <pubDate>Sat, 07 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/data-visualization/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>GitHub Code</title>
+      <link>https://philippgaertner.github.io/categories/github-code/</link>
+      <pubDate>Tue, 08 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/github-code/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

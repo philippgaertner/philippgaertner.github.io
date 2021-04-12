@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/tags/python/</link>
+    <description>Recent content in Python on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 16 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Use Google&#39;s Earth Engine Python API in RStudio</title>
+      <link>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</guid>
+      <description>This blogpost is about RStudio and the &lt;code&gt;reticulate&lt;/code&gt; package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.</description>
+    </item>
+    
+  </channel>
+</rss>

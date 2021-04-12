@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="TL;DR Europe&rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO2 values compared to other &ldquo;normal&rdquo; Saturdays.">
+
+
+<meta property="og:description" content="TL;DR Europe&rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO2 values compared to other &ldquo;normal&rdquo; Saturdays.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Europe&#39;s air pollution is lower during weekends">
+<meta name="twitter:title" content="Europe&#39;s air pollution is lower during weekends">
+<meta property="og:url" content="https://philippgaertner.github.io/2018/12/no2/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2018/12/no2/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="TL;DR Europe&rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO2 values compared to other &ldquo;normal&rdquo; Saturdays.">
+<meta name="twitter:description" content="TL;DR Europe&rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO2 values compared to other &ldquo;normal&rdquo; Saturdays.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2018-12-19T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2018-12-19T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="NO2">
+    
+      <meta property="article:section" content="Air Quality">
+    
+  
+  
+    
+      <meta property="article:tag" content="Sentinel-5P">
+    
+      <meta property="article:tag" content="Google-Earth-Engine">
+    
+      <meta property="article:tag" content="Monitoring">
+    
+      <meta property="article:tag" content="Air-Pollution">
+    
+      <meta property="article:tag" content="Nitrogen-Dioxide">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="http://res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1545281506/NO2/weekday.png">
+  <meta property="twitter:image" content="http://res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1545281506/NO2/weekday.png">
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/v1545267483/NO2/weekday_wide_fnpdaj.jpg">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/v1545267483/NO2/weekday_wide_fnpdaj.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Europe&#39;s air pollution is lower during weekends</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2018/12/no2/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              post-header-cover--partial"
+       style="background-image:url('//res.cloudinary.com/dj9pbb7v1/image/upload/v1545267483/NO2/weekday_wide_fnpdaj.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Europe&#39;s air pollution is lower during weekends
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-12-19T00:00:00Z">
+        
+  December 19, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/no2">NO2</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/air-quality">Air Quality</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">Sentinel-5P Nitrogen Dioxide median values during working days (Mo. - Fr.).</span>
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p><em>TL;DR</em> Europe&rsquo;s air pollution decreases at weekends and rises again during the working week.
+The Netherlands is the country with the highest proportion of Nitrogen Dioxide (NO<sub>2</sub>) in the air - during working days. A Car-Free-Day Saturday in Spain and Portugal did not show a significant improvement in NO<sub>2</sub> values compared to other &ldquo;normal&rdquo; Saturdays.</p>
+
+<h1 id="nitrogen-dioxide-no-sub-2-sub">Nitrogen dioxide (NO<sub>2</sub>)</h1>
+
+<p>Nitrogen dioxide is the chemical compound with the formula NO<sub>2</sub>. The most prominent human-caused source of NO<sub>2</sub> are engines burning fossil. Outdoors, NO<sub>2</sub> can be a result of traffic from motor vehicles (<a href="https://en.wikipedia.org/wiki/Nitrogen_dioxide">NO<sub>2</sub>- wikipedia</a>).</p>
+
+<p>For this blogpost, I used data from Sentinel-5 Precursor (S5P), a satellite capable to<blockquote class="pullquote right">
+	<p>
+Dataset availability of Sentinel-5P in EarthEngine is from 2018-06-28 until Present.   
+</p>
+</blockquote> monitor air pollution. The onboard sensor records Nitrogen Dioxide values in mol/m<sup>2</sup> and provides the data  for the</p>
+
+<ul>
+<li>a) tropospheric vertical column</li>
+<li>b) stratospheric vertical column, or</li>
+<li>c) the total vertical column of NO<sub>2</sub>.</li>
+</ul>
+
+<p>I used the data from the tropospheric vertical column. The troposphere is the lowest layer of the Earth&rsquo;s atmosphere, where nearly all weather conditions take place.</p>
+
+<h3 id="weekend-vs-weekday-separation">Weekend vs. Weekday separation</h3>
+
+<p>I used the Google Earth Engine to get my hand on the Sentinel-5P archive. These were my working steps:</p>
+
+<ol>
+<li>Remove pixels with more than <strong>20 %</strong> cloud fraction.</li>
+<li>Devide the daily data into
+
+<ul>
+<li><strong><span style="color:#762a83">weekdays</span></strong> (Monday - Friday) and<br /></li>
+<li><strong><span style="color:#1b7837">weekends</span></strong> (Saturday - Sunday).<br /></li>
+</ul></li>
+<li>Calculate the <strong>median</strong> value for each pixel.</li>
+<li>Export the data for each European country.</li>
+</ol>
+
+<p><br></p>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545266413/NO2/NO2_tdnwh1.png" title="Figure: Within Europe is Netherlands the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days." data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545266413/NO2/NO2_tdnwh1.png"  alt="Figure: Within Europe is Netherlands the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days.">
+  
+    </a>
+  
+   
+    <span class="caption">Figure: Within Europe is Netherlands the country with the highest proportion of Nitrogen Dioxide (NO2) in the air - during working days.</span>
+  
+</div>
+
+
+<h3 id="why-is-there-a-difference-between-weekend-weekdays-no-sub-2-sub-values">Why is there a difference between weekend / weekdays NO<sub>2</sub> values?</h3>
+
+<p>At this point I can only make assumptions. The reactors, kilns and power plants run around <sup>24</sup>&frasl;<sub>7</sub> non-stop. Thats for sure. There won&rsquo;t be any great variation between days. However, on weekends there are many closed shops, fewer people work and there are fewer commuters, less traffic, fewer cars on the roads and therefore less car emissions, and therefore less NO<sub>2</sub> in the troposphere.</p>
+
+<p>What surprises me, is the fact that Belgium has lower NO<sub>2</sub> values during the week than at the weekend. However, Belgium is also an exception.</p>
+
+<h1 id="car-free-day-2018">Car-Free Day 2018</h1>
+
+<p>The <strong><a href="https://www.daysoftheyear.com/days/2018/09/22/">Car-Free Day</a></strong> encourages motorists to give up their cars for a day. Organized events are <blockquote class="pullquote right">
+	<p>
+Does Sentinel-5P recognize if there are fewer cars driving? Here's my trial.  
+</p>
+</blockquote> held in some cities and countries. In 2018, the <strong>Car-Free-Day</strong> took place on September, 22 2018 (a Saturday). Well, does Sentinel recognize if there are fewer cars driving (less car emission)?</p>
+
+<h3 id="did-sentinel-5p-record-images-on-the-22-september-2018-over-europe">Did Sentinel-5P record images on the 22. September 2018 over Europe?</h3>
+
+<p>Yes, of course. BUT, there are many clouds over central and northern Europe (masked out in the image below). However, there are mostly good conditions in Portugal and Spain (as always).<br />
+<br>
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1545270631/NO2/NO2_europe_20180922_bj0vrt.png" alt="Sentinel-5P Nitrogen Dioxide median values recorded on the Saturday the 22. September 2018 (pixels with a cloud fraction above 20% were removed)." /><span class="caption">Sentinel-5P Nitrogen Dioxide median values recorded on the Saturday the 22. September 2018 (pixels with a cloud fraction above 20% were removed).</span>
+</div>
+<div class="main-content-wrap"></p>
+
+<h1 id="challenge-compare-nitrogen-dioxide-values-for-several-saturdays-over-portugal-and-spain">Challenge: Compare Nitrogen Dioxide values for several Saturdays over Portugal and Spain</h1>
+
+<p>What do you think, will there be any difference in Nitrogen Dioxide values between the <strong>Car-Free-Day</strong> (a Saturday) and any other normal average Saturday?</p>
+
+<p><br></p>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274190/NO2/ESP_POR_25073_mnde0y.png" title="25. August 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274190/NO2/ESP_POR_25073_mnde0y.png"  alt="25. August 2018">
+  
+    </a>
+  
+   
+    <span class="caption">25. August 2018</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274189/NO2/ESP_POR_25080_aetfxn.png" title="1. September 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274189/NO2/ESP_POR_25080_aetfxn.png"  alt="1. September 2018">
+  
+    </a>
+  
+   
+    <span class="caption">1. September 2018</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274190/NO2/ESP_POR_25087_fbfr3o.png" title="8. September 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274190/NO2/ESP_POR_25087_fbfr3o.png"  alt="8. September 2018">
+  
+    </a>
+  
+   
+    <span class="caption">8. September 2018</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274184/NO2/ESP_POR_25094_gwxi7r.png" title="15. September 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274184/NO2/ESP_POR_25094_gwxi7r.png"  alt="15. September 2018">
+  
+    </a>
+  
+   
+    <span class="caption">15. September 2018</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274190/NO2/ESP_POR_25101_tnyc1u.png" title="22. September 2018 our only Car-Free-Day" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274190/NO2/ESP_POR_25101_tnyc1u.png"  alt="22. September 2018 our only Car-Free-Day">
+  
+    </a>
+  
+   
+    <span class="caption">22. September 2018 our only Car-Free-Day</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274189/NO2/ESP_POR_25108_t13rpa.png" title="29. September 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274189/NO2/ESP_POR_25108_t13rpa.png"  alt="29. September 2018">
+  
+    </a>
+  
+   
+    <span class="caption">29. September 2018</span>
+  
+</div>
+
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274192/NO2/ESP_POR_25115_j4jtse.png" title="6. October 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545274192/NO2/ESP_POR_25115_j4jtse.png"  alt="6. October 2018">
+  
+    </a>
+  
+   
+    <span class="caption">6. October 2018</span>
+  
+</div>
+
+
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-25" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545275481/NO2/ESP_POR_25122.png" title="13. October 2018" data-fancybox-group="">
+  
+    <img class="fig-img" src="http://res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545275481/NO2/ESP_POR_25122.png"  alt="13. October 2018">
+  
+    </a>
+  
+   
+    <span class="caption">13. October 2018</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h1 id="car-free-day-has-the-same-no-sub-2-sub-values-like-normal-saturday">Car-Free-Day has the same NO<sub>2</sub> values like normal Saturday</h1>
+
+<p>The Car-Free-Day, which happened to be on the 22. September, shows in the Sentinel-5P data the same NO<sub>2</sub> values like other &ldquo;normal&rdquo; Saturdays.</p>
+
+<p>In the lower graph is the Car-Free-Day histogram highlighted and the corresponding median values are marked as black dots.</p>
+
+<p><br>
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545279550/NO2/car-free-hist_pc1hoe.png" title="Sentinel-5P data for the Car-Free-Day show similar NO2 values like on any other ordinary Saturday." data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/q_auto:eco/v1545279550/NO2/car-free-hist_pc1hoe.png"  alt="Sentinel-5P data for the Car-Free-Day show similar NO2 values like on any other ordinary Saturday.">
+  
+    </a>
+  
+   
+    <span class="caption">Sentinel-5P data for the Car-Free-Day show similar NO2 values like on any other ordinary Saturday.</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+</p>
+
+<h2 id="bottom-line">Bottom Line</h2>
+
+<p>Sentinel5 is a great sensor that helps us make air pollution visible. In the short blog entry I have shown that the air pollution on weekends is lower than within the week.</p>
+
+<p>The example of the Car-Free-Day 2018 in Spain and Portugal did not show a significant improvement in NO<sub>2</sub> values compared to other normal Saturdays before and after.</p>
+
+<hr />
+
+<p>You can <strong>cite</strong> this blogpost using: <em>Gärtner, Philipp (2018/12/19) “Europe&rsquo;s air pollution is lower during weekends”, <a href="https://philippgaertner.github.io/2018/12/no2/">https://philippgaertner.github.io/2018/12/no2/</a></em></p>
+
+<hr />
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/sentinel-5p/">Sentinel-5P</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">Google-Earth-Engine</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/monitoring/">Monitoring</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/air-pollution/">Air-Pollution</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/nitrogen-dioxide/">Nitrogen-Dioxide</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/" data-tooltip="Checking Earth Engine&#39;s Sentinel-2 Surface Reflectance ingestion status">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/11/microsoft-bing-maps/" data-tooltip="How accurate are the recording dates for images in Microsoft Bing Maps?">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/04/gee-s2-level-2a-ingestion/" data-tooltip="Checking Earth Engine&#39;s Sentinel-2 Surface Reflectance ingestion status">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/11/microsoft-bing-maps/" data-tooltip="How accurate are the recording dates for images in Microsoft Bing Maps?">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2018\/12\/no2\/';
+          
+            this.page.identifier = '\/2018\/12\/no2\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

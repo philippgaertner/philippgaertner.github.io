@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.">
+
+
+<meta property="og:description" content="Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Collection of Google Earth Engine management tips">
+<meta name="twitter:title" content="Collection of Google Earth Engine management tips">
+<meta property="og:url" content="https://philippgaertner.github.io/2019/05/gee-management-tips/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2019/05/gee-management-tips/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.">
+<meta name="twitter:description" content="Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2019-05-22T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2019-05-22T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Twitter">
+    
+  
+  
+    
+      <meta property="article:tag" content="Google-Earth-Engine">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617877727/twitter-logo-small-1920.png">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617877727/twitter-logo-small-1920.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>Collection of Google Earth Engine management tips</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2019/05/gee-management-tips/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Collection of Google Earth Engine management tips
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2019-05-22T00:00:00Z">
+        
+  May 22, 2019
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/twitter">Twitter</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>Since April this year I tweet irregularly about Google Earth Engine management tips. This blogpost unites all tweets on this topic.</p>
+
+<div class="alert info ">
+  <p>The list is sorted, last tweet first.</p>
+</div>
+
+<h2 id="8-tip">8. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Hidden in plain sight!<br><br>My 8th <a href="https://twitter.com/hashtag/GoogleEarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#GoogleEarthEngine</a> management tip - Get access to any <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> App source code. <br><br>1. Open <a href="https://twitter.com/hashtag/GEE?src=hash&amp;ref_src=twsrc%5Etfw">#GEE</a> App - e.g. <a href="https://t.co/pdc4GSdex9">https://t.co/pdc4GSdex9</a><br>2. View Page Source<br>3. Search for &quot;.json&quot;<br>4. Open link &quot;<a href="https://t.co/jM98caO1PD">https://t.co/jM98caO1PD</a>&quot;<br>5. Enjoy App source code 😎 <a href="https://t.co/3TmhFHWIvr">pic.twitter.com/3TmhFHWIvr</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1178345138147471361?ref_src=twsrc%5Etfw">September 29, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="7-tip">7. Tip</h2>
+
+<p><blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> provides the most recent <a href="https://twitter.com/hashtag/Sentinel2?src=hash&amp;ref_src=twsrc%5Etfw">#Sentinel2</a> image in less than 18 hours. <br><br>Good to know for 🔥🌋 🌲🌳disturbance mapping / monitoring. <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip <a href="https://t.co/e6uDMKv0BI">https://t.co/e6uDMKv0BI</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1156586390257315841?ref_src=twsrc%5Etfw">July 31, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">How long does it take from 🛰️satellite image acquisition, 📡image download, until the data is finally available in <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a>? Example: <a href="https://twitter.com/hashtag/Sentinel2?src=hash&amp;ref_src=twsrc%5Etfw">#Sentinel2</a> from <a href="https://twitter.com/ESA_EO?ref_src=twsrc%5Etfw">@ESA_EO</a> over <a href="https://twitter.com/berlin?ref_src=twsrc%5Etfw">@Berlin</a> <a href="https://t.co/lSviyZXcf5">pic.twitter.com/lSviyZXcf5</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1156584712938381317?ref_src=twsrc%5Etfw">July 31, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</p>
+
+<h2 id="6-tip">6. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Google <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip: If you run out of asset storing space (250GB), ask a friend or colleague to copy your asset and share with you. <a href="https://t.co/0Ml8TrCRHe">https://t.co/0Ml8TrCRHe</a>.copyAsset(&#39;YOU/sourceID&#39;, &#39;FRIEND/destinationID&#39;)<br><br>Remember: she/he has to copy, not you !! <a href="https://t.co/NvyjxYbXch">pic.twitter.com/NvyjxYbXch</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1136231979454730243?ref_src=twsrc%5Etfw">June 5, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="5-tip">5. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Google <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip: You want a list of all your GEE scripts??? Just use the &quot;Manage Links&quot; page (in the menu behind the &quot;Get Link&quot; button) <br><br>Links can be deleted  <br>Links can be downloaded in bulk<a href="https://twitter.com/hashtag/GoogleEarthTips?src=hash&amp;ref_src=twsrc%5Etfw">#GoogleEarthTips</a> <a href="https://t.co/zUXXpGACet">https://t.co/zUXXpGACet</a> <a href="https://t.co/guV2YtTSi9">pic.twitter.com/guV2YtTSi9</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1133709883830919182?ref_src=twsrc%5Etfw">May 29, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="4-tip">4. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Google <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip: if you need more tools and guidance for map accuracy and area estimation in GEE you want to check out the AREA2 toolbox from <a href="https://twitter.com/J_P_Olofsson?ref_src=twsrc%5Etfw">@J_P_Olofsson</a> and <a href="https://twitter.com/eric__bullock?ref_src=twsrc%5Etfw">@eric__bullock</a><a href="https://t.co/vljsDYmEjs">https://t.co/vljsDYmEjs</a><a href="https://t.co/ZEGQhA4LYe">https://t.co/ZEGQhA4LYe</a> <a href="https://t.co/nV6SP6wm8z">pic.twitter.com/nV6SP6wm8z</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1133425287314718721?ref_src=twsrc%5Etfw">May 28, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="3-tip">3. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Google <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip: some of the early <a href="https://twitter.com/hashtag/Sentinel2?src=hash&amp;ref_src=twsrc%5Etfw">#Sentinel2</a> Level-1C data (spring 2016) have a cloud &quot;Bitmask&quot; error. Clean pixels with no clouds are masked. Just add .unmask(0) in the maskS2clouds function! <br><br>var qa = <a href="https://t.co/Y5rbXMTulg">https://t.co/Y5rbXMTulg</a>(&#39;QA60&#39;).unmask(0); <a href="https://t.co/2XlNCYzqAx">pic.twitter.com/2XlNCYzqAx</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1131257783750467595?ref_src=twsrc%5Etfw">May 22, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="2-tip">2. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Google <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip: use keyboard 1⃣-9⃣ to toggle the visibility of the Nth layer in your Map 🗺️</p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1124632998136225793?ref_src=twsrc%5Etfw">May 4, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="1-tip">1. Tip</h2>
+
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">Google <a href="https://twitter.com/hashtag/EarthEngine?src=hash&amp;ref_src=twsrc%5Etfw">#EarthEngine</a> management tip: interpolate your image with image.resample(&#39;bicubic&#39;) to get a smoother surface <a href="https://t.co/s8Uv9eYZzB">pic.twitter.com/s8Uv9eYZzB</a></p>&mdash; Philipp Gärtner (@Mixed_Pixels) <a href="https://twitter.com/Mixed_Pixels/status/1124492241244913664?ref_src=twsrc%5Etfw">May 4, 2019</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2 id="bottom-line">Bottom Line</h2>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">Google-Earth-Engine</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/" data-tooltip="Use Google Earth Engine in RStudio with reticulate">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/" data-tooltip="Code behind the Sentinel-2 Ingestion Status App">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/12/earth-engine-rstudio-reticulate/" data-tooltip="Use Google Earth Engine in RStudio with reticulate">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2019/05/gee-s2-ingestion-status-app/" data-tooltip="Code behind the Sentinel-2 Ingestion Status App">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2019\/05\/gee-management-tips\/';
+          
+            this.page.identifier = '\/2019\/05\/gee-management-tips\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

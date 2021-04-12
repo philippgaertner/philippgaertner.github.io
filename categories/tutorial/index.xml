@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tutorial on Philipp Gärtner Blog</title>
+    <link>https://philippgaertner.github.io/categories/tutorial/</link>
+    <description>Recent content in Tutorial on Philipp Gärtner Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 16 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://philippgaertner.github.io/categories/tutorial/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Use Google&#39;s Earth Engine Python API in RStudio</title>
+      <link>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</guid>
+      <description>This blogpost is about RStudio and the &lt;code&gt;reticulate&lt;/code&gt; package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.</description>
+    </item>
+    
+    <item>
+      <title>How cloudy is my Sentinel-2 image collection? - The &#39;QA60&#39; band gives insights</title>
+      <link>https://philippgaertner.github.io/2020/08/percent-cloud-cover/</link>
+      <pubDate>Fri, 14 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2020/08/percent-cloud-cover/</guid>
+      <description>&lt;p&gt;In Google Earth Engine we usually load an image collection first and then filter it by a date range, a region of interest and a image property with some cloud percentage estimates.&lt;br /&gt;
+&lt;br&gt;
+If the cloud threshold value is set too low it may happen that we throw away (filter out) to many images that could have been useful for our analysis. If we select the filter too generously, too many scenes with clouds remain. Finding a good threshold is not easy, this blog post may help to find it.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>How to arrange a raster image stack for the use with BFAST in R</title>
+      <link>https://philippgaertner.github.io/2018/04/bfast-preparation/</link>
+      <pubDate>Mon, 16 Apr 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2018/04/bfast-preparation/</guid>
+      <description>&lt;p&gt;The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (&lt;code&gt;bfast&lt;/code&gt;) package and function.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Intra-annual vegetation density changes of two public parks in Berlin, Germany</title>
+      <link>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</link>
+      <pubDate>Fri, 27 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/10/tempelhof_tiergarten/</guid>
+      <description>The blog post shows how the vegetation of two public parks changes seasonally. Multi-temporal satellite images were used to aggregate monthly histograms of vegetation index values.</description>
+    </item>
+    
+    <item>
+      <title>Landsat image inventory in Google Earth Engine</title>
+      <link>https://philippgaertner.github.io/2017/08/landsat-image-inventory-in-google-earth-engine/</link>
+      <pubDate>Tue, 08 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/2017/08/landsat-image-inventory-in-google-earth-engine/</guid>
+      <description>Welcome, to my first step by step tutorial to investigate Landsat image availability and metadata properties for every country within the Earth Engine.</description>
+    </item>
+    
+  </channel>
+</rss>

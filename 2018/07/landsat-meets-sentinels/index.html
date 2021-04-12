@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.">
+
+
+<meta property="og:description" content="How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="When Landsat-8 (almost) meets Sentinel-2">
+<meta name="twitter:title" content="When Landsat-8 (almost) meets Sentinel-2">
+<meta property="og:url" content="https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.">
+<meta name="twitter:description" content="How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2018-07-06T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2018-07-06T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="Landsat">
+    
+      <meta property="article:section" content="Sentinel-2">
+    
+  
+  
+    
+      <meta property="article:tag" content="Metadata">
+    
+      <meta property="article:tag" content="Sentinel-2">
+    
+      <meta property="article:tag" content="Landsat-8">
+    
+      <meta property="article:tag" content="Monitoring">
+    
+      <meta property="article:tag" content="Google-Earth-Engine">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617962629/2018-07-Landsat-meets-Sentinels-files/cover-S2-L8.png">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617962629/2018-07-Landsat-meets-Sentinels-files/cover-S2-L8.png">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>When Landsat-8 (almost) meets Sentinel-2</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      When Landsat-8 (almost) meets Sentinel-2
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-07-06T00:00:00Z">
+        
+  July 6, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/landsat">Landsat</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/sentinel-2">Sentinel-2</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              
+
+<p>Berlin and Venice are exactly 786 kilometres apart. It turns out, the Sentinel-2 satellites are just as far from the Earth, 786 km! It&rsquo;s incredible when you consider that, despite the distance, the sensors take very detailed pictures of the Earth.</p>
+
+<p>Scientists like Sentinel-2. Maybe it&rsquo;s the high spatial and spectral resolution or the short revisiting cycle (5 days), or maybe the 290 km field of view. Whatever it is, everyone has his personal reasons to use Sentinel-2, but we all love it especially because of its <em>free and open data policy</em>. Landsat-8 images are also free, and also very popular for similar reasons (maybe even more popular than Sentinel).
+<blockquote class="pullquote right">
+	<p>Whenever I refer to the Sentinels I mean SENTINEL-2A (launched 23 June 2015) and SENTINEL-2B (launched 7 March 2017) which occupy the same orbit, but separated by 180 degrees.</p>
+</blockquote></p>
+
+<p>In fact many remote sensing scientist or practisioners combine, merge or fuse Sentinel-2 images with Landsat-8 scenes to get a more precise and dense data cube for their analysis.</p>
+
+<p>So it&rsquo;s not surprising that, the number of scientific publications covering <em>Landsat-8</em> and <em>Sentinel-2</em> increase annually.
+<br>
+<br>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center fig-100" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/unnamed-chunk-2-1.png" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/unnamed-chunk-2-1.png" >
+  
+    </a>
+  
+  
+</div>
+
+<br>
+<br>
+So when people do their satellite data munging they look particularly for dates when Landsat and Sentinel have overflown (or will overfly) the area of interest at the very same day. They get excited and move with their expensive instruments outdoors at the same day to record validation and calibration values. Thats very exciting and good science.<br />
+<br>
+<!--html_preserve--><blockquote class="twitter-tweet"><p lang="en" dir="ltr">Super happy with this near coincident <a href="https://twitter.com/USGSLandsat?ref_src=twsrc%5Etfw">@USGSLandsat</a> and <a href="https://twitter.com/ESA_EO?ref_src=twsrc%5Etfw">@ESA_EO</a> <a href="https://twitter.com/hashtag/Sentinel2?src=hash&amp;ref_src=twsrc%5Etfw">#Sentinel2</a> capture over the <a href="https://twitter.com/TERN_Aus?ref_src=twsrc%5Etfw">@TERN_Aus</a> grassland supersite while we were on site measuring <a href="https://twitter.com/hashtag/fractionalCover?src=hash&amp;ref_src=twsrc%5Etfw">#fractionalCover</a> <a href="https://twitter.com/hashtag/Biomass?src=hash&amp;ref_src=twsrc%5Etfw">#Biomass</a> and <a href="https://twitter.com/hashtag/reflectance?src=hash&amp;ref_src=twsrc%5Etfw">#reflectance</a> <a href="https://t.co/k925koooHL">pic.twitter.com/k925koooHL</a></p>&mdash; Peter Scarth 🗺️ (@petescarth) <a href="https://twitter.com/petescarth/status/1011086948427915264?ref_src=twsrc%5Etfw">June 25, 2018</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<!--/html_preserve-->
+<br>
+Websites, such as <a href="http://www.n2yo.com">n2yo.com</a> are very helpful for satellite overpass predictions (i.e. <a href="http://www.n2yo.com">n2yo.com</a> provides 10-day predictions with alert functionality for many sensors).<br />
+<br>
+
+
+
+<div class="figure fig-100" >
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961515/2018-07-Landsat-meets-Sentinels-files/n2yo-screenshot2018-07-05_at_21.30.13.png"  alt="n2yo screenshot of Landsat-8 &amp; Sentinel-2A with orbits (5th of July at 21:30:13)">
+  
+   
+    <span class="caption">n2yo screenshot of Landsat-8 &amp; Sentinel-2A with orbits (5th of July at 21:30:13)</span>
+  
+</div>
+</p>
+
+<h1 id="motivation">Motivation</h1>
+
+<p>At this point I wondered, <strong>How often does Landsat and Sentinel actually appear at the same location at the same time?!?!</strong> <strong>Do both satellites really fly over the same spot somewhere at the same time, sometime?</strong> If so, Sentinel should incidentally take photos of the Landsat satellite itself.</p>
+
+<p>In theory, that would be possible. Sentinel orbits the Earth at a high altitude (786 km; remember Berlin - Venice ?!) and takes a picture of the Landsat-8 satellite orbiting the Earth at a lower altitude (705 km).</p>
+
+<h1 id="the-quest-for-an-unlikely-image">The quest for an unlikely image</h1>
+
+<p>Well let&rsquo;s find out. For this task, I used the <a href="https://earthengine.google.com/#intro">Google Earth Engine</a> again because all Landsat-8 and Sentinel-2 images are available as <code>ImageCollection</code> in the cloud based data catalog. Naive as I am, I search first over Berlin (Germany) for the pictures of all pictures.</p>
+
+<h2 id="parameter-setup">Parameter Setup</h2>
+
+<p>At first I dropped a point marker over Berlin (or any other place, as you wish). Than, I set up some parameter (i.e. terrain background basemap) and get the date of today.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Berlin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Geometry</span>.<span style="color:#a6e22e">Point</span>([<span style="color:#ae81ff">13.40619231451105</span>, <span style="color:#ae81ff">52.51970379595016</span>]);
+
+<span style="color:#75715e">// add Landsat footprint for point marker
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wrs2_descending</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#e6db74">&#39;users/gaertnerp/Blog/WRS2_descending&#39;</span>);
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wrs2_filtered</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wrs2_descending</span>.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">Berlin</span>); <span style="color:#75715e">// filter footprint to aoi
+</span><span style="color:#75715e"></span>
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">wrs2_filtered</span>, {},<span style="color:#e6db74">&#39;Landsat footprint&#39;</span>, <span style="color:#66d9ef">true</span>, <span style="color:#ae81ff">0.3</span>);  <span style="color:#75715e">// add layer to map
+</span><span style="color:#75715e"></span>
+
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#39;TERRAIN&#39;</span>);      <span style="color:#75715e">// change basemap
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">centerObject</span>(<span style="color:#a6e22e">Berlin</span>, <span style="color:#ae81ff">7</span>);    <span style="color:#75715e">// center map to Berlin
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">now</span> <span style="color:#f92672">=</span> Date.<span style="color:#a6e22e">now</span>();
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">eeNow</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">now</span>);
+</code></pre></div>
+<h2 id="get-all-landsat-8-and-sentinel-2-images">Get all Landsat-8 and Sentinel-2 images</h2>
+
+<p><blockquote class="pullquote right">
+	<p>Result for Berlin: At the selected location are 125 Landsat and 546 Sentinel images available.</p>
+</blockquote>
+Now, we are particularly interested in the spacecraft name, the date/time &amp; location of the observations and the product identifier.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// #### Landsat 8 ####
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;LANDSAT/LC08/C01/T1_SR&#39;</span>)
+.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">Berlin</span>)
+.<span style="color:#a6e22e">filterDate</span>(<span style="color:#e6db74">&#39;2015-06-23&#39;</span>, <span style="color:#a6e22e">eeNow</span>)
+.<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">date</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;system:time_start&#39;</span>)).<span style="color:#a6e22e">format</span>(<span style="color:#e6db74">&#34;YYYY-MM-dd&#34;</span>);
+  <span style="color:#a6e22e">date</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">date</span>);
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#a6e22e">date</span>);
+  })
+  .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ID</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.String(<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;system:index&#39;</span>));
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;ID&#39;</span>, <span style="color:#a6e22e">ID</span>);
+  })
+  .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">date</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;system:time_start&#39;</span>));
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;date_time&#39;</span>, <span style="color:#a6e22e">date</span>);
+  });
+
+
+<span style="color:#75715e">// ### Sentinel 2 ####
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;COPERNICUS/S2&#39;</span>)
+.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">Berlin</span>)
+.<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">date</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;system:time_start&#39;</span>)).<span style="color:#a6e22e">format</span>(<span style="color:#e6db74">&#34;YYYY-MM-dd&#34;</span>);
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">date</span>));
+  })
+  .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ID</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.String(<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;system:index&#39;</span>));
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;ID&#39;</span>, <span style="color:#a6e22e">ID</span>);
+  })
+  .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">date</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;system:time_start&#39;</span>));
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;date_time&#39;</span>, <span style="color:#a6e22e">date</span>);
+  });
+  
+</code></pre></div>
+<h2 id="join-sentinel-2-and-landsat-8-by-date">Join Sentinel-2 and Landsat-8 by Date</h2>
+
+<p>We are only interested in images with the same date at the same location.
+<blockquote class="pullquote right">
+	<p>Result for Berlin: For the selected location where
+20 distinct dates recorded.</p>
+</blockquote></p>
+
+<p>Wow. So at least 20 times where Landsat-8 and Sentinel-2 at the same day over Berlin. <strong>But they weren&rsquo;t over Berlin at the same time, or were they?</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// Get FeatureCollection from ImageCollection
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8_FC</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#a6e22e">L8</span>).<span style="color:#a6e22e">select</span>([
+  <span style="color:#e6db74">&#39;ID&#39;</span>,<span style="color:#e6db74">&#39;date&#39;</span>,<span style="color:#e6db74">&#39;date_time&#39;</span>,<span style="color:#e6db74">&#39;CLOUD_COVER&#39;</span>,<span style="color:#e6db74">&#39;SATELLITE&#39;</span>,<span style="color:#e6db74">&#39;system:index&#39;</span>
+]);
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_FC</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#a6e22e">S2</span>).<span style="color:#a6e22e">select</span>([
+  <span style="color:#e6db74">&#39;ID&#39;</span>,<span style="color:#e6db74">&#39;date&#39;</span>,<span style="color:#e6db74">&#39;date_time&#39;</span>,<span style="color:#e6db74">&#39;CLOUDY_PIXEL_PERCENTAGE&#39;</span>,<span style="color:#e6db74">&#39;SPACECRAFT_NAME&#39;</span>,<span style="color:#e6db74">&#39;system:index&#39;</span>],
+ [<span style="color:#e6db74">&#39;ID&#39;</span>,<span style="color:#e6db74">&#39;date&#39;</span>,<span style="color:#e6db74">&#39;date_time&#39;</span>,<span style="color:#e6db74">&#39;CLOUD_COVER&#39;</span>            ,<span style="color:#e6db74">&#39;SATELLITE&#39;</span>      ,<span style="color:#e6db74">&#39;system:index&#39;</span>]);
+
+<span style="color:#75715e">// Get all matches between the &#39;date&#39; 
+</span><span style="color:#75715e">// elements of two collections
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// the equals filter specifies how the collections match (&#39;date&#39;)
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">toyFilter</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Filter</span>.<span style="color:#a6e22e">equals</span>({ <span style="color:#a6e22e">leftField</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#a6e22e">rightField</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;date&#39;</span>});
+
+<span style="color:#75715e">// define the join.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">innerJoin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Join</span>.<span style="color:#a6e22e">inner</span>(<span style="color:#e6db74">&#39;primary&#39;</span>, <span style="color:#e6db74">&#39;secondary&#39;</span>);
+
+<span style="color:#75715e">// apply the join.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">joined</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">innerJoin</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">L8_FC</span>, <span style="color:#a6e22e">S2_FC</span>, <span style="color:#a6e22e">toyFilter</span>);
+
+
+<span style="color:#75715e">// #### Select Matches for 
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">flattener</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feat</span>){
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">feat</span>).<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;primary&#39;</span>));
+};
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sel_primary</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">joined</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">flattener</span>);
+
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">flattener</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feat</span>){
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">feat</span>).<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;secondary&#39;</span>));
+};
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">sel_secondary</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">joined</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">flattener</span>);
+
+
+<span style="color:#75715e">// Merge &amp; Sort by Date
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">merged_selection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sel_secondary</span>.<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">sel_primary</span>).<span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;date&#39;</span>);
+
+<span style="color:#75715e">// get unique matching dates
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">distinct_dates</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sel_primary</span>.<span style="color:#a6e22e">select</span>(<span style="color:#e6db74">&#39;date&#39;</span>).<span style="color:#a6e22e">distinct</span>([<span style="color:#e6db74">&#39;date&#39;</span>]).<span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;date&#39;</span>);
+</code></pre></div>
+<h2 id="scatterchart-when-landsat-8-almost-meets-the-sentinels">ScatterChart - When Landsat-8 (almost) meets the Sentinels</h2>
+
+<p>The following scatterplot shows the days (y-axis) and the times (x-axis) on which both satellites, Landsat-8 and Sentinel-2, were flying over Berlin.</p>
+
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-scatterchart.png" alt="When Landsat-8 (almost) meets the Sentinels" /><span class="caption">When Landsat-8 (almost) meets the Sentinels</span>
+</div>
+<div class="main-content-wrap">
+
+<p>Landsat-8 orbits the Earth sun-synchronous. Meaning Landsat-8 visits Berlin shortly before or shortly after 10:00 am. The images shortly before 10:00 am are scenes of the PATH 193, ROW 23. Shortly after 10:00 am are pictures of the other PATH: 192 and ROW: 24.</p>
+
+<blockquote>
+<p>Sun-synchronous orbits are used to ensure the angle of sunlight upon the Earth&rsquo;s surface is consistently maintained. Apart from small seasonal variations, anchoring of the satellites orbit to the angle of the sun minimises the potential impact of shadows and levels of illumination on the ground. This ensures consistency over time and is critical in assessing time-series data (source: <a href="https://sentinel.esa.int/web/sentinel/missions/sentinel-2/satellite-description/orbit">sentinel.esa.int</a>).</p>
+</blockquote>
+
+<p>The Sentinels (A &amp; B) always comes in a time window of 10:10 am to 10:25 am, depending on the season and the PATH /ROW (as with Landsat-8).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+</span><span style="color:#75715e"></span>
+
+<span style="color:#75715e">// Create a new property with default dates but original times for the x-axis.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">all_dates_to_default_date</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feature</span>) {
+  
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">xx</span>         <span style="color:#f92672">=</span> <span style="color:#a6e22e">feature</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;date_time&#39;</span>);
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">equal_time</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">xx</span>).<span style="color:#a6e22e">update</span>({<span style="color:#a6e22e">year</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2000</span>, <span style="color:#a6e22e">month</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">day</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>});
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">add_3h</span>     <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">equal_time</span>).<span style="color:#a6e22e">advance</span>({<span style="color:#a6e22e">delta</span><span style="color:#f92672">:</span><span style="color:#ae81ff">3</span>,<span style="color:#a6e22e">unit</span><span style="color:#f92672">:</span><span style="color:#e6db74">&#39;hour&#39;</span>}); <span style="color:#75715e">// add 3 hours
+</span><span style="color:#75715e"></span>  
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">feature</span>.<span style="color:#a6e22e">set</span>({<span style="color:#a6e22e">time_default</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">add_3h</span>});
+  
+};
+
+<span style="color:#a6e22e">merged_selection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">merged_selection</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">all_dates_to_default_date</span>);
+
+<span style="color:#75715e">// Create a ScatterChart witch all dates when L8 &amp; S2 where at the same location
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">chart_date</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Chart</span>.<span style="color:#a6e22e">feature</span>.<span style="color:#a6e22e">groups</span>(<span style="color:#a6e22e">merged_selection</span>, <span style="color:#e6db74">&#39;time_default&#39;</span>, <span style="color:#e6db74">&#39;date&#39;</span>, <span style="color:#e6db74">&#39;SATELLITE&#39;</span>)
+    .<span style="color:#a6e22e">setChartType</span>(<span style="color:#e6db74">&#39;ScatterChart&#39;</span>)
+    .<span style="color:#a6e22e">setOptions</span>({
+      <span style="color:#a6e22e">width</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">600</span>,
+      <span style="color:#a6e22e">height</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">400</span>,
+      <span style="color:#a6e22e">crosshair</span><span style="color:#f92672">:</span> { 
+        <span style="color:#a6e22e">trigger</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;both&#39;</span> ,
+        <span style="color:#a6e22e">opacity</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0.5</span> ,
+        <span style="color:#a6e22e">orientation</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;both&#39;</span>
+      },
+      <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;When Landsat-8 (almost) meets the Sentinels&#39;</span>,
+      <span style="color:#a6e22e">hAxis</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Time&#39;</span>,
+        <span style="color:#a6e22e">gridlines</span><span style="color:#f92672">:</span> {
+            <span style="color:#a6e22e">count</span><span style="color:#f92672">:</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,
+            <span style="color:#a6e22e">units</span><span style="color:#f92672">:</span> {
+              <span style="color:#a6e22e">hours</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">format</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;HH:mm&#39;</span>]}
+            }
+          }
+      },
+      <span style="color:#a6e22e">vAxis</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Date&#39;</span>},
+      <span style="color:#a6e22e">tooltip</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">isHtml</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>},
+    });
+
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">chart_date</span>);
+</code></pre></div>
+<h1 id="but-how-close-in-time-were-landsat-8-and-sentinel-2">But how close (in time) were Landsat-8 and Sentinel-2?</h1>
+
+<p>To answer this question I selected the top 5 dates with the smallest time difference. The Barchart is shown below. Images with the same time come from different overlapping tiles (Grid Reference System).</p>
+
+<p>That means for Berlin, Landsat-8 missed Sentinel-2B on the 4th of May 2018 by <blockquote class="pullquote right">
+	<p>522 Seconds difference!!!! What does it actually mean?</p>
+</blockquote><strong>8.69816 minutes, or 522.0 seconds</strong>.</p>
+
+<p>At a flight speed of about 7.5 km per second, Landsat-8 continued already roughly 3915 km when Sentinel arrived over Berlin!
+</div>
+<div class="figure figure--fullWidth">
+  <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-barchart.png" alt="Top 5: Days with the smallest time difference between Landsat-8 and Sentinel-2 scenes" /><span class="caption">Top 5: Days with the smallest time difference between Landsat-8 and Sentinel-2 scenes</span>
+</div>
+<div class="main-content-wrap"></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+</span><span style="color:#75715e"></span>
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">flattener_get_diff</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feat</span>){
+  
+  <span style="color:#a6e22e">feat</span>             <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">feat</span>);
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">primary_f</span>    <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">feat</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;primary&#39;</span>)); <span style="color:#75715e">// primary is L8
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8_date_time</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">primary_f</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;date_time&#39;</span>);
+
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">secondary_f</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Feature</span>(<span style="color:#a6e22e">feat</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;secondary&#39;</span>)); <span style="color:#75715e">// primary is S2
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_ID</span>        <span style="color:#f92672">=</span> <span style="color:#a6e22e">secondary_f</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;ID&#39;</span>);             <span style="color:#75715e">// image ID
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_date_time</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">secondary_f</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;date_time&#39;</span>);
+  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">date_str</span>     <span style="color:#f92672">=</span> <span style="color:#a6e22e">secondary_f</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;date&#39;</span>);
+  <span style="color:#a6e22e">date_str</span>         <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">date_str</span>).<span style="color:#a6e22e">format</span>(<span style="color:#e6db74">&#34;YYYY-MM-dd&#34;</span>);
+  
+  <span style="color:#75715e">// absolute difference between the S2 &amp; L8 sensing times in minutes
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">time_diff</span>    <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">S2_date_time</span>).<span style="color:#a6e22e">difference</span>(<span style="color:#a6e22e">L8_date_time</span>, <span style="color:#e6db74">&#39;minute&#39;</span>).<span style="color:#a6e22e">abs</span>(); 
+  
+  <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">primary_f</span>.<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;date_str&#39;</span>, <span style="color:#a6e22e">date_str</span>).<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;S2/L8&#39;</span>, <span style="color:#a6e22e">time_diff</span>).<span style="color:#a6e22e">set</span>(<span style="color:#e6db74">&#39;S2_ID&#39;</span>, <span style="color:#a6e22e">S2_ID</span>);
+
+};
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">primary_f</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">joined</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">flattener_get_diff</span>)
+<span style="color:#a6e22e">primary_f</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">primary_f</span>.<span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;S2/L8&#39;</span>).<span style="color:#a6e22e">limit</span>(<span style="color:#ae81ff">5</span>) <span style="color:#75715e">// Select the Top 5 with the smallest difference
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// Make BarChart with the Top 5.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">chart1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Chart</span>.<span style="color:#a6e22e">feature</span>.<span style="color:#a6e22e">byProperty</span>({<span style="color:#a6e22e">features</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">primary_f</span>,<span style="color:#a6e22e">xProperties</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;S2/L8&#39;</span>], <span style="color:#a6e22e">seriesProperty</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;date_str&#39;</span>})
+    .<span style="color:#a6e22e">setChartType</span>(<span style="color:#e6db74">&#39;BarChart&#39;</span>)
+    .<span style="color:#a6e22e">setOptions</span>({
+      <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Top 5: Days with the smallest time difference between Landsat and Sentinel scenes&#39;</span>,
+      <span style="color:#a6e22e">hAxis</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Time difference between Landsat 8 and Sentinel (Minutes)&#39;</span>,
+               <span style="color:#a6e22e">minValue</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>},
+      <span style="color:#a6e22e">vAxis</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Top 5 Days&#39;</span> }
+});
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">chart1</span>);
+</code></pre></div>
+<p>We can also look directly at the two pictures. Here are the images and the Javascript code.<br />
+<br>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/L8-04-05-2018.png" title="Landsat-8 at the 4th of May 2018 over Berlin (Germany)" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/L8-04-05-2018.png"  alt="Landsat-8 at the 4th of May 2018 over Berlin (Germany)">
+  
+    </a>
+  
+   
+    <span class="caption">Landsat-8 at the 4th of May 2018 over Berlin (Germany)</span>
+  
+</div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/S2-04-05-2018.png" title="Sentinel-2B at the 4th of May 2018 over Berlin (Germany)" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/S2-04-05-2018.png"  alt="Sentinel-2B at the 4th of May 2018 over Berlin (Germany)">
+  
+    </a>
+  
+   
+    <span class="caption">Sentinel-2B at the 4th of May 2018 over Berlin (Germany)</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<br></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">//Javascript
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// #### Load Images with the smallest difference to the Map. ####
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">// #LANDSAT-8
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8_ID</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">primary_f</span>.<span style="color:#a6e22e">first</span>().<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;ID&#39;</span>); <span style="color:#75715e">// get the L8 image ID
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">srCollection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;LANDSAT/LC08/C01/T1_SR&#39;</span>)
+  .<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">Berlin</span>) 
+  .<span style="color:#a6e22e">filterMetadata</span>(<span style="color:#e6db74">&#39;system:index&#39;</span>,<span style="color:#e6db74">&#39;equals&#39;</span> ,<span style="color:#a6e22e">L8_ID</span>);
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8_vizParams</span> <span style="color:#f92672">=</span> {
+  <span style="color:#a6e22e">bands</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;B5&#39;</span>, <span style="color:#e6db74">&#39;B4&#39;</span>, <span style="color:#e6db74">&#39;B3&#39;</span>],
+  <span style="color:#a6e22e">min</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+  <span style="color:#a6e22e">max</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">4000</span>,
+  <span style="color:#a6e22e">gamma</span><span style="color:#f92672">:</span> [<span style="color:#ae81ff">0.95</span>, <span style="color:#ae81ff">1.1</span>, <span style="color:#ae81ff">1</span>]
+};
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8_img</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Image</span>(<span style="color:#a6e22e">srCollection</span>.<span style="color:#a6e22e">first</span>());
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">L8_img</span>, <span style="color:#a6e22e">L8_vizParams</span>, <span style="color:#e6db74">&#39;Landsat8&#39;</span>);
+
+<span style="color:#75715e">// Sentinel 2
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_ID</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">primary_f</span>.<span style="color:#a6e22e">first</span>().<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;S2_ID&#39;</span>); <span style="color:#75715e">// get the S2 image ID
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">srCollection_S2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;COPERNICUS/S2&#39;</span>)
+  .<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">Berlin</span>) 
+  .<span style="color:#a6e22e">filterMetadata</span>(<span style="color:#e6db74">&#39;system:index&#39;</span>,<span style="color:#e6db74">&#39;equals&#39;</span> ,<span style="color:#a6e22e">S2_ID</span>);
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_vizParams</span> <span style="color:#f92672">=</span> {
+  <span style="color:#a6e22e">bands</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;B8&#39;</span>, <span style="color:#e6db74">&#39;B4&#39;</span>, <span style="color:#e6db74">&#39;B3&#39;</span>],
+  <span style="color:#a6e22e">min</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>,
+  <span style="color:#a6e22e">max</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">4000</span>,
+  <span style="color:#a6e22e">gamma</span><span style="color:#f92672">:</span> [<span style="color:#ae81ff">0.95</span>, <span style="color:#ae81ff">1.1</span>, <span style="color:#ae81ff">1</span>]
+};
+
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_img</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Image</span>(<span style="color:#a6e22e">srCollection_S2</span>.<span style="color:#a6e22e">first</span>());
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">S2_img</span>, <span style="color:#a6e22e">S2_vizParams</span>, <span style="color:#e6db74">&#39;Sentinel&#39;</span>, <span style="color:#ae81ff">0.7</span>, <span style="color:#66d9ef">true</span>);
+</code></pre></div>
+<p>Well that&rsquo;s a bit disappointing. Lets have a look more north to a Sentinel ground station - what about Svalbard, Norway, this station is responsible for data acquisition and near real-time processing.</p>
+
+<h2 id="svalbard-norway">Svalbard, Norway</h2>
+
+<p>At the selected location are 90 Landsat-8 and 396 Sentinel-2 images available
+and 37 distinct dates were recorded. <strong>It turns out Landsat-8 missed Sentinel by 1.9975 minutes (or 120.0 seconds). That would be a difference of 900 km.</strong></p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-svalbard-chart.png" title="Top 5: Days with the smallest time difference between Landsat and Sentinel scenes over Svalbard, Norway" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-svalbard-chart.png"  alt="Top 5: Days with the smallest time difference between Landsat and Sentinel scenes over Svalbard, Norway">
+  
+    </a>
+  
+   
+    <span class="caption">Top 5: Days with the smallest time difference between Landsat and Sentinel scenes over Svalbard, Norway</span>
+  
+</div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/svalbard-S2-L8.png" title="Landsat-8 and Sentinel-2B over Svalbard, Norway" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/svalbard-S2-L8.png"  alt="Landsat-8 and Sentinel-2B over Svalbard, Norway">
+  
+    </a>
+  
+   
+    <span class="caption">Landsat-8 and Sentinel-2B over Svalbard, Norway</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<br></p>
+
+<h2 id="greenland-denmark">Greenland, Denmark</h2>
+
+<p>At the selected location are 137 Landsat-8 and 310 Sentinel images available and 37 distinct dates were recorded. <strong>It turns out Landsat-8 missed Sentinel by 1.815 minutes (or 109.0 seconds) or 817 km.</strong></p>
+
+<p>
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure left fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-greenland-barchart.png" title="Top 5: Days with the smallest time difference between Landsat and Sentinel scenes over Greenland, Denmark" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-greenland-barchart.png"  alt="Top 5: Days with the smallest time difference between Landsat and Sentinel scenes over Greenland, Denmark">
+  
+    </a>
+  
+   
+    <span class="caption">Top 5: Days with the smallest time difference between Landsat and Sentinel scenes over Greenland, Denmark</span>
+  
+</div>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure right fig-50" >
+  
+    <a class="fancybox" href="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/greenland.png" title="Landsat-8 and Sentinel-2B over Greenland, Denmark" data-fancybox-group="">
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/greenland.png"  alt="Landsat-8 and Sentinel-2B over Greenland, Denmark">
+  
+    </a>
+  
+   
+    <span class="caption">Landsat-8 and Sentinel-2B over Greenland, Denmark</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+<br></p>
+
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>This blogpost shows you how to filter days when Landsat-8 and Sentinel-2 were in one place at (almost) the same time using the Google Earth Engine.</p>
+
+<p><strong>Unfortunately, I did not find a Sentinel-2 image were the actual Landsat-8 satellite 🛰️ is visible.</strong> Have you had any luck? Why don&rsquo;t you go and find one by yourself?</p>
+
+<div class="alert warning ">
+  <p>One last note, I have always worked with point markers. You should do this too. Good luck with the search.</p>
+</div>
+
+<h4 id="complete-script">Complete Script</h4>
+
+<p>The following link opens a copy of the <a href="https://code.earthengine.google.com/?scriptPath=users%2Fgaertnerp%2FBlog%3A2018-07-landsat-meets-sentinel" target="_blank">explained script</a> in the Javascript Code Editor.</p>
+
+<hr />
+
+<p>You can <strong>cite</strong> this blogpost using: <em>Gärtner, Philipp (2018/07/06) “When Landsat-8 (almost) meets Sentinel-2”, <a href="https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/">https://philippgaertner.github.io/2018/07/landsat-meets-sentinels/</a></em></p>
+
+<p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/metadata/">Metadata</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/sentinel-2/">Sentinel-2</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/landsat-8/">Landsat-8</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/monitoring/">Monitoring</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/google-earth-engine/">Google-Earth-Engine</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/11/microsoft-bing-maps/" data-tooltip="How accurate are the recording dates for images in Microsoft Bing Maps?">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/06/landsat-cost-estimator/" data-tooltip="This Landsat project would cost...">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/11/microsoft-bing-maps/" data-tooltip="How accurate are the recording dates for images in Microsoft Bing Maps?">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/06/landsat-cost-estimator/" data-tooltip="This Landsat project would cost...">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2018\/07\/landsat-meets-sentinels\/';
+          
+            this.page.identifier = '\/2018\/07\/landsat-meets-sentinels\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+

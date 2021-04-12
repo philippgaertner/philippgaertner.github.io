@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="Philipp Gärtner">
+<meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
+<meta name="description" content="The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (bfast) package and function.">
+
+
+<meta property="og:description" content="The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (bfast) package and function.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How to arrange a raster image stack for the use with BFAST in R">
+<meta name="twitter:title" content="How to arrange a raster image stack for the use with BFAST in R">
+<meta property="og:url" content="https://philippgaertner.github.io/2018/04/bfast-preparation/">
+<meta property="twitter:url" content="https://philippgaertner.github.io/2018/04/bfast-preparation/">
+<meta property="og:site_name" content="Philipp Gärtner Blog">
+<meta property="og:description" content="The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (bfast) package and function.">
+<meta name="twitter:description" content="The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (bfast) package and function.">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2018-04-16T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2018-04-16T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="R">
+    
+      <meta property="article:section" content="BFAST">
+    
+      <meta property="article:section" content="Tutorial">
+    
+  
+  
+    
+      <meta property="article:tag" content="Raster Image Stack">
+    
+      <meta property="article:tag" content="Regular Time Series">
+    
+      <meta property="article:tag" content="rstats">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@Mixed_Pixels">
+
+
+  <meta name="twitter:creator" content="@Mixed_Pixels">
+
+
+
+
+
+
+  <meta property="og:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617807995/test.bfast-1-cropped.jpg">
+  <meta property="twitter:image" content="//res.cloudinary.com/dj9pbb7v1/image/upload/ar_1:1,b_rgb:ffffff,bo_3px_solid_rgb:000000,c_fill,g_auto,r_max,w_280/v1617807995/test.bfast-1-cropped.jpg">
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+
+
+    <title>How to arrange a raster image stack for the use with BFAST in R</title>
+
+    <link rel="icon" href="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg">
+    
+
+    
+
+    <link rel="canonical" href="https://philippgaertner.github.io/2018/04/bfast-preparation/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://philippgaertner.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/stackoverflow-dark.css">
+      
+    
+      
+        <link rel="stylesheet"  href="https://philippgaertner.github.io/css/academicons-1.8.6/css/academicons.css">
+      
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-64337138-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://philippgaertner.github.io/">Philipp Gärtner Blog</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://philippgaertner.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://philippgaertner.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">Philipp Gärtner</h4>
+        
+          <h5 class="sidebar-profile-bio">Jack of all trades, master of some.</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home" title='Home'></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://scholar.google.de/citations?user=6vAmtJUAAAAJ&amp;hl=en" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon ai ai-google-scholar"></i>
+      
+      <span class="sidebar-button-desc">Google Scholar</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/philippgaertner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://stackoverflow.com/users/1765076/philipp-g%c3%a4rtner" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-stack-overflow"></i>
+      
+      <span class="sidebar-button-desc">Stack Overflow</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/Mixed_Pixels" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">Twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://philippgaertner.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+
+      <div id="main" data-behavior="5"
+        class="
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+            <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      How to arrange a raster image stack for the use with BFAST in R
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2018-04-16T00:00:00Z">
+        
+  April 16, 2018
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/r">R</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/bfast">BFAST</a>, 
+    
+      <a class="category-link" href="https://philippgaertner.github.io/categories/tutorial">Tutorial</a>
+    
+  
+
+  </div>
+
+</div>
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (<code>bfast</code>) package and function.</p>
+
+<div class="figure center fig-100" >
+  
+    <img class="fig-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/test.bfast-1.jpg"  alt="BFAST plot generated with a time series of aggregated bi-weekly NDVI values.">
+  
+   
+    <span class="caption">BFAST plot generated with a time series of aggregated bi-weekly NDVI values.</span>
+  
+</div>
+
+
+<h1 id="objective">Objective</h1>
+
+<p>During the process we impute missing data (NA&rsquo;s) either:</p>
+
+<ul>
+<li><strong>l</strong>inearly with <code>na.approx</code> from the <code>zoo</code> package, and/or</li>
+<li><strong>p</strong>eriodic decomposition with <code>na.interp</code> from the <code>forecast</code> package.</li>
+</ul>
+
+<p>We first create a <em>regular</em> daily time series and from that we aggregate the time series with the following frequencies:</p>
+
+<ul>
+<li><strong>d</strong>aily (frequency 365) - the base</li>
+<li><strong>w</strong>eekly (52)</li>
+<li><strong>f</strong>ortnightly (26)</li>
+<li><strong>m</strong>onthly (12)</li>
+<li><strong>q</strong>uarterly (4)</li>
+<li><strong>y</strong>early (1)</li>
+</ul>
+
+<h1 id="workflow">Workflow</h1>
+
+<h2 id="load-all-necessary-libraries">Load all necessary libraries</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+library(zoo)
+library(xts)
+library(forecast)
+library(seas)
+library(bfast)
+library(devtools)
+install_github(<span style="color:#e6db74">&#39;loicdtx/bfastSpatial&#39;</span>)
+library(bfastSpatial)  <span style="color:#75715e"># added 5/2/2019</span>
+library(lubridate)
+library(ggplot2)</code></pre></div>
+<h2 id="load-the-data-and-select-one-example-pixel">Load the data and select one example pixel</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+<span style="color:#75715e"># load data</span>
+data(tura)
+
+<span style="color:#75715e"># get the image dates</span>
+dates <span style="color:#f92672">&lt;-</span> getZ(tura)
+
+selected_pixel <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">90</span>
+
+<span style="color:#75715e"># number of valid values in TS</span>
+nbr<span style="color:#f92672">.</span>NA <span style="color:#f92672">&lt;-</span> sum(<span style="color:#960050;background-color:#1e0010">!</span><span style="color:#f92672">is</span><span style="color:#f92672">.</span>na( <span style="color:#960050;background-color:#1e0010">!</span><span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>vector(tura[selected_pixel])))
+
+<span style="color:#75715e"># create a regular time series object by combining data and date information</span>
+(s <span style="color:#f92672">&lt;-</span> bfastts(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>vector(tura[selected_pixel]), dates, type <span style="color:#f92672">=</span> c(<span style="color:#e6db74">&#34;irregular&#34;</span>)))
+
+<span style="color:#75715e">## Time Series:</span>
+<span style="color:#75715e">## Start = c(1984, 157) </span>
+<span style="color:#75715e">## End = c(2013, 101) </span>
+<span style="color:#75715e">## Frequency = 365 </span>
+<span style="color:#75715e">##     [1]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [14]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [27]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [40]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [53]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [66]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [79]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##    [92]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [105]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [118]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 7388   NA</span>
+<span style="color:#75715e">##   [131]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [144]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [157]   NA   NA   NA   NA 5886   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [170]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [183]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [196]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   [209] 6752   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">##   </span>
+<span style="color:#75715e">##   ....</span>
+<span style="color:#75715e">##</span>
+<span style="color:#75715e">## [10375]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10388]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10401]   NA 7176   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10414]   NA   NA   NA   NA 7526   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10427]   NA   NA   NA   NA   NA   NA   NA 7112   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10440]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 7154   NA   NA</span>
+<span style="color:#75715e">## [10453]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10466]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10479]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10492]   NA   NA   NA   NA   NA   NA 6576   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10505]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA</span>
+<span style="color:#75715e">## [10518]   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA   NA 7444</span>
+
+
+<span style="color:#75715e"># First day of the Time Series</span>
+(first<span style="color:#f92672">.</span>day <span style="color:#f92672">&lt;-</span> head(date_decimal(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time(s))),<span style="color:#ae81ff">1</span>))
+<span style="color:#75715e">## [1] &#34;1984-06-05 10:15:27 UTC&#34;</span>
+
+<span style="color:#75715e"># Last day of the Time Series</span>
+(last<span style="color:#f92672">.</span>day <span style="color:#f92672">&lt;-</span> tail(date_decimal(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time(s))),<span style="color:#ae81ff">1</span>))
+<span style="color:#75715e">## [1] &#34;2013-04-10 23:59:59 UTC&#34;</span></code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/plot.original.time.series-1.png" alt="" /><!-- --></p>
+
+<h2 id="create-daily-time-series-na-s-linear-periodic">Create Daily Time Series (NA&rsquo;s - linear, periodic)</h2>
+
+<p><strong>Replace NA&rsquo;s by Linear Interpolation with <code>na.approx</code> from the <code>zoo</code> package</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear <span style="color:#f92672">&lt;-</span> round(na<span style="color:#f92672">.</span>approx(s),<span style="color:#ae81ff">0</span>) 
+
+<span style="color:#75715e"># added 3/3/2019</span>
+<span style="color:#75715e"># convert the time series to a data.frame </span>
+time<span style="color:#f92672">.</span>series<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>dataframe <span style="color:#f92672">&lt;-</span> function(time_series, source) {
+  
+  s<span style="color:#f92672">.</span>df           <span style="color:#f92672">&lt;-</span> data<span style="color:#f92672">.</span>frame(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time_series))
+  colnames(s<span style="color:#f92672">.</span>df) <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;NDVI&#34;</span>
+  s<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>Time      <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(date_decimal(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time(time_series))))
+  s<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>Type      <span style="color:#f92672">&lt;-</span> source
+  <span style="color:#66d9ef">return</span>(s<span style="color:#f92672">.</span>df)
+  
+}
+
+<span style="color:#75715e"># create a data.frame</span>
+s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear<span style="color:#f92672">.</span>df <span style="color:#f92672">&lt;-</span> time<span style="color:#f92672">.</span>series<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>dataframe(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear, <span style="color:#e6db74">&#34;Linear Interpolation&#34;</span>)</code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.d.linear-1.png" alt="" /><!-- --></p>
+
+<p><strong>Replace NA&rsquo;s by periodic stl decomposition with <code>na.interp</code> from the <code>forecast</code> package</strong></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic <span style="color:#f92672">&lt;-</span> round(na<span style="color:#f92672">.</span>interp(s),<span style="color:#ae81ff">0</span>)</code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.d.periodic-1.png" alt="" /></p>
+
+<h3 id="aggregate-time-series-from-daily-to-weekly">Aggregate Time Series from Daily to Weekly</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
+    
+  dates      <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(date_decimal(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time(daily<span style="color:#f92672">.</span>ts))))
+    
+  xts<span style="color:#f92672">.</span>daily  <span style="color:#f92672">&lt;-</span> xts(daily<span style="color:#f92672">.</span>ts, order<span style="color:#f92672">.</span>by <span style="color:#f92672">=</span> dates)
+  
+  xts<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> round(xts::apply<span style="color:#f92672">.</span>weekly(xts<span style="color:#f92672">.</span>daily, median),<span style="color:#ae81ff">0</span>)  <span style="color:#75715e"># xts</span>
+  
+  start(xts<span style="color:#f92672">.</span>weekly)
+  ts<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> ts(data <span style="color:#f92672">=</span> xts<span style="color:#f92672">.</span>weekly, 
+               <span style="color:#75715e"># define the start and end (Year, Week)    </span>
+               start <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(start(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%Y&#34;</span>)),
+                         <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(start(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%W&#34;</span>))), 
+               end   <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(end(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%Y&#34;</span>)), 
+                         <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(end(xts<span style="color:#f92672">.</span>weekly), <span style="color:#e6db74">&#34;%W&#34;</span>))), 
+               frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">52</span>)
+   
+  <span style="color:#66d9ef">return</span>(ts<span style="color:#f92672">.</span>weekly)
+}
+
+s<span style="color:#f92672">.</span>w<span style="color:#f92672">.</span>linear   <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>weekly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear)
+
+start(s<span style="color:#f92672">.</span>w<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 1984   41</span>
+
+end(s<span style="color:#f92672">.</span>w<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 2013   14</span>
+
+
+s<span style="color:#f92672">.</span>w<span style="color:#f92672">.</span>periodic   <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>weekly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic)</code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.w.linear-1.png" alt="" /></p>
+
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.w.periodic-1.png" alt="" /></p>
+
+<h3 id="aggregate-time-series-from-daily-to-fortnightly">Aggregate Time Series from Daily to Fortnightly</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>fortnight <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
+  
+  daily<span style="color:#f92672">.</span>ts<span style="color:#f92672">.</span>df           <span style="color:#f92672">&lt;-</span> data<span style="color:#f92672">.</span>frame(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(daily<span style="color:#f92672">.</span>ts))
+  colnames(daily<span style="color:#f92672">.</span>ts<span style="color:#f92672">.</span>df) <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#34;NDVI&#34;</span>
+  daily<span style="color:#f92672">.</span>ts<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>date      <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(date_decimal(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(time(daily<span style="color:#f92672">.</span>ts))))
+
+  library(openair)
+  <span style="color:#75715e">## bi-weekly / fortnightly averages with function timeAverage {openair}</span>
+  fortnight      <span style="color:#f92672">&lt;-</span> timeAverage(daily<span style="color:#f92672">.</span>ts<span style="color:#f92672">.</span>df, avg<span style="color:#f92672">.</span>time <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;2 week&#34;</span>)
+  fortnight<span style="color:#960050;background-color:#1e0010">$</span>time <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>Date(fortnight<span style="color:#960050;background-color:#1e0010">$</span>date)
+
+  fortnight<span style="color:#f92672">.</span>ts <span style="color:#f92672">&lt;-</span> ts(fortnight<span style="color:#960050;background-color:#1e0010">$</span>NDVI,
+                     <span style="color:#75715e"># define the start and end (Year, Week)    </span>
+               start <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(min(fortnight<span style="color:#960050;background-color:#1e0010">$</span>date), <span style="color:#e6db74">&#34;%Y&#34;</span>)),
+                         round(yday(min(fortnight<span style="color:#960050;background-color:#1e0010">$</span>date)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">14</span>,<span style="color:#ae81ff">0</span>)), <span style="color:#75715e"># DOY / 14</span>
+               end   <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(format(max(fortnight<span style="color:#960050;background-color:#1e0010">$</span>date), <span style="color:#e6db74">&#34;%Y&#34;</span>)), 
+                         round(yday(max(fortnight<span style="color:#960050;background-color:#1e0010">$</span>date)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">14</span>,<span style="color:#ae81ff">0</span>)), <span style="color:#75715e"># DOY / 14</span>
+                     frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">26</span>)
+   
+  <span style="color:#66d9ef">return</span>(fortnight<span style="color:#f92672">.</span>ts)
+}
+
+s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>linear   <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>fortnight(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## Warning: package &#39;openair&#39; was built under R version 3.4.4</span>
+
+s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>fortnight(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic)
+
+start(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 1984   20</span>
+
+end(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 2013    6</span></code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.f.linear-1.png" alt="" /></p>
+
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.f.periodic-1.png" alt="" /></p>
+
+<h3 id="aggregate-time-series-from-daily-to-monthly">Aggregate Time Series from Daily to Monthly</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>monthly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
+  
+  s<span style="color:#f92672">.</span>month <span style="color:#f92672">&lt;-</span> round(aggregate(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>zoo(daily<span style="color:#f92672">.</span>ts), <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>yearmon, median), <span style="color:#ae81ff">0</span>)   <span style="color:#75715e"># zoo</span>
+  s<span style="color:#f92672">.</span>month <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>ts(s<span style="color:#f92672">.</span>month)
+  
+  <span style="color:#66d9ef">return</span>(s<span style="color:#f92672">.</span>month)
+
+}
+  
+s<span style="color:#f92672">.</span>m<span style="color:#f92672">.</span>linear   <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>monthly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear)
+s<span style="color:#f92672">.</span>m<span style="color:#f92672">.</span>periodic <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>monthly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic)
+
+start(s<span style="color:#f92672">.</span>m<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 1984   10</span>
+
+end(s<span style="color:#f92672">.</span>m<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 2013    4</span></code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.m.linear-1.png" alt="" /></p>
+
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.m.periodic-1.png" alt="" /></p>
+
+<h3 id="aggregate-time-series-from-daily-to-quarterly">Aggregate Time Series from Daily to Quarterly</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>quarterly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
+  
+  s<span style="color:#f92672">.</span>qtr <span style="color:#f92672">&lt;-</span> round(aggregate(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>zoo(daily<span style="color:#f92672">.</span>ts), <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>yearqtr, median), <span style="color:#ae81ff">0</span>)   <span style="color:#75715e"># zoo</span>
+  s<span style="color:#f92672">.</span>qtr <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>ts(s<span style="color:#f92672">.</span>qtr)
+  
+  <span style="color:#66d9ef">return</span>(s<span style="color:#f92672">.</span>qtr)
+
+}
+  
+s<span style="color:#f92672">.</span>q<span style="color:#f92672">.</span>linear   <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>quarterly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear)
+s<span style="color:#f92672">.</span>q<span style="color:#f92672">.</span>periodic <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>quarterly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic)
+
+start(s<span style="color:#f92672">.</span>q<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 1984    4</span>
+
+end(s<span style="color:#f92672">.</span>q<span style="color:#f92672">.</span>linear)
+<span style="color:#75715e">## [1] 2013    2</span></code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.q.linear-1.png" alt="" /><!-- --></p>
+
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.q.periodic-1.png" alt="" /><!-- --></p>
+
+<h3 id="aggregate-time-series-from-daily-to-yearly-season">Aggregate Time Series from Daily to Yearly Season</h3>
+
+<p>The time of summer start and end depends on the location on the globe. The Tura dataset is from Ethopia and we consider June, July and August as their summer season, meaning we consider only these months for our yearly aggragation calculation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+<span style="color:#75715e">#https://stackoverflow.com/questions/18978256/what-is-the-most-elegant-way-to-calculate-seasonal-means-with-r</span>
+
+aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>yearly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
+
+  <span style="color:#75715e"># create data.frame</span>
+  daily<span style="color:#f92672">.</span>df <span style="color:#f92672">&lt;-</span> time<span style="color:#f92672">.</span>series<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>dataframe(daily<span style="color:#f92672">.</span>ts, <span style="color:#e6db74">&#34;not needed here&#34;</span>)
+  
+  <span style="color:#75715e"># add year</span>
+  daily<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>year <span style="color:#f92672">&lt;-</span> format(daily<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>Time, <span style="color:#e6db74">&#34;%Y&#34;</span>)
+
+  <span style="color:#75715e"># add season</span>
+  daily<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>seas <span style="color:#f92672">&lt;-</span> mkseas(x <span style="color:#f92672">=</span> daily<span style="color:#f92672">.</span>df, width <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;DJF&#34;</span>)
+
+  <span style="color:#75715e"># calculate median per season within each year</span>
+  year<span style="color:#f92672">.</span>df <span style="color:#f92672">&lt;-</span> aggregate(NDVI <span style="color:#f92672">~</span> seas <span style="color:#f92672">+</span> year, data <span style="color:#f92672">=</span> daily<span style="color:#f92672">.</span>df, median)
+
+  <span style="color:#75715e"># based on variable values</span>
+  year<span style="color:#f92672">.</span>df<span style="color:#f92672">.</span>JJA <span style="color:#f92672">&lt;-</span> year<span style="color:#f92672">.</span>df[ which(year<span style="color:#f92672">.</span>df<span style="color:#960050;background-color:#1e0010">$</span>seas <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;JJA&#39;</span>), ]
+
+  <span style="color:#75715e"># create ts</span>
+  year<span style="color:#f92672">.</span>ts<span style="color:#f92672">.</span>JJA <span style="color:#f92672">&lt;-</span> ts(year<span style="color:#f92672">.</span>df<span style="color:#f92672">.</span>JJA<span style="color:#960050;background-color:#1e0010">$</span>NDVI, 
+                    start <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(min(year<span style="color:#f92672">.</span>df<span style="color:#f92672">.</span>JJA<span style="color:#960050;background-color:#1e0010">$</span>year)), <span style="color:#ae81ff">1</span>), <span style="color:#75715e"># freq 1</span>
+                    end   <span style="color:#f92672">=</span> c(<span style="color:#66d9ef">as</span><span style="color:#f92672">.</span>numeric(max(year<span style="color:#f92672">.</span>df<span style="color:#f92672">.</span>JJA<span style="color:#960050;background-color:#1e0010">$</span>year)), <span style="color:#ae81ff">1</span>), <span style="color:#75715e"># freq 1</span>
+                    frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+  
+  <span style="color:#66d9ef">return</span>(year<span style="color:#f92672">.</span>ts<span style="color:#f92672">.</span>JJA)
+}
+
+(s<span style="color:#f92672">.</span>y<span style="color:#f92672">.</span>linear   <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>yearly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear))
+<span style="color:#75715e">## Time Series:</span>
+<span style="color:#75715e">## Start = 1985 </span>
+<span style="color:#75715e">## End = 2012 </span>
+<span style="color:#75715e">## Frequency = 1 </span>
+<span style="color:#75715e">##  [1] 6088.5 7552.0 7012.5 7633.0 7672.0 7712.0 7751.0 7791.0 7830.0 7870.0</span>
+<span style="color:#75715e">## [11] 7527.0 7739.5 7950.5 8162.0 8373.5 7963.0 8133.5 8080.5 7476.0 7872.0</span>
+<span style="color:#75715e">## [21] 7286.5 8116.5 8298.5 7509.5 7187.0 8227.5 7656.5 7904.0</span>
+
+(s<span style="color:#f92672">.</span>y<span style="color:#f92672">.</span>periodic <span style="color:#f92672">&lt;-</span> aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>yearly(s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic))
+<span style="color:#75715e">## Time Series:</span>
+<span style="color:#75715e">## Start = 1984 </span>
+<span style="color:#75715e">## End = 2012 </span>
+<span style="color:#75715e">## Frequency = 1 </span>
+<span style="color:#75715e">##  [1] 7433.0 6914.5 8028.0 7063.5 7367.5 7443.5 7519.5 7595.5 7671.5 7747.5</span>
+<span style="color:#75715e">## [11] 7824.0 7460.0 7645.0 7829.0 8015.0 8200.0 7997.5 8142.5 8008.0 7501.5</span>
+<span style="color:#75715e">## [21] 7715.0 7853.5 8304.0 8161.0 8132.0 7629.5 8409.0 7585.5 7784.5</span></code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.y.linear-1.png" alt="" /></p>
+
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.y.periodic-1.png" alt="" /></p>
+
+<h2 id="focus-on-a-specific-period">Focus on a Specific Period</h2>
+
+<p>Once you have your data prepared and you would like to work on a specific temporal window you can use the &lsquo;window&rsquo; function to cookie cut the period of interest.</p>
+
+<p>For example, use the <em>Fortnight</em> time series and focus on the data from year 2000, onwards.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window <span style="color:#f92672">&lt;-</span> window(x <span style="color:#f92672">=</span> s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic, 
+                     start <span style="color:#f92672">=</span> c(<span style="color:#ae81ff">2000</span>,<span style="color:#ae81ff">1</span>),
+                     frequency <span style="color:#f92672">=</span> <span style="color:#ae81ff">26</span>) <span style="color:#75715e"># Fortnight has a frequency of 26 </span>
+
+plot(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window, ylab <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;NDVI&#34;</span>)</code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/window-1.png" alt="" /></p>
+
+<h3 id="testing-the-aggregated-time-series-with-bfast">Testing the aggregated Time Series with BFAST</h3>
+
+<p>Here we do a simple test if <code>bfast</code> will accept the created fortnight time series. Lets see&hellip;</p>
+
+<p>Yeap &hellip; it works beautifully!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+
+fit <span style="color:#f92672">&lt;-</span> bfast(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span><span style="color:#f92672">/</span>length(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window), 
+             season <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;harmonic&#34;</span>, breaks <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>, max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
+
+plot(fit)</code></pre></div>
+<p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/test.bfast-1.png" alt="" /></p>
+
+<h1 id="bottom-line">Bottom line</h1>
+
+<p>This blog post showed you how to arrange and aggragate a raster image stack in order to create a regular time series which can be used with the bfast function. If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
+
+<p>You can <strong>cite</strong> this blogpost using: <em>Gärtner, Philipp (2018/04/16) “How to arrange a raster image stack for the use with BFAST in R”, <a href="https://philippgaertner.github.io/2018/04/bfast-preparation/">https://philippgaertner.github.io/2018/04/bfast-preparation/</a></em></p>
+
+<p>Previous blog posts are available within the <a href="https://philippgaertner.github.io/archives/">blog archive</a>. Feel free to connect or follow me on Twitter - <a href="https://twitter.com/Mixed_Pixels" target="_blank">@Mixed_Pixels</a>.</p>
+
+<h1 id="data-source">Data Source</h1>
+
+<ul>
+<li><em>Tura</em>: The used Tura dataset is provided by the <code>bfastSpatial</code> package. It covers a area in Tura kebele, Kafa Zone, SW Ethiopia. The values are NDVI rescaled by a factor of 10000. Data originate from the Landsat 5 TM and Landsat 7 ETM+ sensors. Original Landsat scene names can be found by typing <code>names(tura)</code>. Dates are also contained in the z-dimension <code>getZ(tura)</code>.</li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/raster-image-stack/">Raster Image Stack</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/regular-time-series/">Regular Time Series</a>
+
+  <a class="tag tag--primary tag--small" href="https://philippgaertner.github.io/tags/rstats/">rstats</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/" data-tooltip="Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/12/berlin-soccer-fields/" data-tooltip="The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+  </span>
+</footer> 
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2018/05/bfast-bvb-the-data/" data-tooltip="Break Detection on Borussia Dortmund stock prices - an exhaustive quest for the optimal h-parameter of BFAST - Part I - The Data">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://philippgaertner.github.io/2017/12/berlin-soccer-fields/" data-tooltip="The FIFA World Cup in 2006 had an impact on the development of Berlin&#39;s soccer fields">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dj9pbb7v1/image/upload/v1496825790/qQv2L8sO_o2jbiq.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">Philipp Gärtner</h4>
+    
+      <div id="about-card-bio">Jack of all trades, master of some.</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        Staff at the Federal Environment Agency
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Berlin, Germany
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://philippgaertner.github.io/images/blur.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://philippgaertner.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/philippgaertner.github.io\/2018\/04\/bfast-preparation\/';
+          
+            this.page.identifier = '\/2018\/04\/bfast-preparation\/'
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'gartn001';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
+<script>
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#2D2D39"
+    },
+    "button": {
+      "background": "#14a7d0"
+    }
+  },
+  "theme": "edgeless",
+  "position": "bottom-right",
+  "content": {
+      "message": "This website uses cookies for Google Analytics so that I know how many people are reading the blog and which blogposts are the most popular. The website does not collect any personal data.",
+  "href": "https://www.cookiesandyou.com/"
+  }
+});
+</script>
+  </body>
+</html>
+
