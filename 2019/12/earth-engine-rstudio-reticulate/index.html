@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="A short tutorial on how to use Google Earth Engine inside RStudio with the GEE Python API and reticulate - the R interface to Python.">
@@ -115,7 +115,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -331,7 +330,7 @@ To use Google Earth Engine in RStudio we need several ingredients. First of all 
 <h3 id="terminal">Terminal</h3>
 
 <p>Open your Terminal and write (check the conda <a href="https://docs.conda.io/projects/conda/en/4.6.0/_downloads/52a95608c49671267e40c689e0bc00ca/conda-cheatsheet.pdf">cheat sheet</a> for Windows &amp; Mac differences):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">### Terminal</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">### Terminal</span>
 
 conda create --name gee-demo      <span style="color:#75715e"># Create a conda environment</span>
 
@@ -346,14 +345,14 @@ conda install numpy</code></pre></div>
 <h3 id="in-rstudio">In RStudio</h3>
 
 <p>In RStudio, install the <code>reticulate</code> package and apply the <code>use_condaenv()</code> function, which  enables you to specify which version of Python in the <code>conda</code> environment you want to use.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R </span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R </span>
 
 install<span style="color:#f92672">.</span>packages(reticulate)   
 library(reticulate)
 
 use_condaenv(<span style="color:#e6db74">&#34;gee-demo&#34;</span>, conda <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,required <span style="color:#f92672">=</span> TRUE)</code></pre></div>
 <p>Import the Earth Engine API (ee) and run the <code>ee$Initialize</code> function to trigger the authentication.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 ee <span style="color:#f92672">=</span> import(<span style="color:#e6db74">&#34;ee&#34;</span>)          <span style="color:#75715e"># Import the Earth Engine library</span>
 
@@ -364,7 +363,7 @@ pd <span style="color:#f92672">=</span> import(<span style="color:#e6db74">&#34;
 <h1 id="get-sentinel-2-data-from-earth-engine">Get Sentinel-2 data from Earth Engine</h1>
 
 <p>Let&rsquo;s assume we are interested in a high resolution, cloud free summer scene from a urban green area in Berlin, Germany. Here is the workflow to get the data into R.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 geometry <span style="color:#f92672">=</span> ee<span style="color:#960050;background-color:#1e0010">$</span>Geometry<span style="color:#960050;background-color:#1e0010">$</span>Point(<span style="color:#ae81ff">13.481643640792527</span>,<span style="color:#ae81ff">52.48959983479137</span>);
 
 S2 <span style="color:#f92672">=</span> ee<span style="color:#960050;background-color:#1e0010">$</span>ImageCollection(<span style="color:#e6db74">&#34;COPERNICUS/S2_SR&#34;</span>)
@@ -372,14 +371,14 @@ S2 <span style="color:#f92672">=</span> ee<span style="color:#960050;background-
 <span style="color:#75715e"># select images between May and August of 2019</span>
 S2 <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>filterDate(ee<span style="color:#960050;background-color:#1e0010">$</span>Date(<span style="color:#e6db74">&#39;2019-05-01&#39;</span>), ee<span style="color:#960050;background-color:#1e0010">$</span>Date(<span style="color:#e6db74">&#39;2019-08-01&#39;</span>))<span style="color:#960050;background-color:#1e0010">$</span>filterBounds(geometry)</code></pre></div>
 <p>Check the number of images in the Image Collection</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 nbrImages <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>size()<span style="color:#960050;background-color:#1e0010">$</span>getInfo()
 nbrImages
 
 <span style="color:#75715e"># 71</span></code></pre></div>
 <p>Order all images according to their cloudiness and select the first (least clouds) image. Create a green vegetation layer (NDVI) and convert the <code>ee.Image</code> to a <code>numpy</code> array.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 S2 <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>sort(<span style="color:#e6db74">&#34;CLOUD_COVERAGE_ASSESSMENT&#34;</span>)<span style="color:#960050;background-color:#1e0010">$</span>first() <span style="color:#75715e"># select the least cloudy image</span>
 S2 <span style="color:#f92672">=</span> S2<span style="color:#960050;background-color:#1e0010">$</span>select(list(<span style="color:#e6db74">&#34;B2&#34;</span>, <span style="color:#e6db74">&#34;B3&#34;</span>, <span style="color:#e6db74">&#34;B4&#34;</span>, <span style="color:#e6db74">&#34;B8&#34;</span>))
@@ -405,7 +404,7 @@ B8_values   <span style="color:#f92672">=</span> np<span style="color:#960050;ba
 <h1 id="convert-numpy-array-to-raster">Convert numpy array to raster</h1>
 
 <p>Convert the <code>numpy</code> array (Python) to a <code>data.frame</code> &reg; and <code>raster</code> &reg; data types.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 df <span style="color:#f92672">&lt;-</span> data<span style="color:#f92672">.</span>frame(x <span style="color:#f92672">=</span> lngs, y <span style="color:#f92672">=</span> lats, ndvi <span style="color:#f92672">=</span> ndvi_values, B2 <span style="color:#f92672">=</span> B2_values, 
                  B3 <span style="color:#f92672">=</span> B3_values, B4 <span style="color:#f92672">=</span> B4_values, B8 <span style="color:#f92672">=</span> B8_values)
@@ -415,7 +414,7 @@ XYZ <span style="color:#f92672">&lt;-</span> rasterFromXYZ(df)</code></pre></div
 <h1 id="plot-false-true-colour">Plot False &amp; True Colour</h1>
 
 <p>Once we have the raster stack, we can start to prepare a false colour or true colour plot based on exported layers.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 plotRGB(XYZ, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>, interpolate <span style="color:#f92672">=</span> TRUE)
 plotRGB(XYZ, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">2</span>, interpolate <span style="color:#f92672">=</span> TRUE, stretch <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lin&#34;</span>)</code></pre></div>
@@ -486,7 +485,7 @@ plotRGB(XYZ, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">3
 <h1 id="rayshader">Rayshader</h1>
 
 <p>Last but not least I wanted to try the new <code>rayshader</code> library and render a 3D NDVI map with depth of field.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 library(rayshader)
 ndvi_m <span style="color:#f92672">=</span> raster_to_matrix(XYZ<span style="color:#960050;background-color:#1e0010">$</span>ndvi)
@@ -535,7 +534,7 @@ render_snapshot(clear <span style="color:#f92672">=</span> TRUE)</code></pre></d
 <h1 id="session-info">Session Info</h1>
 
 <p>Here is my version information about R, the OS (Mac) and attached or loaded packages for comparison.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 sessionInfo()
 
@@ -648,7 +647,7 @@ sessionInfo()
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

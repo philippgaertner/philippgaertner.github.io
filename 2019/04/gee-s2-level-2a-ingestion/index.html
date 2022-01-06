@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="Since the 27th of March 2019 has the Earth Engine data catalogue one more dataset. Sentinel-2 Surface Reflectance (Level-2A) data are finally available. This blog post teaches you in one minute, how to get the current Sentinel-2 ingestion status for your country.">
@@ -112,7 +112,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -333,7 +332,7 @@ Right now the collection "COPERNICUS/S2_SR" only has 30K out of 1M+ expected ass
 </blockquote>
 
 <h2 id="let-s-check-how-many-level-2a-images-are-there-worldwide-for-2017">Let&rsquo;s check how many Level-2A images are there (worldwide) for 2017</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">palettes</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;users/gena/packages:palettes&#39;</span>);
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">palette</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">palettes</span>.<span style="color:#a6e22e">colorbrewer</span>.<span style="color:#a6e22e">Spectral</span>[<span style="color:#ae81ff">11</span>].<span style="color:#a6e22e">reverse</span>();
@@ -351,8 +350,7 @@ Right now the collection "COPERNICUS/S2_SR" only has 30K out of 1M+ expected ass
     {<span style="color:#a6e22e">min</span><span style="color:#f92672">:</span><span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">max</span><span style="color:#f92672">:</span><span style="color:#ae81ff">100</span>, <span style="color:#a6e22e">palette</span><span style="color:#f92672">:</span><span style="color:#a6e22e">palette</span>}, 
     <span style="color:#e6db74">&#39;S2_SR&#39;</span>, <span style="color:#66d9ef">true</span>, <span style="color:#ae81ff">0.6</span>);
 
-<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setCenter</span>(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">2</span>);
-</code></pre></div>
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setCenter</span>(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">5</span>,<span style="color:#ae81ff">2</span>);</code></pre></div>
 <p>The result is the image shown below. If you would like to get the information for other years, just change the filter date numbers.</p>
 
 <p>
@@ -509,7 +507,7 @@ Right now the collection "COPERNICUS/S2_SR" only has 30K out of 1M+ expected ass
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

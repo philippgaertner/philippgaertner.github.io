@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="LANDSAT COST ESTIMATOR - A tool to estimate the cost of analyzed Landsat imagery if it wasn&rsquo;t freely available.">
@@ -107,7 +107,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -312,7 +311,7 @@ if (!doNotTrack) {
 <li>an aerial-survey programme run by the Department of Agriculture (USDA).
 <br>
 <br>
-<!--html_preserve--><blockquote class="twitter-tweet"><p lang="en" dir="ltr">The US government is considering whether to charge for access to two widely used sources of remote-sensing imagery. <a href="https://t.co/R4iNTbRC39">https://t.co/R4iNTbRC39</a></p>&mdash; Nature News &amp; Comment (@NatureNews) <a href="https://twitter.com/NatureNews/status/988784656290992128?ref_src=twsrc%5Etfw">April 24, 2018</a></blockquote>
+<!--html_preserve--><blockquote class="twitter-tweet"><p lang="en" dir="ltr">The US government is considering whether to charge for access to two widely used sources of remote-sensing imagery. <a href="https://t.co/R4iNTbRC39">https://t.co/R4iNTbRC39</a></p>&mdash; nature (@Nature) <a href="https://twitter.com/Nature/status/988784656290992128?ref_src=twsrc%5Etfw">April 24, 2018</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <!--/html_preserve--></li>
 </ul>
@@ -374,7 +373,7 @@ Right on Jillian! The USGS is currently trying to better estimate the value of #
 <h2 id="parameter-setup">Parameter Setup</h2>
 
 <p>The user only has to provide 6 pieces of information. The study area (1), the beginning and end of the study period in year (2,3) and month (4,5), as well as a cloud threshold (6) (only a few buy cloudy scenes).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">aoi</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">geometry</span>; 
 
@@ -419,19 +418,18 @@ Right on Jillian! The USGS is currently trying to better estimate the value of #
 
 
 <p>To see how many Landsat grids are covering the study area we filter the Worldwide Reference System 2 (WRS2) grid and add it to the map.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wrs2_descending</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#e6db74">&#34;users/gaertnerp/Blog/WRS2_descending&#34;</span>);
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wrs2_filtered</span>   <span style="color:#f92672">=</span> <span style="color:#a6e22e">wrs2_descending</span>.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">aoi</span>); <span style="color:#75715e">// filter footprint to aoi
 </span><span style="color:#75715e"></span>
 <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">wrs2_filtered</span>, {},<span style="color:#e6db74">&#39;WRS2&#39;</span>, <span style="color:#66d9ef">true</span>, <span style="color:#ae81ff">0.7</span>);  <span style="color:#75715e">// add layer to map
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">centerObject</span>(<span style="color:#a6e22e">wrs2_filtered</span>, <span style="color:#ae81ff">6</span>);            <span style="color:#75715e">// center map to footprint
-</span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#39;SATELLITE&#39;</span>)
-</code></pre></div>
+</span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#39;SATELLITE&#39;</span>)</code></pre></div>
 <h2 id="create-lookups-and-helper-functions">Create LookUps and Helper Functions</h2>
 
 <p>I got the idea with the lookups and helper functions while browsing through the <a href="https://developers.google.com/earth-engine/tutorial_global_surface_water_04">Global Surface Water Tutorial</a> and used it directly, when appropriate.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// # Create a dictionary for looking up sensor names.
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">lookup_names</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Dictionary</span>.<span style="color:#a6e22e">fromLists</span>(
@@ -448,8 +446,7 @@ Right on Jillian! The USGS is currently trying to better estimate the value of #
 <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">createPieChartSliceDictionary</span>(<span style="color:#a6e22e">fc</span>) {
   <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">List</span>(<span style="color:#a6e22e">fc</span>.<span style="color:#a6e22e">aggregate_array</span>(<span style="color:#e6db74">&#34;class_palette&#34;</span>))
     .<span style="color:#a6e22e">map</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">p</span>) { <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;color&#39;</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">p</span>}; }).<span style="color:#a6e22e">getInfo</span>();
-}
-</code></pre></div>
+}</code></pre></div>
 <h2 id="load-image-collections-and-add-costs">Load Image Collections and add costs</h2>
 
 <p>I am assuming that the user uses all available Landsat sensors. If this is not the case, you must comment out lines in the appropriate places (i.e. remove <code>.merge(lt5)</code> if you didn&rsquo;t use the sensor). <strong>Reminder to my future self: There is room for improvement.</strong></p>
@@ -498,7 +495,7 @@ Post-2008: $0
 
 <li><p>For Landsat-7 &amp; Landsat-8 data, I used the mentioned $600 per image until today, asuming Landsat wasn&rsquo;t freely available.
 <br></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// #### IMAGE_COLLECTION FUNCTIONS ####
 </span><span style="color:#75715e"></span>
@@ -545,8 +542,7 @@ Post-2008: $0
 </span><span style="color:#75715e"></span>    
 };
 
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">LIC</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getCombinedSRcollection</span>(<span style="color:#a6e22e">startYear</span>,<span style="color:#a6e22e">endYear</span>, <span style="color:#a6e22e">startMonth</span>, <span style="color:#a6e22e">endMonth</span>, <span style="color:#a6e22e">aoi</span>);
-</code></pre></div></li>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">LIC</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getCombinedSRcollection</span>(<span style="color:#a6e22e">startYear</span>,<span style="color:#a6e22e">endYear</span>, <span style="color:#a6e22e">startMonth</span>, <span style="color:#a6e22e">endMonth</span>, <span style="color:#a6e22e">aoi</span>);</code></pre></div></li>
 </ul>
 
 <h2 id="calculate-total-landsat-costs">Calculate Total Landsat Costs</h2>
@@ -554,7 +550,7 @@ Post-2008: $0
 <div class="alert info ">
   <p>Example Berlin: This Landsat project would have cost 1217700.0 US Dollar($).</p>
 </div>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// # Get Properties
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">featureCollection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#a6e22e">LIC</span>).<span style="color:#a6e22e">select</span>([<span style="color:#e6db74">&#39;year&#39;</span>,<span style="color:#e6db74">&#39;SATELLITE&#39;</span>,<span style="color:#e6db74">&#39;cost&#39;</span>]);
@@ -567,8 +563,7 @@ Post-2008: $0
   <span style="color:#a6e22e">selectors</span><span style="color:#f92672">:</span> [<span style="color:#e6db74">&#39;cost&#39;</span>],
 });
  
-<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">ee</span>.String(<span style="color:#e6db74">&#39;This Landsat project would have\ncost &#39;</span>).<span style="color:#a6e22e">cat</span>(<span style="color:#a6e22e">totalCost</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;sum&#39;</span>)).<span style="color:#a6e22e">cat</span>(<span style="color:#e6db74">&#39; US Dollar($).&#39;</span>));
-</code></pre></div>
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">ee</span>.String(<span style="color:#e6db74">&#39;This Landsat project would have\ncost &#39;</span>).<span style="color:#a6e22e">cat</span>(<span style="color:#a6e22e">totalCost</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;sum&#39;</span>)).<span style="color:#a6e22e">cat</span>(<span style="color:#e6db74">&#39; US Dollar($).&#39;</span>));</code></pre></div>
 <h2 id="calculate-cost-allocation-per-landsat-sensor-group">Calculate cost allocation per Landsat sensor group</h2>
 
 
@@ -602,7 +597,7 @@ Post-2008: $0
 
 
 <p>Here the costs for each Landsat sensor type are calculated individually. Landsat 4 &amp; 5 were much more expensive than e.g. Landsat 7. The final result is displayed as a PieChart.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// # Cost allocation per sensor grouped.
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cost_grouped</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">featureCollection</span>.<span style="color:#a6e22e">reduceColumns</span>({
@@ -646,8 +641,7 @@ Post-2008: $0
     <span style="color:#a6e22e">slices</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">createPieChartSliceDictionary</span>(<span style="color:#a6e22e">cost_grouped_fc</span>)
   });
   
-<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">summary_pie_chart</span>);
-</code></pre></div>
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">summary_pie_chart</span>);</code></pre></div>
 <h2 id="calculate-landsat-cost-distribution-by-year-and-sensor">Calculate Landsat cost distribution by year and sensor</h2>
 
 </div>
@@ -657,7 +651,7 @@ Post-2008: $0
 <div class="main-content-wrap">
 
 <p>Last but not least, here I devided the Landsat costs by year and sensor. In order to use the <code>reduceColumns</code> reducer I combined the year and sensor to <code>year-SATELLITE</code> (i.e. 2010-LANDSAT_5), added the costs for each <code>year-SATELLITE</code> group and split the string back into <code>year</code> and <code>SATELLITE</code> for the final ColumnChart.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 
 <span style="color:#75715e">// #Combine YEAR and SATELLITE for group informations
@@ -722,8 +716,7 @@ Post-2008: $0
 }
 });
 
-<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">column_Chart</span>);
-</code></pre></div>
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">column_Chart</span>);</code></pre></div>
 <h1 id="bottom-line">Bottom line</h1>
 
 <p>This blog post showed you how to calculate the Landsat project costs if it wasn&rsquo;t freely available. There is still a lot of room for improvements and I am happy to hear from you if you have suggestions.</p>
@@ -829,7 +822,7 @@ Post-2008: $0
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

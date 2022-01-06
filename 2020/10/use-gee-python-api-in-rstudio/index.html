@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="This blogpost is about RStudio and the reticulate package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.">
@@ -119,7 +119,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -356,7 +355,7 @@ if (!doNotTrack) {
 <h3 id="create-new-conda-environment-with-earthengine-api">Create new conda environment with earthengine-api</h3>
 
 <p>The RStudio <strong>Terminal</strong> provides access to the system shell from within the RStudio IDE. Open your <strong>Terminal</strong> tab and write:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">### Terminal</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">### Terminal</span>
 
 <span style="color:#75715e"># Create a conda environment</span>
 conda create --name gee-demo 
@@ -375,18 +374,18 @@ conda install numpy</code></pre></div>
 <h3 id="create-new-r-markdown-file">Create new R Markdown file</h3>
 
 <p>In RStudio, create a new R Markdown file (File =&gt; New File =&gt; R Markdown &hellip;) and install the <code>reticulate</code> package and apply the <code>use_condaenv()</code> function to point to the created <strong>&lsquo;gee-demo&rsquo;</strong> conda environment.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 <span style="color:#66d9ef">if</span>(<span style="color:#960050;background-color:#1e0010">!</span>require(<span style="color:#e6db74">&#34;reticulate&#34;</span>)) install<span style="color:#f92672">.</span>packages(<span style="color:#e6db74">&#34;reticulate&#34;</span>)
 library(reticulate)
 
 use_condaenv(<span style="color:#e6db74">&#34;gee-demo&#34;</span>, conda <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;auto&#34;</span>,required <span style="color:#f92672">=</span> TRUE)</code></pre></div>
 <p>The Earth Engine Python API is available as a Python package that can be installed locally. The Python API package is called <code>ee</code>. It must be imported and initialized for each new Python session and script.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 <span style="color:#f92672">import</span> ee       
 ee<span style="color:#f92672">.</span>Initialize() <span style="color:#75715e"># Initialize the API</span>
-<span style="color:#66d9ef">print</span>(ee<span style="color:#f92672">.</span>__version__)
+print(ee<span style="color:#f92672">.</span>__version__)
 
 
 <span style="color:#75715e">## 0.1.238</span></code></pre></div>
@@ -427,7 +426,7 @@ ee<span style="color:#f92672">.</span>Initialize() <span style="color:#75715e">#
 With the help of the <a href="http://opentrees.org">opentrees.org</a> project I found a beech forest near Potsdam in East Germany. <a href="http://opentrees.org">Opentrees.org</a> is the world&rsquo;s largest database of municipal street and park trees, produced by harvesting open data from dozens of different sources.<br />
 <br>
 <br></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 geometry <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Geometry<span style="color:#f92672">.</span>Polygon( <span style="color:#75715e"># beech forest area</span>
         [[[<span style="color:#ae81ff">13.109782839513642</span>, <span style="color:#ae81ff">52.42163736335469</span>],
@@ -435,7 +434,7 @@ geometry <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</s
           [<span style="color:#ae81ff">13.111671114660126</span>, <span style="color:#ae81ff">52.420752422262055</span>],
           [<span style="color:#ae81ff">13.111671114660126</span>, <span style="color:#ae81ff">52.42163736335469</span>]]]);</code></pre></div>
 <h4 id="create-a-function-to-mask-clouds-using-the-sentinel-2-qa-band">Create a function to mask clouds using the Sentinel-2 QA band</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">maskclouds</span>(image):
     qa <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>select(<span style="color:#e6db74">&#34;QA60&#34;</span>)
@@ -446,13 +445,13 @@ geometry <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</s
     <span style="color:#66d9ef">return</span> image<span style="color:#f92672">.</span>updateMask(mask)<span style="color:#f92672">.</span>divide(<span style="color:#ae81ff">10000</span>) \
                  <span style="color:#f92672">.</span>set(<span style="color:#e6db74">&#39;date&#39;</span>, image<span style="color:#f92672">.</span>date()<span style="color:#f92672">.</span>format()) <span style="color:#75715e"># adding recording date</span></code></pre></div>
 <h4 id="create-a-function-to-add-normalized-difference-vegetation-index-ndvi-band">Create a function to add Normalized Difference Vegetation Index (NDVI) band</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ndvi</span>(image):
     ndvi <span style="color:#f92672">=</span> image<span style="color:#f92672">.</span>normalizedDifference([<span style="color:#e6db74">&#34;B8&#34;</span>,<span style="color:#e6db74">&#34;B4&#34;</span>])<span style="color:#f92672">.</span>rename(<span style="color:#e6db74">&#34;ndvi&#34;</span>)
     <span style="color:#66d9ef">return</span> image<span style="color:#f92672">.</span>addBands([ndvi])</code></pre></div>
 <h4 id="create-two-imagecollections-with-sentinel2-level-2a-and-cloud-probability-data">Create two <code>ImageCollections</code> with Sentinel2 Level-2A and cloud probability data</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 start_date <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Date(<span style="color:#e6db74">&#39;2017-04-01&#39;</span>)
 end_date   <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Date(<span style="color:#e6db74">&#39;2020-12-31&#39;</span>)
@@ -468,7 +467,7 @@ s2c <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>I
         <span style="color:#f92672">.</span>filterBounds(geometry) \
         <span style="color:#f92672">.</span>filterDate(start_date, end_date);</code></pre></div>
 <h4 id="create-a-function-to-join-two-collections-on-their-system-index-property">Create a function to <code>Join</code> two collections on their &lsquo;system:index&rsquo; property.</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 <span style="color:#75715e"># The propertyName parameter is the name of the property</span>
 <span style="color:#75715e"># that references the joined image.</span>
@@ -484,7 +483,7 @@ s2c <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>I
   <span style="color:#75715e"># Merge the bands of the joined image.</span>
   <span style="color:#66d9ef">return</span> joined<span style="color:#f92672">.</span>map(<span style="color:#66d9ef">lambda</span> image: image<span style="color:#f92672">.</span>addBands(ee<span style="color:#f92672">.</span>Image(image<span style="color:#f92672">.</span>get(propertyName))<span style="color:#f92672">.</span>rename(<span style="color:#e6db74">&#34;cld&#34;</span>)))</code></pre></div>
 <h4 id="create-a-function-to-get-a-median-value-and-b-the-recording-date-for-each-image">Create a function to get a) median value and b) the recording date for each image</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculateMedian</span>(image):
   
@@ -496,7 +495,7 @@ s2c <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>I
   <span style="color:#75715e"># set the recording date and median values as a property of the image</span>
   <span style="color:#66d9ef">return</span> image<span style="color:#f92672">.</span>set(<span style="color:#e6db74">&#39;date&#39;</span>, image<span style="color:#f92672">.</span>get(<span style="color:#e6db74">&#39;date&#39;</span>))<span style="color:#f92672">.</span>set(<span style="color:#e6db74">&#39;median&#39;</span>, median)</code></pre></div>
 <h4 id="apply-the-join-function-and-median-values">Apply the <code>Join</code> function and median values</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 withCloudProbability <span style="color:#f92672">=</span> indexJoin(s2Sr, s2c, <span style="color:#e6db74">&#39;cloud_probability&#39;</span>);
 
@@ -512,21 +511,21 @@ eeList <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</spa
 <span style="color:#75715e"># convert  list of lists to a dictionaty</span>
 medians <span style="color:#f92672">=</span> ee<span style="color:#f92672">.</span>Dictionary(eeList<span style="color:#f92672">.</span>flatten())</code></pre></div>
 <h4 id="call-getinfo-on-earth-engine-objects-to-get-the-object-from-the-server-to-the-client">Call <code>getInfo()</code> on Earth Engine objects to get the object from the server to the client</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 median_values <span style="color:#f92672">=</span> medians<span style="color:#f92672">.</span>getInfo(); <span style="color:#75715e"># ee.Dictionary =&gt; Python dictionary</span>
 type(median_values)
 
 <span style="color:#75715e">## &lt;class &#39;dict&#39;&gt;</span></code></pre></div>
 <h4 id="python-dictionary-to-pandas-dataframe">Python dictionary to pandas DataFrame</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 <span style="color:#f92672">import</span> pandas
 pd_df <span style="color:#f92672">=</span> pandas<span style="color:#f92672">.</span>DataFrame<span style="color:#f92672">.</span>from_dict(median_values, orient<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;index&#39;</span>)</code></pre></div>
 <hr />
 
 <h2 id="span-style-color-red-stop-span-lets-see-what-we-have-got-span-style-color-red-stop-span"><span style="color:red">STOP</span> - lets see what we have got - <span style="color:red">STOP</span></h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### Python</span>
 
 pd_df
 
@@ -549,7 +548,7 @@ pd_df
 <h4 id="calling-python-from-r">Calling Python from R</h4>
 
 <p>The <strong>pd_df</strong> <code>panda</code> DataFrame, created within the Python chunk above, is available to R using the <code>py</code> object from the <code>reticulate</code> package.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 df <span style="color:#f92672">&lt;-</span> py<span style="color:#960050;background-color:#1e0010">$</span>pd_df <span style="color:#75715e"># convert pandas DataFrame to R DataFrame</span>
 head(df)
@@ -564,7 +563,7 @@ head(df)
 <h4 id="prepare-data-for-plotting">Prepare data for plotting</h4>
 
 <p>For the work with R we use the following packages:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 list<span style="color:#f92672">.</span>of<span style="color:#f92672">.</span>packages <span style="color:#f92672">&lt;-</span> c(<span style="color:#e6db74">&#34;stringr&#34;</span>, <span style="color:#e6db74">&#34;dplyr&#34;</span>, <span style="color:#e6db74">&#34;tidyr&#34;</span>, <span style="color:#e6db74">&#34;ggplot2&#34;</span>, <span style="color:#e6db74">&#34;patchwork&#34;</span>)
 new<span style="color:#f92672">.</span>packages <span style="color:#f92672">&lt;-</span> list<span style="color:#f92672">.</span>of<span style="color:#f92672">.</span>packages[<span style="color:#960050;background-color:#1e0010">!</span>(list<span style="color:#f92672">.</span>of<span style="color:#f92672">.</span>packages <span style="color:#f92672">%</span><span style="color:#f92672">in</span><span style="color:#f92672">%</span> installed<span style="color:#f92672">.</span>packages()[, <span style="color:#e6db74">&#34;Package&#34;</span>])]
@@ -576,7 +575,7 @@ library(tidyr)
 library(ggplot2)
 library(patchwork)</code></pre></div>
 <p>In the next code chunk we manipulate the data to make our life easier with the plotting. We extract the recording date from the <code>rownames</code> and additionally create <strong>year</strong> and <strong>doy</strong> (day of the year) values. We also delete all lines with <code>NaN</code> NDVI values and exclude images with cloud probability values greater than 40.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 xx <span style="color:#f92672">&lt;-</span> df <span style="color:#f92672">%&gt;%</span>
   mutate(row_names <span style="color:#f92672">=</span> rownames(df)) <span style="color:#f92672">%&gt;%</span>
@@ -608,7 +607,7 @@ dim(xx)
 <p>After filtering all <strong>NaN</strong> values and exclude cloud probabilities higher than <strong>40 %</strong> we have 164 rows (median NDVI values) left to work with.</p>
 
 <h4 id="plotting-the-data">Plotting the data</h4>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 max <span style="color:#f92672">&lt;-</span> xx <span style="color:#f92672">%&gt;%</span>
   group_by(year) <span style="color:#f92672">%&gt;%</span>
@@ -655,7 +654,7 @@ plt1</code></pre></div>
   
 </div>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 plt2 <span style="color:#f92672">&lt;-</span> ggplot(xx, aes(x<span style="color:#f92672">=</span>yday, y<span style="color:#f92672">=</span>ndvi, fill <span style="color:#f92672">=</span> id))<span style="color:#f92672">+</span>  
   coord_polar(theta<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;x&#34;</span>, start<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,direction<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span>  
@@ -694,7 +693,7 @@ plt2 </code></pre></div>
   
 </div>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 plt1 <span style="color:#f92672">+</span> plt2 <span style="color:#f92672">+</span> plot_layout(widths <span style="color:#f92672">=</span> c(<span style="color:#ae81ff">2.5</span>, <span style="color:#ae81ff">1</span>), heights <span style="color:#f92672">=</span> unit(c(<span style="color:#ae81ff">5</span>), c(<span style="color:#e6db74">&#39;cm&#39;</span>, <span style="color:#e6db74">&#39;null&#39;</span>)))</code></pre></div>
 
@@ -896,7 +895,7 @@ plt1 <span style="color:#f92672">+</span> plt2 <span style="color:#f92672">+</sp
 
 
 <h2 id="session-info">Session Info</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 sessionInfo()
 
@@ -1025,7 +1024,7 @@ sessionInfo()
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

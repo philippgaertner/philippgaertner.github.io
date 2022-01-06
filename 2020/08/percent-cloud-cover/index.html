@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="In Google Earth Engine we usually load an image collection first and then filter it by a date range, a region of interest and a image property with some cloud percentage estimates.
@@ -122,7 +122,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -348,13 +347,13 @@ If the cloud threshold value is set too low it may happen that we throw away (fi
 </ul>
 
 <p>To get the respective bit values we use the Javascript bitwise left shift operator  <code>&lt;&lt;</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cloudBitMask</span>  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">10</span>; <span style="color:#75715e">// 1024
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cirrusBitMask</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">11</span>; <span style="color:#75715e">// 2048
 </span></code></pre></div>
 <p>Now we only need one simple function to read the cloud, cirrus or cloud-free bit mask values from the QA60 band and add each cloud type as new band to our original image.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">addValues</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">image</span>) {
   <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cloud</span>     <span style="color:#f92672">=</span> <span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">eq</span>(<span style="color:#a6e22e">cloudBitMask</span>).<span style="color:#a6e22e">rename</span>(<span style="color:#e6db74">&#39;cloud&#39;</span>);
@@ -406,7 +405,7 @@ If the cloud threshold value is set too low it may happen that we throw away (fi
 
 
 <p>Now we can create a diagram and display the three different categories (cloud, cirrus and cloudfree) per image. <code>geometry</code> is in this case the outline of the whole Sentinel-2 scene, to get the cloud values only for a part of it we can pick a <code>region</code> and replace the term <code>geometry</code> with the new <code>region</code>. Use <code>isStacked: 'percent'</code> to get the three columns stacked and with percent axis labels.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tempTimeSeries_wholeImage</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">Chart</span>.<span style="color:#a6e22e">image</span>.<span style="color:#a6e22e">series</span>(
     <span style="color:#a6e22e">dataset</span>, <span style="color:#a6e22e">geometry</span>, <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Reducer</span>.<span style="color:#a6e22e">sum</span>(), <span style="color:#ae81ff">60</span>, <span style="color:#e6db74">&#39;system:time_start&#39;</span>)
@@ -422,8 +421,7 @@ If the cloud threshold value is set too low it may happen that we throw away (fi
             <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;00FF00&#39;</span>}, 
             <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">color</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;0000FF&#39;</span>}  
 }});
-<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">tempTimeSeries_wholeImage</span>);
-</code></pre></div>
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">tempTimeSeries_wholeImage</span>);</code></pre></div>
 <p><br>
 </div>
 <div class="figure figure--fullWidth">
@@ -440,7 +438,7 @@ If the cloud threshold value is set too low it may happen that we throw away (fi
 <h2 id="complete-script">Complete Script</h2>
 
 <p>This <a href="https://code.earthengine.google.com/?scriptPath=users%2Fgaertnerp%2FBlog%3A2020-08-percent-cloud-cover" target="_blank">link</a> opens a copy of the script in the Javascript Code Editor, or simply <em>copy &amp; paste</em> the code from below.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cloudBitMask</span>  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&lt;&lt;</span> <span style="color:#ae81ff">10</span>;
 <span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">cloudBitMask</span>);
@@ -512,8 +510,7 @@ If the cloud threshold value is set too low it may happen that we throw away (fi
 
 <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">region</span>,{}, <span style="color:#e6db74">&#39;Valley region&#39;</span>);
 <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">centerObject</span>(<span style="color:#a6e22e">region</span>,<span style="color:#ae81ff">8</span>);
-<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#39;SATELLITE&#39;</span>)
-</code></pre></div>
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#39;SATELLITE&#39;</span>)</code></pre></div>
 <h2 id="bottom-line">Bottom Line</h2>
 
 <p>If you have any questions, suggestions or spotted a mistake, please use the comment function at the bottom of this page.</p>
@@ -604,7 +601,7 @@ If the cloud threshold value is set too low it may happen that we throw away (fi
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

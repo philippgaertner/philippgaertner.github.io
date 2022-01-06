@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="How often does Landsat-8 and Sentinel-2 appear at the same location at the same time?! Do both satellites really fly over the same spot somewhere at the same time, sometime? If so, Sentinel-2 should incidentally take photos of the Landsat-8 satellite itself. Well, let the quest for an unlikely image begin.">
@@ -115,7 +115,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -390,7 +389,7 @@ Websites, such as <a href="http://www.n2yo.com">n2yo.com</a> are very helpful fo
 <h2 id="parameter-setup">Parameter Setup</h2>
 
 <p>At first I dropped a point marker over Berlin (or any other place, as you wish). Than, I set up some parameter (i.e. terrain background basemap) and get the date of today.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">Berlin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Geometry</span>.<span style="color:#a6e22e">Point</span>([<span style="color:#ae81ff">13.40619231451105</span>, <span style="color:#ae81ff">52.51970379595016</span>]);
 
@@ -405,15 +404,14 @@ Websites, such as <a href="http://www.n2yo.com">n2yo.com</a> are very helpful fo
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">centerObject</span>(<span style="color:#a6e22e">Berlin</span>, <span style="color:#ae81ff">7</span>);    <span style="color:#75715e">// center map to Berlin
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">now</span> <span style="color:#f92672">=</span> Date.<span style="color:#a6e22e">now</span>();
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">eeNow</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">now</span>);
-</code></pre></div>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">eeNow</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.Date(<span style="color:#a6e22e">now</span>);</code></pre></div>
 <h2 id="get-all-landsat-8-and-sentinel-2-images">Get all Landsat-8 and Sentinel-2 images</h2>
 
 <p><blockquote class="pullquote right">
 	<p>Result for Berlin: At the selected location are 125 Landsat and 546 Sentinel images available.</p>
 </blockquote>
 Now, we are particularly interested in the spacecraft name, the date/time &amp; location of the observations and the product identifier.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// #### Landsat 8 ####
 </span><span style="color:#75715e"></span>
@@ -462,7 +460,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
 </blockquote></p>
 
 <p>Wow. So at least 20 times where Landsat-8 and Sentinel-2 at the same day over Berlin. <strong>But they weren&rsquo;t over Berlin at the same time, or were they?</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// Get FeatureCollection from ImageCollection
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">L8_FC</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#a6e22e">L8</span>).<span style="color:#a6e22e">select</span>([
@@ -504,8 +502,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">merged_selection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sel_secondary</span>.<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">sel_primary</span>).<span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;date&#39;</span>);
 
 <span style="color:#75715e">// get unique matching dates
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">distinct_dates</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sel_primary</span>.<span style="color:#a6e22e">select</span>(<span style="color:#e6db74">&#39;date&#39;</span>).<span style="color:#a6e22e">distinct</span>([<span style="color:#e6db74">&#39;date&#39;</span>]).<span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;date&#39;</span>);
-</code></pre></div>
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">distinct_dates</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sel_primary</span>.<span style="color:#a6e22e">select</span>(<span style="color:#e6db74">&#39;date&#39;</span>).<span style="color:#a6e22e">distinct</span>([<span style="color:#e6db74">&#39;date&#39;</span>]).<span style="color:#a6e22e">sort</span>(<span style="color:#e6db74">&#39;date&#39;</span>);</code></pre></div>
 <h2 id="scatterchart-when-landsat-8-almost-meets-the-sentinels">ScatterChart - When Landsat-8 (almost) meets the Sentinels</h2>
 
 <p>The following scatterplot shows the days (y-axis) and the times (x-axis) on which both satellites, Landsat-8 and Sentinel-2, were flying over Berlin.</p>
@@ -523,7 +520,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
 </blockquote>
 
 <p>The Sentinels (A &amp; B) always comes in a time window of 10:10 am to 10:25 am, depending on the season and the PATH /ROW (as with Landsat-8).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 
 <span style="color:#75715e">// Create a new property with default dates but original times for the x-axis.
@@ -564,8 +561,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
       <span style="color:#a6e22e">tooltip</span><span style="color:#f92672">:</span> {<span style="color:#a6e22e">isHtml</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">true</span>},
     });
 
-<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">chart_date</span>);
-</code></pre></div>
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">chart_date</span>);</code></pre></div>
 <h1 id="but-how-close-in-time-were-landsat-8-and-sentinel-2">But how close (in time) were Landsat-8 and Sentinel-2?</h1>
 
 <p>To answer this question I selected the top 5 dates with the smallest time difference. The Barchart is shown below. Images with the same time come from different overlapping tiles (Grid Reference System).</p>
@@ -580,7 +576,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
   <img class="figure-img" src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1617961644/2018-07-Landsat-meets-Sentinels-files/ee-barchart.png" alt="Top 5: Days with the smallest time difference between Landsat-8 and Sentinel-2 scenes" /><span class="caption">Top 5: Days with the smallest time difference between Landsat-8 and Sentinel-2 scenes</span>
 </div>
 <div class="main-content-wrap"></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">// Javascript
 </span><span style="color:#75715e"></span>
 
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">flattener_get_diff</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feat</span>){
@@ -614,8 +610,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
                <span style="color:#a6e22e">minValue</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>},
       <span style="color:#a6e22e">vAxis</span><span style="color:#f92672">:</span> { <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Top 5 Days&#39;</span> }
 });
-<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">chart1</span>);
-</code></pre></div>
+<span style="color:#a6e22e">print</span>(<span style="color:#a6e22e">chart1</span>);</code></pre></div>
 <p>We can also look directly at the two pictures. Here are the images and the Javascript code.<br />
 <br>
 
@@ -702,7 +697,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
   <div style="clear:both;"></div>
 
 <br></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">//Javascript
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Javascript" data-lang="Javascript"><span style="color:#75715e">//Javascript
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// #### Load Images with the smallest difference to the Map. ####
 </span><span style="color:#75715e"></span>
@@ -740,8 +735,7 @@ Now, we are particularly interested in the spacecraft name, the date/time &amp; 
 };
 
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">S2_img</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">Image</span>(<span style="color:#a6e22e">srCollection_S2</span>.<span style="color:#a6e22e">first</span>());
-<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">S2_img</span>, <span style="color:#a6e22e">S2_vizParams</span>, <span style="color:#e6db74">&#39;Sentinel&#39;</span>, <span style="color:#ae81ff">0.7</span>, <span style="color:#66d9ef">true</span>);
-</code></pre></div>
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">addLayer</span>(<span style="color:#a6e22e">S2_img</span>, <span style="color:#a6e22e">S2_vizParams</span>, <span style="color:#e6db74">&#39;Sentinel&#39;</span>, <span style="color:#ae81ff">0.7</span>, <span style="color:#66d9ef">true</span>);</code></pre></div>
 <p>Well that&rsquo;s a bit disappointing. Lets have a look more north to a Sentinel ground station - what about Svalbard, Norway, this station is responsible for data acquisition and near real-time processing.</p>
 
 <h2 id="svalbard-norway">Svalbard, Norway</h2>
@@ -1032,7 +1026,7 @@ and 37 distinct dates were recorded. <strong>It turns out Landsat-8 missed Senti
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

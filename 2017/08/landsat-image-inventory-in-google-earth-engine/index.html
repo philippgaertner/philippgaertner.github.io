@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="Welcome, to my first step by step tutorial to investigate Landsat image availability and metadata properties for every country within the Earth Engine.">
@@ -118,7 +118,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -432,7 +431,7 @@ if (!doNotTrack) {
 </ul>
 
 <p>The script for these actions would look like this (<a href="https://code.earthengine.google.com/?scriptPath=users%2Fgaertnerp%2FBlog%3ALandsat-Inventory%2F01%20Dropdown%20Country%20Selection" target="_blank">Open in Code Editor</a>).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Load country boundaries
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// Load country boundaries
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">countries</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#e6db74">&#34;USDOS/LSIB_SIMPLE/2017&#34;</span>);
 
 <span style="color:#75715e">// Load Footprint of Landsat WRS2 
@@ -461,8 +460,7 @@ if (!doNotTrack) {
 
 <span style="color:#75715e">// Add the drop-down &#39;select&#39; widget to the map
 </span><span style="color:#75715e"></span><span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">add</span>(<span style="color:#a6e22e">select</span>);
-<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#34;SATELLITE&#34;</span>);
-</code></pre></div>
+<span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">setOptions</span>(<span style="color:#e6db74">&#34;SATELLITE&#34;</span>);</code></pre></div>
 
  
   
@@ -492,7 +490,7 @@ if (!doNotTrack) {
 <h2 id="2-adding-selected-country-borders">2. Adding Selected Country Borders</h2>
 
 <p>In the next step, we add the <a href="https://www.usgs.gov/media/files/landsat-wrs-2-descending-path-row-shapefile" target="_blank">Landsat WRS 2 Descending Path Row</a> boundaries to the <em>redraw function</em> (<a href="https://code.earthengine.google.com/d1ef8dd9c5accef732e0caf0538f001d" target="_blank">Open in Code Editor</a>).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">redraw</span>(<span style="color:#a6e22e">key</span>){
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">redraw</span>(<span style="color:#a6e22e">key</span>){
   
   <span style="color:#75715e">// ... continuing the redraw function ........
 </span><span style="color:#75715e"></span>  
@@ -504,8 +502,7 @@ if (!doNotTrack) {
   
   <span style="color:#75715e">// ...........
 </span><span style="color:#75715e"></span>
-}
-</code></pre></div>
+}</code></pre></div>
 
  
   
@@ -535,13 +532,12 @@ if (!doNotTrack) {
 <h2 id="3-load-and-filter-landsat-imagecollections">3. Load and Filter Landsat ImageCollections</h2>
 
 <p>In order to get information about Landsat 4, 5, 7 and 8 Landsat Level-1 data, we load these as individual ImageCollections and merge them together to a giant dataset.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l4_coll</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#34;LANDSAT/LT4_L1T_TOA&#34;</span>);  <span style="color:#75715e">//Aug 22, 1982 - Dec 14, 1993
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l4_coll</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#34;LANDSAT/LT4_L1T_TOA&#34;</span>);  <span style="color:#75715e">//Aug 22, 1982 - Dec 14, 1993
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l5_coll</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;LANDSAT/LT5_L1T_TOA&#39;</span>);  <span style="color:#75715e">//Jan 1, 1984 - May 5, 2012
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l7_coll</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;LANDSAT/LE7_L1T_TOA&#39;</span>);  <span style="color:#75715e">//Jan 1, 1999 - ongoing
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">l8_coll</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#e6db74">&#39;LANDSAT/LC8_L1T_TOA&#39;</span>);  <span style="color:#75715e">//Apr 11, 2013 - ongoing
 </span><span style="color:#75715e"></span>
-<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">merged_collection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#a6e22e">l4_coll</span>.<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">l5_coll</span>).<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">l7_coll</span>).<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">l8_coll</span>));
-</code></pre></div>
+<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">merged_collection</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">ImageCollection</span>(<span style="color:#a6e22e">l4_coll</span>.<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">l5_coll</span>).<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">l7_coll</span>).<span style="color:#a6e22e">merge</span>(<span style="color:#a6e22e">l8_coll</span>));</code></pre></div>
 <p>Now, we continue with the <em>redraw function</em> by<br />
 <br></p>
 
@@ -554,7 +550,7 @@ if (!doNotTrack) {
 </ul>
 
 <p><br></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">  <span style="color:#75715e">// ... continue the redraw function ........
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript">  <span style="color:#75715e">// ... continue the redraw function ........
 </span><span style="color:#75715e"></span>
   <span style="color:#75715e">// filter the ImageCollection with the boundary of the selected country
 </span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">iC</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">merged_collection</span>.<span style="color:#a6e22e">filterBounds</span>(<span style="color:#a6e22e">selectedCountry</span>.<span style="color:#a6e22e">geometry</span>())
@@ -576,7 +572,7 @@ if (!doNotTrack) {
 <h3 id="chart-landsat-mission-4-8-gee-image-availability">Chart: Landsat Mission 4-8 - GEE image availability</h3>
 
 <p>Now, we can draw two histogram charts which will be plotted in the lower right corner <em>Panel</em> area. The first chart shows the image availability, with time on the x-axis and <em>Image count</em> on the y-axis.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">options1</span> <span style="color:#f92672">=</span> {
     <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Landsat Mission 4-8 - GEE image availability&#39;</span>,
@@ -600,7 +596,7 @@ if (!doNotTrack) {
 <h2 id="chart-landsat-cloud-cover">Chart: Landsat cloud cover</h2>
 
 <p>The second chart shows the <em>Cloud cover %</em> for all images recorded over <em>Germany</em>. The chart has a 5% <em>Cloud cover</em> bin width on the x-axis and shows again the <em>Image count</em> on the y-axis.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">options2</span> <span style="color:#f92672">=</span> {
     <span style="color:#a6e22e">title</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Landsat cloud cover&#39;</span>,
@@ -624,7 +620,7 @@ if (!doNotTrack) {
 <h1 id="add-info-text">Add Info Text</h1>
 
 <p>With the information on the <em>Country</em> name (<em>Germany</em>) the amount of WRS-2 grids (<em>43</em>) as well as the total number of recorded Landsat imagery (<em>16003</em>), I added a small informative info-text to the <em>Panel</em>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">iscoveredby</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34; is covered by &#34;</span>;
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wrs2_filtered_size</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wrs2_filtered</span>.<span style="color:#a6e22e">size</span>();
@@ -663,14 +659,14 @@ if (!doNotTrack) {
 <li>get the centre point (<em>centroid</em>) of each WRS-2 grid geometry and</li>
 
 <li><p>keep the <em>Row</em> and <em>Path</em> properties</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// create centroids
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">centroids</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">wrs2_filtered</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">getCentroid</span>);
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">fC</span>        <span style="color:#f92672">=</span> <span style="color:#a6e22e">centroids</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">addField</span>);
 
 <span style="color:#75715e">// ...........
-</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// begin - getCentroid
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// begin - getCentroid
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">getCentroid</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feature</span>) {
   
@@ -704,7 +700,7 @@ if (!doNotTrack) {
 <li>additionally I create a <span style="color:orange">orange circle</span> with <em>Cloud_Cover</em> information.</li>
 
 <li><p>because the <em>Cloud_Cover</em> is in my example 50 %, I reduce the circle radius from 40.000 to 20.000 m.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// beginn - addField 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// beginn - addField 
 </span><span style="color:#75715e"></span>
 <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">addField</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feature</span>) {
 
@@ -726,7 +722,7 @@ if (!doNotTrack) {
 }; 
 
 <span style="color:#75715e">// end - addField
-</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#75715e">// ... continue the redraw function ........
 </span><span style="color:#75715e"></span>
 <span style="color:#75715e">// buffer centroid according to image counts
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">buffered_points</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fC</span>.<span style="color:#a6e22e">map</span>(<span style="color:#a6e22e">buffer_count</span>).<span style="color:#a6e22e">flatten</span>();
@@ -746,7 +742,7 @@ if (!doNotTrack) {
 <span style="color:#a6e22e">Map</span>.<span style="color:#a6e22e">layers</span>().<span style="color:#a6e22e">set</span>(<span style="color:#ae81ff">3</span>, <span style="color:#a6e22e">layer3</span>);
   
 <span style="color:#75715e">// end of redraw function
-</span></code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">buffer_count</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feature</span>) {
+</span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-javascript" data-lang="javascript"><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">buffer_count</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">feature</span>) {
 
 <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ee</span>.<span style="color:#a6e22e">FeatureCollection</span>(<span style="color:#a6e22e">feature</span>.<span style="color:#a6e22e">buffer</span>(<span style="color:#a6e22e">feature</span>.<span style="color:#a6e22e">get</span>(<span style="color:#e6db74">&#39;count&#39;</span>)));
 
@@ -856,7 +852,7 @@ if (!doNotTrack) {
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>

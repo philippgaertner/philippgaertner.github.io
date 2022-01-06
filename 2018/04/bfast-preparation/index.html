@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.80.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.90.0 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="Philipp Gärtner">
 <meta name="keywords" content=", earth-observation, remote sensing, earth engine, google earth enngine">
 <meta name="description" content="The goal of this blog post is to arrange a irregularly (with varying time intervals) spaced raster stack from Landsat into a regular time series to be used in the Breaks For Additive Season and Trend (bfast) package and function.">
@@ -113,7 +113,6 @@ if (!doNotTrack) {
 	ga('send', 'pageview');
 }
 </script>
-
     
     
   </head>
@@ -346,7 +345,7 @@ if (!doNotTrack) {
 <h1 id="workflow">Workflow</h1>
 
 <h2 id="load-all-necessary-libraries">Load all necessary libraries</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 library(zoo)
 library(xts)
@@ -359,7 +358,7 @@ library(bfastSpatial)  <span style="color:#75715e"># added 5/2/2019</span>
 library(lubridate)
 library(ggplot2)</code></pre></div>
 <h2 id="load-the-data-and-select-one-example-pixel">Load the data and select one example pixel</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 <span style="color:#75715e"># load data</span>
 data(tura)
@@ -425,7 +424,7 @@ nbr<span style="color:#f92672">.</span>NA <span style="color:#f92672">&lt;-</spa
 <h2 id="create-daily-time-series-na-s-linear-periodic">Create Daily Time Series (NA&rsquo;s - linear, periodic)</h2>
 
 <p><strong>Replace NA&rsquo;s by Linear Interpolation with <code>na.approx</code> from the <code>zoo</code> package</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear <span style="color:#f92672">&lt;-</span> round(na<span style="color:#f92672">.</span>approx(s),<span style="color:#ae81ff">0</span>) 
 
@@ -446,13 +445,13 @@ s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>linear
 <p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.d.linear-1.png" alt="" /><!-- --></p>
 
 <p><strong>Replace NA&rsquo;s by periodic stl decomposition with <code>na.interp</code> from the <code>forecast</code> package</strong></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 s<span style="color:#f92672">.</span>d<span style="color:#f92672">.</span>periodic <span style="color:#f92672">&lt;-</span> round(na<span style="color:#f92672">.</span>interp(s),<span style="color:#ae81ff">0</span>)</code></pre></div>
 <p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.d.periodic-1.png" alt="" /></p>
 
 <h3 id="aggregate-time-series-from-daily-to-weekly">Aggregate Time Series from Daily to Weekly</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>weekly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
     
@@ -489,7 +488,7 @@ s<span style="color:#f92672">.</span>w<span style="color:#f92672">.</span>period
 <p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.w.periodic-1.png" alt="" /></p>
 
 <h3 id="aggregate-time-series-from-daily-to-fortnightly">Aggregate Time Series from Daily to Fortnightly</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>fortnight <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
   
@@ -528,7 +527,7 @@ end(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>li
 <p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.f.periodic-1.png" alt="" /></p>
 
 <h3 id="aggregate-time-series-from-daily-to-monthly">Aggregate Time Series from Daily to Monthly</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>monthly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
   
@@ -552,7 +551,7 @@ end(s<span style="color:#f92672">.</span>m<span style="color:#f92672">.</span>li
 <p><img src="//res.cloudinary.com/dj9pbb7v1/image/upload/v1618045865/2018-04-aggregate-time-series/ggplot-s.m.periodic-1.png" alt="" /></p>
 
 <h3 id="aggregate-time-series-from-daily-to-quarterly">Aggregate Time Series from Daily to Quarterly</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.</span>to<span style="color:#f92672">.</span>quarterly <span style="color:#f92672">&lt;-</span> function(daily<span style="color:#f92672">.</span>ts) {
   
@@ -578,7 +577,7 @@ end(s<span style="color:#f92672">.</span>q<span style="color:#f92672">.</span>li
 <h3 id="aggregate-time-series-from-daily-to-yearly-season">Aggregate Time Series from Daily to Yearly Season</h3>
 
 <p>The time of summer start and end depends on the location on the globe. The Tura dataset is from Ethopia and we consider June, July and August as their summer season, meaning we consider only these months for our yearly aggragation calculation.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 <span style="color:#75715e">#https://stackoverflow.com/questions/18978256/what-is-the-most-elegant-way-to-calculate-seasonal-means-with-r</span>
 
@@ -634,7 +633,7 @@ aggregate<span style="color:#f92672">.</span>daily<span style="color:#f92672">.<
 <p>Once you have your data prepared and you would like to work on a specific temporal window you can use the &lsquo;window&rsquo; function to cookie cut the period of interest.</p>
 
 <p>For example, use the <em>Fortnight</em> time series and focus on the data from year 2000, onwards.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window <span style="color:#f92672">&lt;-</span> window(x <span style="color:#f92672">=</span> s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic, 
                      start <span style="color:#f92672">=</span> c(<span style="color:#ae81ff">2000</span>,<span style="color:#ae81ff">1</span>),
@@ -648,7 +647,7 @@ plot(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>p
 <p>Here we do a simple test if <code>bfast</code> will accept the created fortnight time series. Lets see&hellip;</p>
 
 <p>Yeap &hellip; it works beautifully!</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e">### R</span>
 
 fit <span style="color:#f92672">&lt;-</span> bfast(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window, h <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span><span style="color:#f92672">/</span>length(s<span style="color:#f92672">.</span>f<span style="color:#f92672">.</span>periodic<span style="color:#f92672">.</span>window), 
              season <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;harmonic&#34;</span>, breaks <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>, max<span style="color:#f92672">.</span>iter <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>)
@@ -752,7 +751,7 @@ plot(fit)</code></pre></div>
         </article>
         <footer id="footer" class="main-content-wrap">
   <span class="copyrights">
-    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2021 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
+    <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="0l94rzR" data-color="#ffffff" data-emoji=""  data-font="Cookie" data-text="Coffee for Philipp" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#000000" ></script>&copy; 2017 - 2022 Philipp Gärtner &VerticalSeparator; Some Rights Reserved<br>Content on this site is licensed under a <a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International license</a>.
   </span>
 </footer> 
       </div>
