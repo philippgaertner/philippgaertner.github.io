@@ -26,33 +26,6 @@
     <loc>https://philippgaertner.github.io/tags/</loc>
     <lastmod>2022-01-04T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://philippgaertner.github.io/categories/ndvi/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/tags/python/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/categories/python/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/categories/r/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/tags/reticulate/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/tags/rstats/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/tags/rstudio/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/categories/tutorial/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://philippgaertner.github.io/2021/10/use-gee-python-api-in-rstudio/</loc>
-    <lastmod>2021-10-02T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://philippgaertner.github.io/categories/datawrapper/</loc>
     <lastmod>2020-12-23T00:00:00+00:00</lastmod>
   </url><url>
@@ -67,6 +40,30 @@
   </url><url>
     <loc>https://philippgaertner.github.io/2020/12/baking-without-coding/</loc>
     <lastmod>2020-12-14T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/categories/ndvi/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/tags/python/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/categories/python/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/categories/r/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/tags/reticulate/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/tags/rstats/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/tags/rstudio/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://philippgaertner.github.io/categories/tutorial/</loc>
+    <lastmod>2020-10-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://philippgaertner.github.io/2020/10/use-gee-python-api-in-rstudio/</loc>
     <lastmod>2020-10-16T00:00:00+00:00</lastmod>
