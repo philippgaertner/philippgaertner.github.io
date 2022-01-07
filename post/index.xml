@@ -17,15 +17,6 @@
     </item>
     
     <item>
-      <title>Use Google&#39;s Earth Engine Python API in RStudio</title>
-      <link>https://philippgaertner.github.io/2021/10/use-gee-python-api-in-rstudio/</link>
-      <pubDate>Sat, 02 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://philippgaertner.github.io/2021/10/use-gee-python-api-in-rstudio/</guid>
-      <description>This blogpost is about RStudio and the &lt;code&gt;reticulate&lt;/code&gt; package! Reticulate includes a Python engine for R Markdown that enables easy interoperability between Python and R chunks. This enables us to bring the power of Earth Engine to RStudio.</description>
-    </item>
-    
-    <item>
       <title>Google Earth Engine Apps - Updated 23th December 2020</title>
       <link>https://philippgaertner.github.io/2020/12/ee-apps-table-searchable/</link>
       <pubDate>Wed, 23 Dec 2020 00:00:00 +0000</pubDate>

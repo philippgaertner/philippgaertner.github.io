@@ -26,42 +26,6 @@
     </item>
     
     <item>
-      <title>NDVI</title>
-      <link>https://philippgaertner.github.io/categories/ndvi/</link>
-      <pubDate>Sat, 02 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://philippgaertner.github.io/categories/ndvi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Python</title>
-      <link>https://philippgaertner.github.io/categories/python/</link>
-      <pubDate>Sat, 02 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://philippgaertner.github.io/categories/python/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>https://philippgaertner.github.io/categories/r/</link>
-      <pubDate>Sat, 02 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://philippgaertner.github.io/categories/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tutorial</title>
-      <link>https://philippgaertner.github.io/categories/tutorial/</link>
-      <pubDate>Sat, 02 Oct 2021 00:00:00 +0000</pubDate>
-      
-      <guid>https://philippgaertner.github.io/categories/tutorial/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>DataWrapper</title>
       <link>https://philippgaertner.github.io/categories/datawrapper/</link>
       <pubDate>Wed, 23 Dec 2020 00:00:00 +0000</pubDate>
@@ -76,6 +40,42 @@
       <pubDate>Sat, 19 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>https://philippgaertner.github.io/categories/google-analytics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>NDVI</title>
+      <link>https://philippgaertner.github.io/categories/ndvi/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/ndvi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://philippgaertner.github.io/categories/python/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://philippgaertner.github.io/categories/r/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorial</title>
+      <link>https://philippgaertner.github.io/categories/tutorial/</link>
+      <pubDate>Fri, 16 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://philippgaertner.github.io/categories/tutorial/</guid>
       <description></description>
     </item>
     
